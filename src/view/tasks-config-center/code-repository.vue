@@ -1,0 +1,354 @@
+<template>
+  <Card>
+    <div class="search-con search-con-top">
+      <Select
+        v-model="searchKey"
+        class="search-col"
+      >
+        <Option
+          v-for="item in columns"
+          v-if="item.key !== 'handle' && item.key !== 'status' && item.key !== ''"
+          :value="item.key"
+          :key="`search-col-${item.key}`"
+        >{{ item.title }}</Option>
+      </Select>
+      <Input
+        @on-change="handleClear"
+        clearable
+        placeholder="输入关键字搜索"
+        class="search-input"
+        v-model="searchValue"
+      />
+      <Button
+        @click="handleSearch"
+        class="search-btn"
+        type="primary"
+      >搜索</Button>
+      <slot name="new_btn"><Button
+          type="primary"
+          @click="editModal('', 'post', '新建仓库')"
+          class="search-btn"
+        >新建仓库</Button>
+        <Button
+          type="warning"
+          @click="handlerRefresh()"
+          class="search-btn"
+        >刷新地址</Button></slot>
+    </div>
+    <Table
+      size="small"
+      height="718"
+      ref="selection"
+      border
+      :columns="columns"
+      :data="tableData"
+    ></Table>
+    <Modal
+      v-model="modalMap.modalVisible"
+      :title="modalMap.modalTitle"
+      :loading=true
+      :footer-hide=true
+    >
+      <form-group
+        v-if="!isCorrelation"
+        :list="formList"
+        @on-submit-success="handleSubmit"
+      ></form-group>
+      <Select
+        v-if="isCorrelation"
+        class="search-input-long"
+        v-model="existUser"
+        filterable
+        multiple
+        placeholder="请选择关联的用户"
+      >
+        <Option
+          v-for="item in allUser"
+          :value="item.nickname"
+          :key="item.user_id"
+        >{{ item.nickname }}</Option>
+      </Select>
+      <Button
+        v-if="isCorrelation"
+        type="success"
+        style="margin-top: 10px;"
+        @click="handlerSubmitUser"
+        long
+      >确定关联</Button>
+    </Modal>
+  </Card>
+</template>
+
+<script>
+import FormGroup from '_c/form-group'
+import { getCoderepository, operationCoderepository } from '@/api/task'
+import { getuserlist } from '@/api/user'
+export default {
+  components: {
+    FormGroup
+  },
+  data () {
+    return {
+      columns: [
+        {
+          title: '应用名称',
+          key: 'app_name',
+          align: 'center',
+          width: 150,
+          sortable: true
+        },
+        {
+          title: '仓库地址',
+          key: 'repository',
+          align: 'center'
+        },
+        {
+          title: '描述',
+          key: 'description',
+          align: 'center'
+        },
+        {
+          title: '操作',
+          key: 'handle',
+          width: 200,
+          align: 'center',
+          render: (h, params) => {
+            return h('div', [
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'success',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      if (params.row.user_info) {
+                        this.existUser = params.row.user_info.split(',')
+                      }
+                      this.relevanceUser(params.row.id)
+                    }
+                  }
+                },
+                '用户'
+              ),
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.editModal(params.index, 'put', '编辑仓库')
+                    }
+                  }
+                },
+                '编辑'
+              ),
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'error',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.delData(params)
+                    }
+                  }
+                },
+                '删除'
+              )
+            ])
+          }
+        }
+      ],
+      tableData: [],
+      modalMap: {
+        modalVisible: false,
+        modalTitle: '新建'
+      },
+      formList: [],
+      editModalData: '',
+      //
+      searchKey: '',
+      searchValue: '',
+      //
+      isCorrelation: false,
+      theRepository: '',
+      allUser: [], // 所有用户
+      existUser: [] // 已存在用户
+    }
+  },
+  methods: {
+    getCodeRepository (key, value) {
+      getCoderepository(key, value).then(res => {
+        if (res.data.code === 0) {
+          this.tableData = res.data.data
+        } else {
+          this.$Message.error(`${res.data.msg}`)
+        }
+      })
+    },
+    // 获取用户列表
+    getUserList () {
+      getuserlist(1, 10000).then(res => {
+        if (res.data.code === 0) {
+          this.allUser = res.data.data
+        } else {
+          this.$Message.error(`${res.data.msg}`)
+        }
+      })
+    },
+    relevanceUser (val) {
+      this.modalMap.modalVisible = true
+      this.modalMap.modalTitle = '关联用户'
+      this.isCorrelation = true
+      this.theRepository = val
+    },
+    handlerSubmitUser () {
+      setTimeout(() => {
+        operationCoderepository(
+          { new_user_info: this.existUser.join(','), repository_id: this.theRepository },
+          'patch'
+        ).then(res => {
+          if (res.data.code === 0) {
+            this.$Message.success(`${res.data.msg}`)
+            this.getCodeRepository(this.searchKey, this.searchValue)
+            this.modalMap.modalVisible = false
+            this.existUser = []
+            this.isCorrelation = false
+          } else {
+            this.$Message.error(`${res.data.msg}`)
+          }
+        })
+      }, 1000)
+    },
+    handlerRefresh () {
+      this.$Message.error('刷新同步gitlab信息，暂时不提供刷新')
+    },
+    editModal (index, meth, mtitle) {
+      this.modalMap.modalVisible = true
+      this.modalMap.modalTitle = mtitle
+      this.editModalData = meth
+      this.formList = [
+        {
+          name: 'id',
+          value: meth === 'put' ? this.tableData[index].id : ''
+        },
+        {
+          name: 'app_name',
+          type: 'i-input',
+          value: meth === 'put' ? this.tableData[index].app_name : '',
+          label: '仓库名称',
+          placeholder: '请输入此仓库的名称',
+          rule: [{ required: true, message: '名称不能为空', trigger: 'blur' }]
+        },
+        {
+          name: 'repository',
+          type: 'i-input',
+          value: meth === 'put' ? this.tableData[index].repository : '',
+          label: '仓库地址',
+          placeholder: '请输入代码仓库的地址。',
+          rule: [
+            {
+              required: true,
+              message: '代码仓库的地址不能为空',
+              trigger: 'blur'
+            }
+          ]
+        },
+        {
+          name: 'description',
+          type: 'i-input',
+          value: meth === 'put' ? this.tableData[index].description : '',
+          label: '备注信息',
+          placeholder: '请输入备注信息，方便查阅'
+        }
+      ]
+    },
+    handleSubmit (value) {
+      setTimeout(() => {
+        operationCoderepository(value.data, this.editModalData).then(res => {
+          if (res.data.code === 0) {
+            this.$Message.success(`${res.data.msg}`)
+            this.getCodeRepository(this.searchKey, this.searchValue)
+            this.modalMap.modalVisible = false
+          } else {
+            this.$Message.error(`${res.data.msg}`)
+          }
+        })
+      }, 1000)
+    },
+    // 删除
+    delData (params) {
+      if (confirm(`确定要删除 ${params.row.app_name}`)) {
+        operationCoderepository(
+          { repository_id: params.row.id },
+          'delete'
+        ).then(res => {
+          if (res.data.code === 0) {
+            this.$Message.success(`${res.data.msg}`)
+            this.tableData.splice(params.index, 1)
+          } else {
+            this.$Message.error(`${res.data.msg}`)
+          }
+        })
+      }
+    },
+    setDefaultSearchKey () {
+      this.searchKey =
+        this.columns[0].key && this.columns[0].key !== 'handle'
+          ? this.columns[0].key
+          : this.columns.length > 1
+            ? this.columns[1].key
+            : ''
+    },
+    handleClear (e) {
+      if (e.target.value === '') this.tableData = this.value
+    },
+    handleSearch () {
+      this.getCodeRepository(this.searchKey, this.searchValue)
+    }
+  },
+  watch: {
+    searchValue (val) {
+      this.getCodeRepository(this.searchKey, val)
+    }
+  },
+  mounted () {
+    this.getCodeRepository()
+    this.setDefaultSearchKey()
+    this.getUserList()
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.search-con {
+  padding: 10px 0;
+  .search {
+    &-col {
+      display: inline-block;
+      width: 200px;
+    }
+    &-input {
+      display: inline-block;
+      width: 200px;
+      margin-left: 2px;
+    }
+    &-btn {
+      margin-left: 2px;
+    }
+  }
+}
+</style>
