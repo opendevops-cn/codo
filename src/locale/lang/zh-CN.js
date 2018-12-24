@@ -77,4 +77,7 @@ export default {
   server_group: '主机组',
   tag: '标签管理',
   adm_user:'管理用户',
+  statisticaldata: "统计数据",
+  statisticalImage:"统计图",
+  historyTaskList: "历史任务"
 }

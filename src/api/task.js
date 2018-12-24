@@ -138,6 +138,19 @@ export const getTaskChecklist = (listId, getRunGroup, getRunHost) => {
   })
 }
 
+// 查看历史订单
+export const getTaskCheckHistorylist = (listId, getRunGroup, getRunHost) => {
+  return axios.request({
+    url: '/task/v2/task/check_history/',
+    method: 'get',
+    params: {
+      list_id: listId,
+      get_run_group: getRunGroup,
+      get_run_host: getRunHost
+    }
+  })
+}
+
 // 日志websocket
 export const logWS = 'ws://172.16.0.223:8900/v2/task/ws_log/'
 

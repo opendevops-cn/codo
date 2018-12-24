@@ -51,7 +51,7 @@ export const routerMap = [
         path: 'taskOrderList',
         name: 'taskOrderList',
         meta: {
-          icon: 'md-reorder',
+          icon: 'ios-options',
           title: '任务订单'
         },
         component: () => import('@/view/task-order/task-order-list.vue')
@@ -450,6 +450,35 @@ export const routerMap = [
           title: '系统日志'
         },
         component: () => import('@/view/system-manage/systemlog.vue')
+      }
+    ]
+  },
+  {
+    path: '/statisticaldata',
+    name: 'statisticaldata',
+    meta: {
+      icon: 'ios-stats',
+      title: '统计数据'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'statisticalImage',
+        name: 'statisticalImage',
+        meta: {
+          icon: 'ios-pie',
+          title: '统计图'
+        },
+        component: () => import('@/view/statistical-data/statistical-images.vue')
+      },
+      {
+        path: 'historyTaskList',
+        name: 'historyTaskList',
+        meta: {
+          icon: 'ios-options',
+          title: '历史任务'
+        },
+        component: () => import('@/view/statistical-data/history-task-list.vue')
       }
     ]
   }
