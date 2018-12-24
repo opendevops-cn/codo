@@ -26,7 +26,7 @@ import copyRight from '@/components/public/copyright'
 import Tables from '_c/tables'
 import TtyLog from './TtyLog'
 import Record from '@/view/cmdb/webssh/Record'
-import { getTableData,getTtyLogData,getRecordData } from '@/api/cmdb/server_log.js'
+import { getLogData,getTtyLogData,getRecordData } from '@/api/cmdb/server_log.js'
 export default {
   name: 'list',
   components: {
@@ -198,7 +198,7 @@ export default {
 
     getData(){
       //获取数据
-      getTableData(this.getParams).then(res => {
+      getLogData(this.getParams).then(res => {
         // console.log('tableData==>')
         // console.log(res)
         this.tableData = res.data.data

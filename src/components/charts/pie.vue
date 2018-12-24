@@ -22,46 +22,49 @@ export default {
   methods: {
     resize () {
       this.dom.resize()
+    },
+    initPie(){
+      this.$nextTick(() => {
+        let legend = this.value.map(_ => _.name)
+        let option = {
+          title: {
+            text: this.text,
+            subtext: this.subtext,
+            x: 'center'
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+          },
+          legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: legend
+          },
+          series: [
+            {
+              type: 'pie',
+              radius: '55%',
+              center: ['50%', '60%'],
+              data: this.value,
+              itemStyle: {
+                emphasis: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+              }
+            }
+          ]
+        }
+        this.dom = echarts.init(this.$refs.dom, 'tdTheme')
+        this.dom.setOption(option)
+        on(window, 'resize', this.resize)
+      })
     }
   },
   mounted () {
-    this.$nextTick(() => {
-      let legend = this.value.map(_ => _.name)
-      let option = {
-        title: {
-          text: this.text,
-          subtext: this.subtext,
-          x: 'center'
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'left',
-          data: legend
-        },
-        series: [
-          {
-            type: 'pie',
-            radius: '55%',
-            center: ['50%', '60%'],
-            data: this.value,
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          }
-        ]
-      }
-      this.dom = echarts.init(this.$refs.dom, 'tdTheme')
-      this.dom.setOption(option)
-      on(window, 'resize', this.resize)
-    })
+    this.initPie()
   },
   beforeDestroy () {
     off(window, 'resize', this.resize)

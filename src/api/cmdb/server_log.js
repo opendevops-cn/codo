@@ -1,7 +1,7 @@
 import axios from '@/libs/api.request'
 
 // 获取所有登录日志
-export const getTableData = (params) => {
+export const getLogData = (params) => {
   return axios.request({
     url: '/cmdb/v1/cmdb/server_log/',
     method: 'get',
