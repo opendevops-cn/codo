@@ -1,4 +1,5 @@
 import axios from '@/libs/api.request'
+import config from '@/config'
 
 export const getCommandlist = (key, value) => {
   return axios.request({
@@ -151,8 +152,9 @@ export const getTaskCheckHistorylist = (listId, getRunGroup, getRunHost) => {
   })
 }
 
+const theDomain = process.env.NODE_ENV === 'development' ? config.domainName.dev : config.domainName.pro
 // 日志websocket
-export const logWS = 'ws://172.16.0.223:8900/v2/task/ws_log/'
+export const logWS = 'ws://' + theDomain + '/api' + '/task/v2/task/ws_log/'
 
 // 代码仓库
 export const getCoderepository = (key, value) => {

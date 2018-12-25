@@ -563,6 +563,7 @@ export default {
         this.logInfo = []
       }
       // let ws = new WebSocket("ws://172.16.0.223:8900/v2/task/ws_log/");
+      console.log(logWS)
       let ws = new WebSocket(logWS)
       ws.onopen = () => {
         // Web Socket 已连接上，使用 send() 方法发送数据
