@@ -7,28 +7,40 @@
           <p>{{ infor.title }}</p>
         </infor-card>
       </i-col> -->
-      <i-col :xs="12" :md="8" :lg="6" key="infor-0" style="height: 120px;padding-bottom: 10px;">
+      <i-col :xs="12" :md="8" :lg="4" key="infor-1" style="height: 120px;padding-bottom: 10px;">
+        <infor-card shadow color="#E46CBB" icon="md-person-add" :icon-size="36">
+          <count-to :end="cardData.users" count-class="count-style"/>
+          <p>用户总数</p>
+        </infor-card>
+      </i-col>
+      <i-col :xs="12" :md="8" :lg="4" key="infor-2" style="height: 120px;padding-bottom: 10px;">
         <infor-card shadow color="#2d8cf0" icon="md-cube" :icon-size="36">
           <count-to :end="cardData.cmdb" count-class="count-style"/>
           <p>资产总数</p>
         </infor-card>
       </i-col>
-      <i-col :xs="12" :md="8" :lg="6" key="infor-1" style="height: 120px;padding-bottom: 10px;">
+      <i-col :xs="12" :md="8" :lg="4" key="infor-3" style="height: 120px;padding-bottom: 10px;">
         <infor-card shadow color="#19be6b" icon="logo-usd" :icon-size="36">
           <count-to :end="cardData.money" count-class="count-style"/>
           <p>消费金额</p>
         </infor-card>
       </i-col>
-      <i-col :xs="12" :md="8" :lg="6" key="infor-2" style="height: 120px;padding-bottom: 10px;">
-        <infor-card shadow color="#ed3f14" icon="md-warning" :icon-size="36">
-          <count-to :end="cardData.alarm" count-class="count-style"/>
-          <p>报警数量</p>
+      <i-col :xs="12" :md="8" :lg="4" key="infor-4" style="height: 120px;padding-bottom: 10px;">
+        <infor-card shadow color="#9A66E4" icon="ios-alarm" :icon-size="36">
+          <count-to :end="cardData.cron" count-class="count-style"/>
+          <p>定时任务</p>
         </infor-card>
       </i-col>
-      <i-col :xs="12" :md="8" :lg="6" key="infor-3" style="height: 120px;padding-bottom: 10px;">
+      <i-col :xs="12" :md="8" :lg="4" key="infor-5" style="height: 120px;padding-bottom: 10px;">
         <infor-card shadow color="#ff9900" icon="ios-alarm" :icon-size="36">
           <count-to :end="cardData.call" count-class="count-style"/>
           <p>事件提醒</p>
+        </infor-card>
+      </i-col>
+      <i-col :xs="12" :md="8" :lg="4" key="infor-6" style="height: 120px;padding-bottom: 10px;">
+        <infor-card shadow color="#ed3f14" icon="md-warning" :icon-size="36">
+          <count-to :end="cardData.alarm" count-class="count-style"/>
+          <p>报警数量</p>
         </infor-card>
       </i-col>
     </Row>
@@ -59,7 +71,6 @@
       </i-col>
     </Row>
 
-
     <!-- <Row>
       <Card shadow>
         <example style="height: 310px;"/>
@@ -73,8 +84,9 @@ import InforCard from '_c/info-card'
 import CountTo from '_c/count-to'
 import { ChartPie, ChartBar } from '_c/charts'
 import Example from './example.vue'
-import { getTableData,getGroupList } from '@/api/cmdb/server.js'
+import { getTableData, getGroupList } from '@/api/cmdb/server.js'
 import { getLogData } from '@/api/cmdb/server_log.js'
+import { getTaskOrderlist } from '@/api/task.js'
 import TaskInfo from './taskinfo'
 import LoginInfo from './logininfo'
 export default {
@@ -90,22 +102,24 @@ export default {
   },
   data () {
     return {
-      cardData:{
+      cardData: {
+        users: 0,
         cmdb: 0,
         money: 0,
         alarm: 0,
-        call: 0
+        call: 0,
+        cron: 0
       },
       // inforCardData: [],
       pieCmdbData: [],
       loginInfoData: [],
-      taskInfoData:[
-        {name: 'FT客户端发布', user: '杨铭威'},
-        {name: 'FT服务端发布', user: '杨红飞'},
-        {name: 'MZ SQL语句审核', user: '杨铭威'},
-        {name: 'AWS资源申请', user: '沈硕'},
-        {name: 'WD客户端发布', user: '杨铭威'},
-        {name: 'WD服务端发布', user: '杨红飞'},
+      taskInfoData: [
+        // {name: 'FT客户端发布', user: '杨铭威'},
+        // {name: 'FT服务端发布', user: '杨红飞'},
+        // {name: 'MZ SQL语句审核', user: '杨铭威'},
+        // {name: 'AWS资源申请', user: '沈硕'},
+        // {name: 'WD客户端发布', user: '杨铭威'},
+        // {name: 'WD服务端发布', user: '杨红飞'}
       ],
       barTaskData: {
         Mon: 9,
@@ -118,38 +132,51 @@ export default {
       }
     }
   },
-  methods:{
-    getCmdbCount(){
+  methods: {
+    getCmdbCount () {
       // 获取CMDB资产数量
-      const params = {pageNum: 1,pageSize: 10000}
+      const params = {pageNum: 1, pageSize: 10000}
       getTableData(params).then(res => {
         this.cardData.cmdb = res.data.count
-      }).catch(error =>{
+      }).catch(error => {
         console.log('get CMDB count Faild!')
-      });
-    },
-
-    initLoginInfo(){
-      // 初始化 [登录记录]
-      const params= {pageNum: 1, pageSize: 5}
-      getLogData(params).then(res => {
-        console.log(res.data.data)
-        this.loginInfoData = res.data.data
       })
     },
-    initPieCmdb(){
-      // 初始化 [主机分类] 饼状图
-      getGroupList().then(res => {
-        const data = res.data
+    initTaskInfo(){
+      // 初始化 [待处理任务订单]
+      getTaskOrderlist().then(res => {
+        console.log(res)
+        const data = res.data.data
         for(var item in data){
-          this.pieCmdbData.push({
-              value: data[item].server_set.length,
-              name: data[item].name
+          this.taskInfoData.push({
+            name: data[item].task_name,
+            creator: data[item].creator,
+            status: data[item].status
           })
         }
       })
     },
-    initCard(){
+    initLoginInfo () {
+      // 初始化 [登录记录]
+      const params = {pageNum: 1, pageSize: 5}
+      getLogData(params).then(res => {
+        // console.log(res.data.data)
+        this.loginInfoData = res.data.data
+      })
+    },
+    initPieCmdb () {
+      // 初始化 [主机分类] 饼状图
+      getGroupList().then(res => {
+        const data = res.data
+        for (var item in data) {
+          this.pieCmdbData.push({
+            value: data[item].server_set.length,
+            name: data[item].name
+          })
+        }
+      })
+    },
+    initCard () {
       // 初始化第1排汇总
       this.getCmdbCount()
       // this.inforCardData = [
@@ -166,9 +193,10 @@ export default {
     this.initCard()
     this.initPieCmdb()
     this.initLoginInfo()
+    this.initTaskInfo()
   },
-  watch:{
-    pieCmdbData: function(){
+  watch: {
+    pieCmdbData: function () {
       this.$refs.childCmdb.initPie()
     }
   }

@@ -23,7 +23,7 @@ export default {
     resize () {
       this.dom.resize()
     },
-    initPie(){
+    initPie () {
       this.$nextTick(() => {
         let legend = this.value.map(_ => _.name)
         let option = {

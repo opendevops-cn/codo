@@ -94,4 +94,4 @@ export const rsyncPublicKeyData = (data) => {
 }
 
 // WEB Socket
-export const webSocketUrl = 'ws://172.16.80.12:8000/ws/terminal'
+export const webSocketUrl = 'ws://cmdb.opendevops.cn:8002/v1/cmdb/ws/terminal'

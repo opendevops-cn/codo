@@ -43,10 +43,13 @@ export default {
     },
     checkAuth(server_id){
       //判断当前用户对该资产是否有权限
-      const token = getToken()
+      const token = getToken()  // cookie获取 auth_key
+      // console.log('auth_key-->',token)
       const decoded = jwt_decode(token)
-      checkAuthServer(decoded.name,server_id).then(res => {
-        console.log(res)
+      // console.log('decode--->',decoded)
+      checkAuthServer(decoded.data.username,server_id).then(res => {
+      // checkAuthServer(decoded.name,server_id).then(res => {  
+        // console.log(res)
         if(res.data.status === true){
           this.openSocket(server_id)
         }else{
