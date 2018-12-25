@@ -142,12 +142,12 @@ export default {
         console.log('get CMDB count Faild!')
       })
     },
-    initTaskInfo(){
+    initTaskInfo () {
       // 初始化 [待处理任务订单]
       getTaskOrderlist().then(res => {
         console.log(res)
         const data = res.data.data
-        for(var item in data){
+        for (var item in data) {
           this.taskInfoData.push({
             name: data[item].task_name,
             creator: data[item].creator,
