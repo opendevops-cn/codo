@@ -95,4 +95,9 @@ export const rsyncPublicKeyData = (data) => {
 
 // WEB Socket
 // export const webSocketUrl = 'ws://cmdb.opendevops.cn:8002/v1/cmdb/ws/terminal' 内网
-export const webSocketUrl = 'ws://demo.opendevops.cn/v1/cmdb/ws/terminal' // 外网
+// export const webSocketUrl = 'ws://demo.opendevops.cn/api/cmdb/v1/cmdb/ws/terminal' // 外网
+
+// const domain = 'demo.opendevops.cn'
+const domain = window.location.host
+const wsuri = '/cmdb/v1/cmdb/ws/terminal'
+export const webSocketUrl = 'ws://' + domain + '/api' + wsuri

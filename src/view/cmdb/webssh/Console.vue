@@ -33,6 +33,7 @@ export default {
     },
     openSocket (pid) {
       console.log('start conn...')
+      console.log('webSocketUrl--->',webSocketUrl)
       this.terminalSocket = new WebSocket(webSocketUrl + '?id=' + pid)
       this.terminalSocket.onopen = this.runRealTerminal
       this.terminalSocket.onclose = this.closeRealTerminal
