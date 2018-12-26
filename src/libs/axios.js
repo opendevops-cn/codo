@@ -33,13 +33,6 @@ class HttpRequest {
       this.queue[url] = true
       return config
     }, error => {
-      if (error.request.status === '403') {
-        Message.error({
-          content: `你没有权限`,
-          duration: 8,
-          closable: true
-        })
-      }
       return Promise.reject(error)
     })
     // 响应拦截
@@ -49,16 +42,17 @@ class HttpRequest {
       return { data, status }
     }, error => {
       this.destroy(url)
-      if (error.response.status === '401') {
-        router.router.replace('/login')
+      if (error.response.status === '401' || error.response.status === 401) {
         location.reload()
-      } else if (error.response.status === '403') {
-        router.router.replace('/403')
-      } else if (error.response.status === '500') {
-        router.router.replace('/500')
+      } else if (error.response.status === 403) {
+        Message.error({
+          content: `你没有权限, 请联系管理员`,
+          duration: 8,
+          closable: true
+        })
       } else {
         Message.error({
-          content: error.response.data,
+          content: error.response.status,
           duration: 8,
           closable: true
         })
