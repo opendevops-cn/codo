@@ -33,6 +33,13 @@ class HttpRequest {
       this.queue[url] = true
       return config
     }, error => {
+      if (error.request.status === '403') {
+        Message.error({
+          content: `你没有权限`,
+          duration: 8,
+          closable: true
+        })
+      }
       return Promise.reject(error)
     })
     // 响应拦截
