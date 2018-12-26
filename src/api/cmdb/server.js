@@ -1,4 +1,5 @@
 import axios from '@/libs/api.request'
+import config from '@/config'
 
 // 获取所有主机
 export const getTableData = (params) => {
@@ -96,8 +97,7 @@ export const rsyncPublicKeyData = (data) => {
 // WEB Socket
 // export const webSocketUrl = 'ws://cmdb.opendevops.cn:8002/v1/cmdb/ws/terminal' 内网
 // export const webSocketUrl = 'ws://demo.opendevops.cn/api/cmdb/v1/cmdb/ws/terminal' // 外网
-
-// const domain = 'demo.opendevops.cn'
-const domain = window.location.host
+// const theDomain = process.env.NODE_ENV === 'development' ? 'demo.opendevops.cn' : config.domainName.pro
+const theDomain = process.env.NODE_ENV === 'development' ? config.domainName.dev : config.domainName.pro
 const wsuri = '/cmdb/v1/cmdb/ws/terminal'
-export const webSocketUrl = 'ws://' + domain + '/api' + wsuri
+export const webSocketUrl = 'ws://' + theDomain + '/api' + wsuri

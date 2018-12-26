@@ -11,7 +11,7 @@
     <div style="margin-top:10px;margin-bottom:10px;height:232px">
       <Row v-for="(item,index) in data">
         <Col span="4">
-          {{ index+1 }}
+          {{item.id}}
         </Col>
         <Col span="12">
           <p> <b>{{item.name}}</b> </p>

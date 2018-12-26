@@ -149,7 +149,8 @@ export default {
         const data = res.data.data
         for (var item in data) {
           this.taskInfoData.push({
-            name: data[item].task_name,
+            id: data[item].list_id,
+            name: data[item].task_name + data[item].task_type,
             creator: data[item].creator,
             status: data[item].status
           })
