@@ -146,6 +146,7 @@ export default {
         {
           name: 'command',
           type: 'i-input',
+          maxlength: 220,
           value: meth === 'put' ? this.tableData[index].command : '',
           label: '执行命令',
           placeholder: '请输入可执行命令，通常为shell命令或者可执行文件脚本。',
@@ -156,6 +157,7 @@ export default {
         {
           name: 'args',
           type: 'i-input',
+          maxlength: 220,
           value: meth === 'put' ? this.tableData[index].args : '',
           label: '命令参数',
           placeholder:
