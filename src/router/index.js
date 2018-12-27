@@ -22,11 +22,13 @@ router.beforeEach((to, from, next) => {
         store.dispatch('concatRoutes', rules).then(routers => {
           router.addRoutes(routers)
           next({ ...to, replace: true })
-        }).catch(() => {
+        }).catch((err) => {
+          console.log(err)
           next({ name: 'login' })
         })
-      }).catch(() => {
-        // setToken('')
+      }).catch((err1) => {
+        console.log(err1)
+        setToken('')
         next({ name: 'login' })
       })
     } else {
