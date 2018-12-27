@@ -16,3 +16,11 @@ export const addServerGroup = (data, url, action) => {
     data
   })
 }
+
+// 删除主机
+export const delGroup = (id) => {
+  return axios.request({
+    url: `/cmdb/v1/cmdb/server_group/${id}`,
+    method: 'delete'
+  })
+}

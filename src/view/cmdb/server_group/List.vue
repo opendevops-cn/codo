@@ -18,7 +18,9 @@
         </Card>
       </Col>
     </Row> 
-
+    <Modal v-model="del_dialog.show" :title="del_dialog.title" :loading=true @on-ok="removeAction(del_dialog.id)" @on-cancel="closeDelModal">
+       <p>确定要进行删除操作?</p>
+    </Modal>
     <copyRight> </copyRight>
     
   </div>
@@ -29,7 +31,7 @@ import {Tag} from 'iview'
 import copyRight from '@/components/public/copyright'
 import Tables from '_c/tables'
 import Add from './Add'
-import { getTableData } from '@/api/cmdb/server_group.js'
+import { getTableData,delGroup } from '@/api/cmdb/server_group.js'
 export default {
   name: 'list',
   components: {
@@ -47,6 +49,10 @@ export default {
         show: false,
         title: '',
         option: ''
+      },
+      del_dialog:{
+        show: false,
+        title: '删除主机'
       },
       columns: [
         {
@@ -90,7 +96,8 @@ export default {
                   },
                   on: {
                       click: () => {
-                          this.remove(params.index)
+                        this.handleRemove(params.row)
+                          // this.remove(params.index)
                           // vm.$emit('on-delete', params)
                           // vm.$emit('input', params.tableData.filter((item, index) => index !== params.row.initRowIndex))
                       }
@@ -120,6 +127,31 @@ export default {
     //       content: `项目名称：${this.tableData[index].name}<br>运行时间：${this.tableData[index].time}<br>镜像：${this.tableData[index].iamge}`
     //   })
     // },
+
+    //删除
+    handleRemove(row){
+      this.del_dialog = {
+        show: true,
+        title: '删除主机组 '+ row.name,
+        id : row.id
+      }
+    },
+    removeAction(id){
+      delGroup(id).then(res => {
+        this.$Message.success({
+            content: 'Success!',
+            duration: 3
+        });
+        this.closeDelModal()
+        this.getData()
+      }).catch(error =>{
+          this.$Message.error({
+              content: JSON.stringify(error.response.data),
+              duration: 10
+          });
+      });
+    },
+
     remove (index) {
       this.tableData.splice(index, 1);
     },
@@ -145,7 +177,8 @@ export default {
       this.formData= {
           name: row.name,
           comment: row.comment,
-          id: row.id
+          id: row.id,
+          server_set: row.server_set
       }
     },
     getData(){
@@ -157,8 +190,8 @@ export default {
         this.treeData = []
         for(let item in res.data){
           let children = []
-            for(let c in res.data[item].server_set){
-              children.push({ title: res.data[item].server_set[c] })
+            for(let c in res.data[item].server_set_name){
+              children.push({ title: res.data[item].server_set_name[c] })
             }
           this.treeData.push({
               title: res.data[item].name,
@@ -192,7 +225,10 @@ export default {
     closeModal(){
       //关闭modal
       this.dialog.show = false
-    }
+    },
+    closeDelModal(){
+      this.del_dialog.show = false
+    },
   },
   mounted () {
     /** 获取表格数据 **/

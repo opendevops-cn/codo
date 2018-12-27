@@ -62,12 +62,12 @@
                         // edit => put => /api/cmdb/server_group/1
                         const url = this.dialog.option == 'add' ? '/' : `/${this.formData.id}/`;
                         const action = this.dialog.option == 'add' ? 'post' : 'put';
-                        console.log(this.formData)
+                        // console.log(this.formData)
                         addServerGroup(this.formData,url,action).then(res => {
                             console.log(res)
                             if (res.status){
                                 this.$Message.success({
-                                    content: '主机添加成功',
+                                    content: '主机组添加成功',
                                     duration: 3
                                 });
                                 this.$emit('e-close');

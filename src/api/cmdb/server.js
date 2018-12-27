@@ -97,7 +97,7 @@ export const rsyncPublicKeyData = (data) => {
 // WEB Socket
 // export const webSocketUrl = 'ws://cmdb.opendevops.cn:8002/v1/cmdb/ws/terminal' 内网
 // export const webSocketUrl = 'ws://demo.opendevops.cn/api/cmdb/v1/cmdb/ws/terminal' // 外网
-// const theDomain = process.env.NODE_ENV === 'development' ? 'demo.opendevops.cn' : config.domainName.pro
-const theDomain = process.env.NODE_ENV === 'development' ? config.domainName.dev : config.domainName.pro
+const theDomain = process.env.NODE_ENV === 'development' ? 'demo.opendevops.cn' : config.domainName.pro
+// const theDomain = process.env.NODE_ENV === 'development' ? config.domainName.dev : config.domainName.pro
 const wsuri = '/cmdb/v1/cmdb/ws/terminal'
 export const webSocketUrl = 'ws://' + theDomain + '/api' + wsuri
