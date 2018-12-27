@@ -14,31 +14,6 @@ import parentView from '@/components/parent-view'
 
 export const routerMap = [
   {
-    path: '/',
-    name: '_home',
-    redirect: '/home',
-    component: Main,
-    meta: {
-      title: '首页',
-      icon: 'md-home',
-      hideInMenu: true,
-      notCache: true
-    },
-    children: [
-      {
-        path: '/home',
-        name: 'home',
-        meta: {
-          hideInMenu: true,
-          title: '首页',
-          notCache: true,
-          icon: 'md-home'
-        },
-        component: () => import('@/view/single-page/home')
-      }
-    ]
-  },
-  {
     path: '/order',
     name: 'order',
     meta: {
@@ -159,7 +134,7 @@ export const routerMap = [
         component: () => import('@/view/k8s/project/Publish.vue')
       },
       {
-        path: '/',
+        path: 'publish_list',
         name: 'publish_list',
         meta: {
           icon: 'ios-stats',
@@ -494,6 +469,29 @@ export const routes = [
       hideInMenu: true
     },
     component: () => import('@/view/login/login.vue')
+  },
+  {
+    path: '/',
+    name: '_home',
+    redirect: '/home',
+    component: Main,
+    meta: {
+      hideInMenu: true,
+      notCache: true
+    },
+    children: [
+      {
+        path: '/home',
+        name: 'home',
+        meta: {
+          hideInMenu: true,
+          title: '首页',
+          notCache: true,
+          icon: 'md-home'
+        },
+        component: () => import('@/view/single-page/home')
+      }
+    ]
   },
   {
     path: '/doc',
