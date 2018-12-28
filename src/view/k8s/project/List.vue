@@ -10,7 +10,7 @@
     </Card>
     <Modal width="600px;" v-model="dialog.show"  :title="dialog.title" :loading=true :footer-hide=true> 
         <!-- <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group> -->
-        <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal"></Add>
+        <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal" ref="childAdd"></Add>
     </Modal>
     <Publish :dialog="publish_dialog" :formData="publishFormData" @e-close="closePublishModal"></Publish>
     <copyRight> </copyRight>
@@ -64,7 +64,7 @@ export default {
           align: 'center',
           render: (h, params) => {
             //return h('router-link', {props:{to:'/project/publish/'+params.row.id+ '/'}}, params.row.name)
-            return h('router-link', {props:{to:'/publish/'}}, params.row.name)
+            return h('router-link', {props:{to:'/k8s/publish/'}}, params.row.name)
           }
         },
         {
@@ -235,6 +235,7 @@ export default {
     },
     // 新增
     handleAdd() {
+      this.$refs.childAdd.parentHandleclick()
       this.dialog = {
         show: true,
         title: '新建项目',

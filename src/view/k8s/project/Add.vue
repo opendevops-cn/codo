@@ -166,29 +166,29 @@
             },
             handleReset (name) {
                 this.$refs[name].resetFields();
+            },
+            parentHandleclick() {
+                // 父组件调用时触发
+                getAppList().then(res => {
+                    const data = res.data.data
+                    for(var item in data){
+                        this.AppList.push({
+                            key: data[item].id,
+                            label: data[item].name
+                        })
+                    }
+                }),
+                getEnvList().then(res => {
+                    this.EnvList = res.data.data
+                }),
+                getUserList().then(res => {
+                    this.UserList = res.data.data
+                })
             }
-
         },
         props:{
             dialog: Object,
             formData: Object
-        },
-        mounted () {
-            getAppList().then(res => {
-                const data = res.data.data
-                for(var item in data){
-                    this.AppList.push({
-                        key: data[item].id,
-                        label: data[item].name
-                    })
-                }
-            }),
-            getEnvList().then(res => {
-                this.EnvList = res.data.data
-            }),
-            getUserList().then(res => {
-                this.UserList = res.data.data
-            })
         }
     }
 </script>

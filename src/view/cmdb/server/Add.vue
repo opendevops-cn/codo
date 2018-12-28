@@ -192,36 +192,37 @@
             handleReset (name) {
                 console.log('name..',name)
                 this.$refs[name].resetFields();
-            }
+            },
+            parentHandleclick() {
+                // 父组件调用时触发
+                getGroupList().then(res => {
+                    const data = res.data
+                    for(var item in data){
+                        this.GroupList.push({
+                            key: data[item].id,
+                            label: data[item].name
+                        })
+                    }
+                }),
+                getTagList().then(res => {
+                    const data = res.data
+                    for(var item in data){
+                        this.TagList.push({
+                            key: data[item].id,
+                            label: data[item].name
+                        })
+                    }
+                }),
+                getAdmUser().then(res => {
+                    this.AdmUser = res.data
+                    console.log(this.AdmUser)
+                })
+            },
 
         },
         props:{
             dialog: Object,
             formData: Object
-        },
-        mounted () {
-            getGroupList().then(res => {
-                const data = res.data
-                for(var item in data){
-                    this.GroupList.push({
-                        key: data[item].id,
-                        label: data[item].name
-                    })
-                }
-            }),
-            getTagList().then(res => {
-                const data = res.data
-                for(var item in data){
-                    this.TagList.push({
-                        key: data[item].id,
-                        label: data[item].name
-                    })
-                }
-            }),
-            getAdmUser().then(res => {
-                this.AdmUser = res.data
-                console.log(this.AdmUser)
-            })
         },
         watch:{
             formData: function(){

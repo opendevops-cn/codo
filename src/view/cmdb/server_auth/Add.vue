@@ -145,6 +145,31 @@
             handleReset (name) {
                 console.log('name..',name)
                 this.$refs[name].resetFields();
+            },
+            parentHandleclick() {
+                // 父组件调用时触发
+                getGroupList().then(res => {
+                    const data = res.data
+                    for (var item in data) {
+                    this.GroupList.push({
+                        key: data[item].id,
+                        label: data[item].name
+                    })
+                    }
+                    // console.log('GroupList-->',GroupList)
+                    // this.$store.dispatch('setGroupList',GroupList)
+                })
+                const params = {pageNum: 1, pageSize: 10000}
+                getTableData(params).then(res => {
+                    const data = res.data.data
+                    for (var item in data) {
+                    this.ServerList.push({
+                        key: data[item].id,
+                        label: data[item].hostname
+                    })
+                    }
+                    // this.$store.dispatch('setServerList',ServerList)
+                })
             }
 
         },
@@ -152,31 +177,6 @@
             dialog: Object,
             formData: Object,
             systemUser: Array
-        },
-        mounted () {
-            getGroupList().then(res => {
-                const data = res.data
-                for(var item in data){
-                    this.GroupList.push({
-                        key: data[item].id,
-                        label: data[item].name
-                    })
-                }
-                //console.log('GroupList-->',GroupList)
-                //this.$store.dispatch('setGroupList',GroupList)
-            })
-
-            const params = {pageNum: 1,pageSize: 10000}
-            getTableData(params).then(res => {
-                const data = res.data.data
-                for(var item in data){
-                    this.ServerList.push({
-                        key: data[item].id,
-                        label: data[item].hostname
-                    })
-                }
-                //this.$store.dispatch('setServerList',ServerList)
-            })
         },
         watch:{
             formData: function(){
