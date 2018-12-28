@@ -20,7 +20,7 @@ export const addTag = (data, url, action) => {
 // 删除tag
 export const delTag = (id) => {
   return axios.request({
-    url: `/v1/cmdb/tag/${id}`,
+    url: `/cmdb/v1/cmdb/tag/${id}`,
     method: 'delete'
   })
 }
