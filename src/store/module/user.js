@@ -84,7 +84,7 @@ export default {
           if (parseInt(res.status) === 401) {
             reject(new Error('token error'))
           } else {
-            if (!res.data.code) {
+            if (!res.data.data.rules) {
               authorization().then(res => {
                 if (parseInt(res.status) === 200) {
                   resolve(res.data.data.rules.page)
