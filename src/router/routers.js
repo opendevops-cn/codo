@@ -78,25 +78,6 @@ export const routerMap = [
       }
     ]
   },
-  {
-    path: '/i18n',
-    name: 'i18n',
-    meta: {
-      hide: true
-    },
-    component: Main,
-    children: [
-      {
-        path: 'i18n_page',
-        name: 'i18n_page',
-        meta: {
-          icon: 'md-planet',
-          title: '国际化'
-        },
-        component: () => import('@/view/i18n/i18n-page.vue')
-      }
-    ]
-  },
   //
   {
     path: '/k8s',
@@ -490,6 +471,25 @@ export const routes = [
           icon: 'md-home'
         },
         component: () => import('@/view/single-page/home')
+      }
+    ]
+  },
+  {
+    path: '/i18n',
+    name: 'i18n',
+    meta: {
+      hideInMenu: true
+    },
+    component: Main,
+    children: [
+      {
+        path: 'i18n_page',
+        name: 'i18n_page',
+        meta: {
+          icon: 'md-planet',
+          title: '国际化'
+        },
+        component: () => import('@/view/i18n/i18n-page.vue')
       }
     ]
   },
