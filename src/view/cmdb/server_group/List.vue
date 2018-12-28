@@ -64,8 +64,15 @@ export default {
           align: 'center'
         },
         {title: '组名', key: 'name', align: 'center'},
+        {
+          title: '主机', 
+          key: 'server', 
+          align: 'center',
+          render: (h, params) => {
+            return h('div', [h(Tag,{props:{color:'primary'}}, params.row.server_set.length)])
+          }
+        },
         {title: '描述', key: 'comment', align: 'center'},
-
         {
           title: '操作',
           key: 'handle',

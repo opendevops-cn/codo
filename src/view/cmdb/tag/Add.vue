@@ -6,6 +6,17 @@
         <FormItem label="Tag" prop="name">
             <Input v-model="formData.name" placeholder=""></Input>
         </FormItem>
+        
+        <FormItem label="主机" >
+            <Transfer
+            :data="ServerList"
+            :target-keys="formData.server_set"
+            filterable
+            :filter-method="serverFilter"
+            :titles="serverTitle"
+            @on-change="serverHandleChange">
+            </Transfer>
+        </FormItem>
 
         <FormItem>
             <Button type="primary" @click="handleSubmit('formData')">提交</Button>
@@ -18,10 +29,13 @@
 </template>
 <script>
     import { addTag } from '@/api/cmdb/tag'
+    import { getTableData } from '@/api/cmdb/server'
     export default {
         name: 'add',
         data () {
             return {
+                ServerList: [],
+                serverTitle: ['可关联','已关联'],
                 ruleValidate: {
                     name: [
                         { required: true, message: 'tag名称不能为空', trigger: 'blur' }
@@ -30,6 +44,12 @@
             }
         },
         methods: {
+            serverHandleChange (newTargetKeys) {
+                this.formData.server_set = newTargetKeys;
+            },
+            serverFilter (data, query) {
+                return data.label.indexOf(query) > -1;
+            },
             handleSubmit (name) {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
@@ -74,6 +94,18 @@
         props:{
             dialog: Object,
             formData: Object
+        },
+        mounted(){
+            const params = {pageNum: 1,pageSize: 10000}
+            getTableData(params).then(res => {
+                const data = res.data.data
+                for(var item in data){
+                    this.ServerList.push({
+                        key: data[item].id,
+                        label: data[item].hostname
+                    })
+                }
+            }) 
         }
     }
 </script>
