@@ -39,6 +39,7 @@ class HttpRequest {
     instance.interceptors.response.use(res => {
       this.destroy(url)
       const { data, status } = res
+      console.log( { data, status })
       return { data, status }
     }, error => {
       this.destroy(url)
@@ -52,7 +53,7 @@ class HttpRequest {
         })
       } else {
         Message.error({
-          content: error.response.status,
+          content: `${error.response.status}-错误`,
           duration: 8,
           closable: true
         })
