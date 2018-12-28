@@ -42,7 +42,6 @@
       :systemUser="systemUser"
       @e-update="getData"
       @e-close="closeModal"
-      ref="childAdd"
     ></Add>
     <Detail
       :dialog="dialog2"
@@ -256,7 +255,6 @@ export default {
     },
     // 新增
     handleAdd() {
-      this.$refs.childAdd.parentHandleclick()
       this.dialog = {
         show: true,
         title: "添加授权规则",

@@ -15,7 +15,7 @@
       <Page :total="pageTotal" :current="getParams.pageNum" :page-size="getParams.pageSize" :page-size-opts=[25,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize"></Page>
     </Card>
 
-    <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal" ref="childAdd"></Add>
+    <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal"></Add>
     <multiAdd :dialog="multi_dialog" :formData="formData_multi" @e-update="getData" @e-close="closeMultiModal"></multiAdd>
     <Detail :dialog="dialog2" :formData="formData" @e-close="closeModal"></Detail>
 
@@ -281,7 +281,6 @@ export default {
     },
     // 新增
     handleAdd () {
-      this.$refs.childAdd.parentHandleclick();
       this.dialog = {
         show: true,
         title: '添加DB',

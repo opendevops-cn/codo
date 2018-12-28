@@ -113,34 +113,33 @@ export default {
     },
     handleReset (name) {
       this.$refs[name].resetFields()
-    },
-    parentHandleclick() {
-      // 父组件调用时触发
-      const params = {pageNum: 1, pageSize: 10000}
-      getTableData(params).then(res => {
-        const data = res.data.data
-        for (var item in data) {
-          this.ServerList.push({
-            key: data[item].id,
-            label: data[item].hostname
-          })
-        }
-      })
-      getDBData(params).then(res => {
-        const data = res.data.data
-        for (var item in data) {
-          this.DBList.push({
-            key: data[item].id,
-            label: data[item].host
-          })
-        }
-      })
     }
 
   },
   props: {
     dialog: Object,
     formData: Object
+  },
+  mounted(){
+    const params = {pageNum: 1, pageSize: 10000}
+    getTableData(params).then(res => {
+      const data = res.data.data
+      for (var item in data) {
+        this.ServerList.push({
+          key: data[item].id,
+          label: data[item].hostname
+        })
+      }
+    })
+    getDBData(params).then(res => {
+      const data = res.data.data
+      for (var item in data) {
+        this.DBList.push({
+          key: data[item].id,
+          label: data[item].host
+        })
+      }
+    })
   }
 }
 </script>

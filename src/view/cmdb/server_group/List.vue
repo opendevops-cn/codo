@@ -10,7 +10,7 @@
             </div>
           </tables>
         </Card>
-        <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal" ref="childAdd"></Add>
+        <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal"></Add>
       </Col>
       <Col span="7" offset="1">
         <Card>
@@ -176,7 +176,6 @@ export default {
     },
     // 新增
     handleAdd () {
-      this.$refs.childAdd.parentHandleclick()
       this.dialog = {
         show: true,
         title: '添加主机组',

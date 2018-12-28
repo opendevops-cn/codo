@@ -10,7 +10,7 @@
     </Card>
     <Modal width="600px;" v-model="dialog.show"  :title="dialog.title" :loading=true :footer-hide=true> 
         <!-- <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group> -->
-        <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal" ref="childAdd"></Add>
+        <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal"></Add>
     </Modal>
     <Publish :dialog="publish_dialog" :formData="publishFormData" @e-close="closePublishModal"></Publish>
     <copyRight> </copyRight>
@@ -235,7 +235,6 @@ export default {
     },
     // 新增
     handleAdd() {
-      this.$refs.childAdd.parentHandleclick()
       this.dialog = {
         show: true,
         title: '新建项目',
@@ -244,6 +243,7 @@ export default {
     },
     // 编辑
     handleEdit(index,row) {
+      this.$refs.childAdd.parentHandleclick()
       this.dialog = {
         show: true,
         title: '编辑项目',

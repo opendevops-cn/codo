@@ -145,7 +145,7 @@ export default {
     initTaskInfo () {
       // 初始化 [待处理任务订单]
       getTaskOrderlist().then(res => {
-        console.log(res)
+        //console.log(res)
         const data = res.data.data
         for (var item in data) {
           this.taskInfoData.push({
@@ -168,7 +168,7 @@ export default {
     initPieCmdb () {
       // 初始化 [主机分类] 饼状图
       getGroupList().then(res => {
-        const data = res.data
+        const data = [res.data]
         for (var item in data) {
           this.pieCmdbData.push({
             value: data[item].server_set.length,

@@ -147,14 +147,14 @@ export default {
       tableData: [],
       formData: {
           name: 'demo01',
-          domain: 'demo01.yangmv.com',
+          domain: 'demo01.xxx.com',
           port: '5000',
           env: [],
           owner: [],
           replicas: 2,
           desc: '这是一个测试demo',
-          git_url: 'http://gitlab.shinezoneserver.com/Shinezone-OPS/flask-demo.git',
-          git_user: 'yangmv',
+          git_url: 'http://github.com//demo01.git',
+          git_user: 'xxx',
           git_pwd: '123456',
           // cuser_id: this.$store.getters.user.id
           cuser_id: '2' 
