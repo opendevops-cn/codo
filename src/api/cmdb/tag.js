@@ -16,3 +16,11 @@ export const addTag = (data, url, action) => {
     data
   })
 }
+
+// 删除tag
+export const delTag = (id) => {
+  return axios.request({
+    url: `/v1/cmdb/tag/${id}`,
+    method: 'delete'
+  })
+}

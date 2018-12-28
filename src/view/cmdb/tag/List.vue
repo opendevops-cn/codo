@@ -11,7 +11,9 @@
     
     <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal"></Add>
     <copyRight> </copyRight>
-    
+    <Modal v-model="del_dialog.show" :title="del_dialog.title" :loading=true @on-ok="removeAction(del_dialog.id)" @on-cancel="closeDelModal">
+       <p>确定要进行删除操作?</p>
+    </Modal>
   </div>
 </template>
 
@@ -20,7 +22,7 @@ import {Tag} from 'iview'
 import copyRight from '@/components/public/copyright'
 import Tables from '_c/tables'
 import Add from './Add'
-import { getTableData } from '@/api/cmdb/tag.js'
+import { getTableData,delTag } from '@/api/cmdb/tag.js'
 export default {
   name: 'list',
   components: {
@@ -38,6 +40,10 @@ export default {
         title: '',
         option: ''
       },
+      del_dialog:{
+        show: false,
+        title: '删除主机'
+      },
       columns: [
         {
           title: 'ID',
@@ -48,6 +54,14 @@ export default {
           align: 'center',
         },
         {title: 'Tag', key: 'name', align: 'center',},
+        {
+          title: '主机', 
+          key: 'server', 
+          align: 'center',
+          render: (h, params) => {
+            return h('div', [h(Tag,{props:{color:'primary'}}, params.row.server_set.length)])
+          }
+        },
         {
           title: '操作',
           key: 'handle',
@@ -78,7 +92,8 @@ export default {
                   },
                   on: {
                       click: () => {
-                          this.remove(params.index)
+                        this.handleRemove(params.row)
+                          // this.remove(params.index)
                           // vm.$emit('on-delete', params)
                           // vm.$emit('input', params.tableData.filter((item, index) => index !== params.row.initRowIndex))
                       }
@@ -92,8 +107,8 @@ export default {
       ],
       tableData: [],
       formData: {
-          name: 'Game001',
-          comment: '这是一个测试主机组'
+          name: '',
+          server_set: []
       }
     }
   },
@@ -107,6 +122,31 @@ export default {
     //       content: `项目名称：${this.tableData[index].name}<br>运行时间：${this.tableData[index].time}<br>镜像：${this.tableData[index].iamge}`
     //   })
     // },
+
+  //删除
+    handleRemove(row){
+      this.del_dialog = {
+        show: true,
+        title: '删除主机组 '+ row.name,
+        id : row.id
+      }
+    },
+    removeAction(id){
+      delTag(id).then(res => {
+        this.$Message.success({
+            content: 'Success!',
+            duration: 3
+        });
+        this.closeDelModal()
+        this.getData()
+      }).catch(error =>{
+          this.$Message.error({
+              content: JSON.stringify(error.response.data),
+              duration: 10
+          });
+      });
+    },
+
     remove (index) {
       this.tableData.splice(index, 1);
     },
@@ -132,7 +172,8 @@ export default {
       this.formData= {
           name: row.name,
           comment: row.comment,
-          id: row.id
+          id: row.id,
+          server_set: row.server_set
       }
     },
     getData(){
@@ -147,7 +188,10 @@ export default {
     closeModal(){
       //关闭modal
       this.dialog.show = false
-    }
+    },
+    closeDelModal(){
+      this.del_dialog.show = false
+    },
   },
   mounted () {
     /** 获取表格数据 **/
