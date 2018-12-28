@@ -156,10 +156,19 @@ export const routerMap = [
         path: 'server',
         name: 'server_list',
         meta: {
-          icon: 'ios-build',
+          icon: 'ios-cube',
           title: '主机管理'
         },
         component: () => import('@/view/cmdb/server/List.vue')
+      },
+      {
+        path: 'db',
+        name: 'server_db',
+        meta: {
+          icon: 'ios-cube',
+          title: 'DB管理'
+        },
+        component: () => import('@/view/cmdb/db/List.vue')
       },
       {
         path: 'server_log',

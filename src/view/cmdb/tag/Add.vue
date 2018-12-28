@@ -18,6 +18,17 @@
             </Transfer>
         </FormItem>
 
+        <FormItem label="数据库" >
+            <Transfer
+            :data="DBList"
+            :target-keys="formData.dbserver_set"
+            filterable
+            :filter-method="dbFilter"
+            :titles="dbTitle"
+            @on-change="dbHandleChange">
+            </Transfer>
+        </FormItem>
+
         <FormItem>
             <Button type="primary" @click="handleSubmit('formData')">提交</Button>
             <Button @click="handleReset('formData')" style="margin-left: 8px">重置</Button>
@@ -30,12 +41,15 @@
 <script>
     import { addTag } from '@/api/cmdb/tag'
     import { getTableData } from '@/api/cmdb/server'
+    import { getDBData } from '@/api/cmdb/db'
     export default {
         name: 'add',
         data () {
             return {
                 ServerList: [],
+                DBList:[],
                 serverTitle: ['可关联','已关联'],
+                dbTitle: ['可关联DB','已关联DB'],
                 ruleValidate: {
                     name: [
                         { required: true, message: 'tag名称不能为空', trigger: 'blur' }
@@ -48,6 +62,12 @@
                 this.formData.server_set = newTargetKeys;
             },
             serverFilter (data, query) {
+                return data.label.indexOf(query) > -1;
+            },
+            dbHandleChange (newTargetKeys) {
+                this.formData.dbserver_set = newTargetKeys;
+            },
+            dbFilter (data, query) {
                 return data.label.indexOf(query) > -1;
             },
             handleSubmit (name) {
@@ -105,7 +125,16 @@
                         label: data[item].hostname
                     })
                 }
-            }) 
+            })
+            getDBData(params).then(res => {
+                const data = res.data.data
+                for(var item in data){
+                    this.DBList.push({
+                        key: data[item].id,
+                        label: data[item].host
+                    })
+                }
+            })
         }
     }
 </script>

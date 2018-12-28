@@ -63,6 +63,14 @@ export default {
           }
         },
         {
+          title: 'DB', 
+          key: 'dbserver', 
+          align: 'center',
+          render: (h, params) => {
+            return h('div', [h(Tag,{props:{color:'primary'}}, params.row.dbserver_set.length)])
+          }
+        },
+        {
           title: '操作',
           key: 'handle',
           width: 200,
@@ -108,7 +116,8 @@ export default {
       tableData: [],
       formData: {
           name: '',
-          server_set: []
+          server_set: [],
+          dbserver_set: []
       }
     }
   },
@@ -158,7 +167,7 @@ export default {
     handleAdd() {
       this.dialog = {
         show: true,
-        title: '添加主机组',
+        title: '添加Tag',
         option: 'add'
       }
     },
@@ -173,7 +182,8 @@ export default {
           name: row.name,
           comment: row.comment,
           id: row.id,
-          server_set: row.server_set
+          server_set: row.server_set,
+          dbserver_set: row.dbserver_set
       }
     },
     getData(){

@@ -75,6 +75,7 @@ export default {
   server_log: '日志审计',
   server_auth:'授权规则',
   server_group: '主机组',
+  server_db: 'DB管理',
   tag: '标签管理',
   adm_user:'管理用户',
   statisticaldata: "统计数据",
