@@ -4,7 +4,7 @@ import config from '@/config'
 import { forEach, hasOneOf, objEqual } from '@/libs/tools'
 
 export const setTitle = (title) => {
-  window.document.title = `${title} -admin` || 'admin'
+  window.document.title = `${title} -CODO` || 'CODO'
 }
 
 export const TOKEN_KEY = 'auth_key'
