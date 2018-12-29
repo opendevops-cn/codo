@@ -84,23 +84,23 @@ export default {
           if (parseInt(res.status) === 401) {
             reject(new Error('token error'))
           } else {
-            resolve(res.data.data.rules.page)
-            commit('SET_RULES', res.data.data.rules.component)
-            // if (!res.data.data) {
-            //   authorization().then(res => {
-            //     if (parseInt(res.status) === 200) {
-            //       resolve(res.data.data.rules.page)
-            //       commit('SET_RULES', res.data.data.rules.component)
-            //     } else {
-            //       reject(new Error('token error'))
-            //     }
-            //   }).catch(error => {
-            //     reject(error)
-            //   })
-            // } else {
-            //   resolve(res.data.data.rules.page)
-            //   commit('SET_RULES', res.data.data.rules.component)
-            // }
+            // resolve(res.data.data.rules.page)
+            // commit('SET_RULES', res.data.data.rules.component)
+            if (!res.data.data) {
+              authorization().then(res => {
+                if (parseInt(res.status) === 200) {
+                  resolve(res.data.data.rules.page)
+                  commit('SET_RULES', res.data.data.rules.component)
+                } else {
+                  reject(new Error('token error'))
+                }
+              }).catch(error => {
+                reject(error)
+              })
+            } else {
+              resolve(res.data.data.rules.page)
+              commit('SET_RULES', res.data.data.rules.component)
+            }
           }
         }).catch(error => {
           reject(error)
