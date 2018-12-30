@@ -11,6 +11,7 @@
           </tables>
         </Card>
         <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal"></Add>
+        <Api :dialog="api_dialog" :apiUrl="apiUrl" @e-close="closeApiModal"></Api>
       </Col>
       <Col span="7" offset="1">
         <Card>
@@ -31,6 +32,7 @@ import {Tag} from 'iview'
 import copyRight from '@/components/public/copyright'
 import Tables from '_c/tables'
 import Add from './Add'
+import Api from '@/view/cmdb/common/Api'
 import { getTableData, delGroup } from '@/api/cmdb/server_group.js'
 export default {
   name: 'list',
@@ -38,10 +40,12 @@ export default {
     copyRight,
     Tables,
     Tag,
-    Add
+    Add,
+    Api
   },
   data () {
     return {
+      apiUrl: null,
       treeData: [],
       // 弹出框
       loading: false,
@@ -49,6 +53,11 @@ export default {
         show: false,
         title: '',
         option: ''
+      },
+      api_dialog: {
+        show: false,
+        title: '',
+        name: ''
       },
       del_dialog: {
         show: false,
@@ -89,6 +98,21 @@ export default {
           button: [
             (h, params, vm) => {
               return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'info',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                    // this.show(params.index)
+                      this.handleAPI(params.index, params.row)
+                    }
+                  }
+                }, '获取接口'),
                 h('Button', {
                   props: {
                     type: 'primary',
@@ -182,6 +206,14 @@ export default {
         option: 'add'
       }
     },
+    // 获取API
+    handleAPI(index, row) {
+      this.api_dialog = {
+        show: true,
+        title: '获取API',
+        name: row.name
+      }
+    },
     // 编辑
     handleEdit (index, row) {
       this.dialog = {
@@ -201,6 +233,7 @@ export default {
       // 获取数据
       getTableData().then(res => {
         this.tableData = res.data
+        this.apiUrl = res.request.responseURL
         // console.log(this.tableData)
         this.treeData = []
 
@@ -244,6 +277,9 @@ export default {
     },
     closeDelModal () {
       this.del_dialog.show = false
+    },
+    closeApiModal () {
+      this.api_dialog.show = false
     }
   },
   mounted () {

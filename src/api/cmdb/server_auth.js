@@ -52,12 +52,12 @@ export const loginGW = () => {
 }
 
 // 判断当前用户对资产是否有权限
-export const checkAuthServer = (user, sid) => {
+export const checkAuthServer = (sid) => {
   return axios.request({
     url: '/cmdb/v1/cmdb/server_check_auth/',
     method: 'get',
     params: {
-      'username': user,
+      // 'username': user,
       'sid': sid
     }
   })

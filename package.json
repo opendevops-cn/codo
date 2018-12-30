@@ -29,6 +29,7 @@
     "simplemde": "^1.11.2",
     "sortablejs": "^1.7.0",
     "vue": "^2.5.10",
+    "vue-clipboard2": "^0.2.1",
     "vue-i18n": "^7.8.0",
     "vue-qart": "^2.2.0",
     "vue-router": "^3.0.1",

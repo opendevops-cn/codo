@@ -10,6 +10,7 @@
     </Card>
 
     <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal"></Add>
+    <Api :dialog="api_dialog" :apiUrl="apiUrl" @e-close="closeModal"></Api>
     <copyRight> </copyRight>
     <Modal v-model="del_dialog.show" :title="del_dialog.title" :loading=true @on-ok="removeAction(del_dialog.id)" @on-cancel="closeDelModal">
        <p>确定要进行删除操作?</p>
@@ -22,6 +23,7 @@ import {Tag} from 'iview'
 import copyRight from '@/components/public/copyright'
 import Tables from '_c/tables'
 import Add from './Add'
+import Api from '@/view/cmdb/common/Api'
 import { getTableData, delTag } from '@/api/cmdb/tag.js'
 export default {
   name: 'list',
@@ -29,16 +31,22 @@ export default {
     copyRight,
     Tables,
     Tag,
-    Add
+    Add,
+    Api
   },
   data () {
     return {
-      // 弹出框
-      loading: false,
+      apiUrl: null,
+      loading: false, // 弹出框
       dialog: {
         show: false,
         title: '',
         option: ''
+      },
+      api_dialog: {
+        show: false,
+        title: '',
+        name: ''
       },
       del_dialog: {
         show: false,
@@ -78,6 +86,21 @@ export default {
           button: [
             (h, params, vm) => {
               return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'info',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                    // this.show(params.index)
+                      this.handleAPI(params.index, params.row)
+                    }
+                  }
+                }, '获取接口'),
                 h('Button', {
                   props: {
                     type: 'primary',
@@ -171,6 +194,14 @@ export default {
         option: 'add'
       }
     },
+    // 获取API
+    handleAPI(index, row) {
+      this.api_dialog = {
+        show: true,
+        title: '获取API',
+        name: row.name
+      }
+    },
     // 编辑
     handleEdit (index, row) {
       this.dialog = {
@@ -191,6 +222,7 @@ export default {
       getTableData().then(res => {
         // console.log('tableData==>')
         // console.log(res)
+        this.apiUrl = res.request.responseURL
         this.tableData = res.data
         // console.log(this.tableData)
       })
@@ -201,6 +233,9 @@ export default {
     },
     closeDelModal () {
       this.del_dialog.show = false
+    },
+    closeDelModal () {
+      this.api_dialog.show = false
     }
   },
   mounted () {
