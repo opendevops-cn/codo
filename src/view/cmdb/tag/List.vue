@@ -222,11 +222,9 @@ export default {
       getTableData().then(res => {
         console.log('tableData==>')
         console.log(res)
-        const { data,status,request} = res
-        console.log('request--->',request)
 
-        this.apiUrl = request.responseURL
-        this.tableData = data
+        this.apiUrl = res.request.responseURL
+        this.tableData = res.data
         // console.log(this.tableData)
       })
     },

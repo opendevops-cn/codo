@@ -38,9 +38,9 @@ class HttpRequest {
     // 响应拦截
     instance.interceptors.response.use(res => {
       this.destroy(url)
-      const { data, status } = res
+      const { data, status, request } = res
       // console.log( { data, status })
-      return { data, status }
+      return { data, status, request }
     }, error => {
       this.destroy(url)
       if (error.response.status === '401' || error.response.status === 401) {
