@@ -220,8 +220,8 @@ export default {
     getData () {
       // 获取数据
       getTableData().then(res => {
-        // console.log('tableData==>')
-        // console.log(res)
+        console.log('tableData==>')
+        console.log(res)
         this.apiUrl = res.request.responseURL
         this.tableData = res.data
         // console.log(this.tableData)
