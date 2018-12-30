@@ -168,7 +168,7 @@ export default {
     initPieCmdb () {
       // 初始化 [主机分类] 饼状图
       getGroupList().then(res => {
-        const data = [res.data]
+        const data = res.data
         for (var item in data) {
           this.pieCmdbData.push({
             value: data[item].server_set.length,
