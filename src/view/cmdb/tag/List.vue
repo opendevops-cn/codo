@@ -100,7 +100,7 @@ export default {
                       this.handleAPI(params.index, params.row)
                     }
                   }
-                }, '获取接口'),
+                }, 'API'),
                 h('Button', {
                   props: {
                     type: 'primary',
@@ -220,9 +220,8 @@ export default {
     getData () {
       // 获取数据
       getTableData().then(res => {
-        console.log('tableData==>')
-        console.log(res)
-
+        // console.log('tableData==>')
+        // console.log(res)
         this.apiUrl = res.request.responseURL
         this.tableData = res.data
         // console.log(this.tableData)

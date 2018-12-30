@@ -112,7 +112,7 @@ export default {
                       this.handleAPI(params.index, params.row)
                     }
                   }
-                }, '获取接口'),
+                }, 'API'),
                 h('Button', {
                   props: {
                     type: 'primary',
