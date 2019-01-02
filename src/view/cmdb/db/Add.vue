@@ -19,6 +19,14 @@
             <Input v-model="formData.password" placeholder=""></Input>
         </FormItem>
 
+        <FormItem label="角色">
+            <Select v-model="formData.role" placeholder="请选择" filterable>
+                <Option value="master" >主</Option>
+                <Option value="slave" >从</Option>
+                <Option value="bak" >备</Option>
+            </Select>
+        </FormItem>
+
         <FormItem label="IDC">
             <Select v-model="formData.idc" placeholder="请选择" filterable>
                 <Option value="qcloud" >腾讯云</Option>

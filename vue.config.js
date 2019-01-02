@@ -37,6 +37,10 @@ module.exports = {
   devServer: {
     // proxy: 'http://172.16.0.223:9800/'
     proxy: 'http://ops-demo.shinezone.net.cn/api/'
+<<<<<<< HEAD
     // proxy: 'http://demo.opendevops.cn/api/'
+=======
+    // proxy: 'https://demo.opendevops.cn/api/'
+>>>>>>> f6e4e182b79299a659bbe1253b74ad3ca2ab21d9
   }
 }

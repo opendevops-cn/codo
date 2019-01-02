@@ -18,6 +18,7 @@
     </Card>
     
     <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal"></Add>
+    <Api :dialog="api_dialog" :apiUrl="apiUrl" @e-close="closeApiModal"></Api>
     <multiAdd :dialog="multi_dialog" :formData="formData_multi" @e-update="getData" @e-close="closeMultiModal"></multiAdd>
     <Detail :dialog="dialog2" :formData="formData" @e-close="closeModal"></Detail>
 
@@ -38,6 +39,7 @@ import {Tag} from 'iview'
 import copyRight from '@/components/public/copyright'
 import Tables from '_c/tables'
 import Add from './Add'
+import Api from '@/view/cmdb/common/Api'
 import multiAdd from './multiAdd'
 import Detail from './Detail'
 // import { getTableData } from '@/api/data'
@@ -50,11 +52,18 @@ export default {
     Tag,
     Add,
     multiAdd,
-    Detail
+    Detail,
+    Api
   },
   data () {
     return {
       // 弹出框
+      apiUrl: null,
+      api_dialog: {
+        show: false,
+        title: '',
+        name: ''
+      },
       loading: false,
       dialog:{
         show: false,
@@ -157,7 +166,7 @@ export default {
         {
           title: '操作',
           key: 'handle',
-          width: 200,
+          width: 220,
           align: 'center',
           button: [
             (h, params, vm) => {
@@ -176,6 +185,21 @@ export default {
                   }
                 }
               },'SSH'),
+              h('Button', {
+                props: {
+                  type: 'info',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                  // this.show(params.index)
+                    this.handleAPI(params.index, params.row)
+                  }
+                }
+              }, 'API'),
               h('Button', {
                 props: {
                   type: 'primary',
@@ -453,6 +477,14 @@ export default {
         option: 'add'
       }
     },
+    // 获取API
+    handleAPI(index, row) {
+      this.api_dialog = {
+        show: true,
+        title: '获取API',
+        name: 'hostname='+row.hostname
+      }
+    },
     // 编辑
     handleEdit(index,row) {
       this.dialog = {
@@ -540,6 +572,7 @@ export default {
       getTableData(this.getParams).then(res => {
         this.tableData = res.data.data
         this.pageTotal = res.data.count
+        this.apiUrl = res.request.responseURL.split('?')[0]
         //console.log(this.tableData)
       })
     },
@@ -577,6 +610,9 @@ export default {
           password: null
       },
       this.dialog.show = false
+    },
+    closeApiModal () {
+      this.api_dialog.show = false
     }
   },
   mounted () {

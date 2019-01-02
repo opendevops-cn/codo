@@ -10,7 +10,7 @@
     </Card>
 
     <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal"></Add>
-    <Api :dialog="api_dialog" :apiUrl="apiUrl" @e-close="closeModal"></Api>
+    <Api :dialog="api_dialog" :apiUrl="apiUrl" @e-close="closeApiModal"></Api>
     <copyRight> </copyRight>
     <Modal v-model="del_dialog.show" :title="del_dialog.title" :loading=true @on-ok="removeAction(del_dialog.id)" @on-cancel="closeDelModal">
        <p>确定要进行删除操作?</p>
@@ -199,7 +199,7 @@ export default {
       this.api_dialog = {
         show: true,
         title: '获取API',
-        name: row.name
+        name: 'name='+row.name
       }
     },
     // 编辑
@@ -234,7 +234,7 @@ export default {
     closeDelModal () {
       this.del_dialog.show = false
     },
-    closeDelModal () {
+    closeApiModal () {
       this.api_dialog.show = false
     }
   },
