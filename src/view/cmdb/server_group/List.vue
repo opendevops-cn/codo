@@ -211,7 +211,7 @@ export default {
       this.api_dialog = {
         show: true,
         title: '获取API',
-        name: row.name
+        name: 'name='+row.name
       }
     },
     // 编辑

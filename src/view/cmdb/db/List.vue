@@ -16,6 +16,7 @@
     </Card>
 
     <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal"></Add>
+    <Api :dialog="api_dialog" :apiUrl="apiUrl" @e-close="closeApiModal"></Api>
     <multiAdd :dialog="multi_dialog" :formData="formData_multi" @e-update="getData" @e-close="closeMultiModal"></multiAdd>
     <Detail :dialog="dialog2" :formData="formData" @e-close="closeModal"></Detail>
 
@@ -36,6 +37,7 @@ import {Tag} from 'iview'
 import copyRight from '@/components/public/copyright'
 import Tables from '_c/tables'
 import Add from './Add'
+import Api from '@/view/cmdb/common/Api'
 import multiAdd from './multiAdd'
 import Detail from './Detail'
 import { getDBData, delMulti, delDB } from '@/api/cmdb/db.js'
@@ -47,10 +49,17 @@ export default {
     Tag,
     Add,
     multiAdd,
-    Detail
+    Detail,
+    Api
   },
   data () {
     return {
+      apiUrl: null,
+      api_dialog: {
+        show: false,
+        title: '',
+        name: ''
+      },
       // 弹出框
       loading: false,
       dialog: {
@@ -102,6 +111,7 @@ export default {
         {title: '端口', key: 'port', align: 'center'},
         {title: '用户名', key: 'username', align: 'center'},
         // {title: '密码', key: 'password', align: 'center',},
+        {title: '角色', key: 'role_name', align: 'center'},
         {title: 'IDC', key: 'idc_name', align: 'center'},
         {title: 'DB类型', key: 'db_type', align: 'center'},
         {title: '版本', key: 'db_version', align: 'center'},
@@ -113,6 +123,21 @@ export default {
           button: [
             (h, params, vm) => {
               return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'info',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                    // this.show(params.index)
+                      this.handleAPI(params.index, params.row)
+                    }
+                  }
+                }, 'API'),
                 h('Button', {
                   props: {
                     type: 'primary',
@@ -161,6 +186,7 @@ export default {
         port: 3306,
         username: null,
         password: null,
+        role:'master',
         idc: 'other',
         db_type: 'MySQL',
         db_version: '5.7',
@@ -279,6 +305,14 @@ export default {
         title: '批量添加DB（仅限MySQL）'
       }
     },
+    // 获取API
+    handleAPI(index, row) {
+      this.api_dialog = {
+        show: true,
+        title: '获取API',
+        name: 'host='+row.host
+      }
+    },
     // 新增
     handleAdd () {
       this.dialog = {
@@ -299,6 +333,7 @@ export default {
         port: row.port,
         username: row.username,
         password: row.password,
+        role: row.role,
         idc: row.idc,
         db_type: row.db_type,
         db_version: row.db_version,
@@ -318,6 +353,7 @@ export default {
         port: row.port,
         username: row.username,
         password: row.password,
+        role_name: row.role_name,
         idc_name: row.idc_name,
         db_type: row.db_type,
         db_version: row.db_version,
@@ -361,6 +397,7 @@ export default {
       getDBData(this.getParams).then(res => {
         this.tableData = res.data.data
         this.pageTotal = res.data.count
+        this.apiUrl = res.request.responseURL.split('?')[0]
         // console.log(this.tableData)
       })
     },
@@ -390,6 +427,7 @@ export default {
         os_version: '',
         sn: '',
         comment: '',
+        role:'master',
         idc: 'other',
         admin_user: null,
         group: [],
@@ -398,6 +436,9 @@ export default {
         password: null
       },
       this.dialog.show = false
+    },
+    closeApiModal () {
+      this.api_dialog.show = false
     }
   },
   mounted () {

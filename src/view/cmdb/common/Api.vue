@@ -37,7 +37,7 @@ export default {
   },
   computed:{
     get_apiUrl(){
-      return `${this.apiUrl}?name=${this.dialog.name}`
+      return `${this.apiUrl}?${this.dialog.name}`
     }
   }
 }
