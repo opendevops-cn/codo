@@ -85,7 +85,7 @@
           >
             <Radio label="service">服务器</Radio>
             <Radio label="bucket">存储桶</Radio>
-            <Radio label="container">容器</Radio>
+            <Radio disabled label="container">容器</Radio>
           </RadioGroup>
         </FormItem>
         <FormItem
@@ -193,7 +193,7 @@
             <FormItem label="目标主机组">
               <Input
                 v-model="formValidate.publish_hosts_api"
-                :maxlength="80"
+                :maxlength="120"
                 placeholder="请选择要能获取到主机组的API地址。"
               ></Input>
             </FormItem>
@@ -208,6 +208,13 @@
               placeholder="${publish_path} 发布到目标主机的目录路径，例如： /var/www/"
             ></Input>
           </FormItem>
+          <FormItem label="邮件通知人">
+              <Input
+                v-model="formValidate.mail_to"
+                :maxlength=500
+                placeholder="${mail_to} 执行任务中如果需要发送邮件，则需要填写"
+              ></Input>
+            </FormItem>
         </div>
         <div v-else-if="formValidate.publish_type === 'bucket'">
           <FormItem
@@ -358,6 +365,7 @@ export default {
         publish_hosts: '',
         publish_hosts_api: '',
         publish_path: '',
+        mail_to: '',
         bucket_type: 'oss',
         region: '',
         bucket_name: '',
