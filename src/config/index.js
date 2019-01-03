@@ -24,6 +24,7 @@ export default {
     dev: 'gw.shinezone.net.cn',
     pro: window.location.host
   },
+  isHttps: 'https:' == document.location.protocol ? true: false,
   /**
    * @description 默认打开的首页的路由name值，默认为home
    */

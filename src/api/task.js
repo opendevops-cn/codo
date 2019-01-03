@@ -152,9 +152,10 @@ export const getTaskCheckHistorylist = (listId, getRunGroup, getRunHost) => {
   })
 }
 
+const ws = config.isHttps ? 'wss': 'ws'
 const theDomain = process.env.NODE_ENV === 'development' ? config.domainName.dev : config.domainName.pro
 // 日志websocket
-export const logWS = 'ws://' + theDomain + '/api' + '/task/v2/task/ws_log/'
+export const logWS =  ws + '://' + theDomain + '/api' + '/task/v2/task/ws_log/'
 
 // 代码仓库
 export const getCoderepository = (key, value) => {
