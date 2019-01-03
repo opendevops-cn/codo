@@ -199,7 +199,7 @@ export default {
       this.api_dialog = {
         show: true,
         title: '获取API',
-        name: 'name='+row.name
+        name: 'tag='+row.name
       }
     },
     // 编辑
@@ -222,7 +222,9 @@ export default {
       getTableData().then(res => {
         // console.log('tableData==>')
         // console.log(res)
-        this.apiUrl = res.request.responseURL
+        // this.apiUrl = res.request.responseURL
+        let resUrl = res.request.responseURL.split('v1')[0]
+        this.apiUrl = resUrl + 'v1/cmdb/all_server/'
         this.tableData = res.data
         // console.log(this.tableData)
       })
