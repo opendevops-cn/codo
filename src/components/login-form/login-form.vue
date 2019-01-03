@@ -58,9 +58,9 @@ export default {
   data () {
     return {
       form: {
-        username: 'ss',
-        password: 'shenshuo',
-        dynamic: '123456'
+        username: 'demo',
+        password: '2ZbFYNv9WibWcR7GB6kcEY',
+        dynamic: '654321'
       }
     }
   },

@@ -5,10 +5,10 @@
 <template>
   <div class="login">
     <div class="login-con">
-      <Card icon="log-in" title="欢迎登录xx系统" :bordered="false">
+      <Card icon="log-in" title="欢迎登录codo系统" :bordered="false">
         <div class="form-con">
           <login-form @on-success-valid="handleSubmit"></login-form>
-          <p class="login-tip">可以使用邮箱登录</p>
+          <p class="login-tip">demo环境可以不用多因子验证</p>
         </div>
       </Card>
     </div>
