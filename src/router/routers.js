@@ -56,7 +56,7 @@ export const routerMap = [
           icon: 'md-alarm',
           title: 'SQL优化'
         },
-        component: () => import('@/view/task-order/publish-app.vue')
+        component: () => import('@/view/task-order/mysql-optimize.vue')
       },
       {
         path: 'resourceApplication',
@@ -232,7 +232,7 @@ export const routerMap = [
         name: 'publishConfig',
         meta: {
           icon: 'md-funnel',
-          title: '发布配置'
+          title: '应用配置'
         },
         component: () => import('@/view/tasks-config-center/publish-config.vue')
       },

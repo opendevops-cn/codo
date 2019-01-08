@@ -52,7 +52,7 @@ export default {
         {
           title: '登录IP',
           key: 'login_ip',
-          width: 120
+          width: 125
         },
         {
           title: '操作时间',

@@ -52,7 +52,7 @@ export default {
   templist: '模板管理',
   argslist: '参数管理',
   taskuser: '执行用户',
-  publishConfig: '发布配置',
+  publishConfig: '应用配置',
   codeRepository: '代码仓库',
   dockerRegistry: '镜像仓库',
   order: '订单中心',

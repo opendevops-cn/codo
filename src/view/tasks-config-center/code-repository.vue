@@ -133,7 +133,7 @@ export default {
                     }
                   }
                 },
-                '用户'
+                '授权'
               ),
               h(
                 'Button',

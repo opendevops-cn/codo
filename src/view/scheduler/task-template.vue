@@ -122,7 +122,7 @@ export default {
                     }
                   }
                 },
-                '关联'
+                '授权'
               ),
               h(
                 'Button',

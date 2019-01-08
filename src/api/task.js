@@ -234,3 +234,12 @@ export const operationPublishApplist = (data, meth) => {
     data
   })
 }
+
+// SQL 优化任务提交
+export const operationMysqlOptimizelist = (data, meth) => {
+  return axios.request({
+    url: '/task/v2/task_other/mysql_optimize/',
+    method: meth,
+    data
+  })
+}
