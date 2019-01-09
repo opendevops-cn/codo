@@ -47,7 +47,7 @@ export const routerMap = [
           icon: 'ios-help-circle',
           title: 'SQL审核'
         },
-        component: () => import('@/view/task-order/publish-app.vue')
+        component: () => import('@/view/task-order/mysql-audit.vue')
       },
       {
         path: 'mysqlOptimize',
