@@ -192,7 +192,8 @@ export default {
         db_version: '5.7',
         comment: '',
         group: [],
-        tag: []
+        tag: [],
+        region: null
       },
       select_id: []
     }
@@ -340,7 +341,8 @@ export default {
         comment: row.comment,
         group: row.group,
         tag: row.tag,
-        id: row.id
+        id: row.id,
+        region: row.region
       }
       if (this.formData.username != null) {
         this.formData.single = true
@@ -360,7 +362,8 @@ export default {
         comment: row.comment,
         group_name: row.group_name.join(' '),
         tag_name: row.tag_name.join(' '),
-        id: row.id
+        id: row.id,
+        region: row.region
       }
     },
 
@@ -433,7 +436,8 @@ export default {
         group: [],
         tag: [],
         username: null,
-        password: null
+        password: null,
+        region: null
       },
       this.dialog.show = false
     },

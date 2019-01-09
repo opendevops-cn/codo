@@ -27,6 +27,10 @@
             </Select>
         </FormItem>
 
+        <FormItem label="区域">
+            <Input v-model="formData.region" placeholder=""></Input>
+        </FormItem>
+
         <FormItem label="管理用户">
             <Row>
                 <Col span="4">

@@ -260,7 +260,8 @@ export default {
           group: [],
           tag:[],
           username: null,
-          passowrd: null
+          passowrd: null,
+          region: null
       },
       select_id : []
     }
@@ -509,7 +510,8 @@ export default {
           tag: row.tag,
           id: row.id,
           username: row.username,
-          password: row.password
+          password: row.password,
+          region: row.region
       }
       if(this.formData.username != null){
         this.formData.single = true
@@ -535,7 +537,8 @@ export default {
           id: row.id,
           group_name: row.group_name.join(' '),
           admin_user_name: row.admin_user_name,
-          idc_name: row.idc_name
+          idc_name: row.idc_name,
+          region: row.region
       }
     },
 
@@ -607,7 +610,8 @@ export default {
           group: [],
           tag:[],
           username: null,
-          password: null
+          password: null,
+          region: null
       },
       this.dialog.show = false
     },

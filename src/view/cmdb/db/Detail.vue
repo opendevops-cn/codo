@@ -42,6 +42,11 @@
                 <Row>
                     <Col span="3"><p> <b>角色</b>  </p></Col>
                     <Col span="9"> <Tag color="blue"> {{formData.role_name}}</Tag> </Col>
+                    <Col span="3"><p> <b>区域</b>  </p></Col>
+                    <Col span="9"><p> {{formData.region}} </p></Col>
+                </Row>
+
+                <Row>
                     <Col span="3"><p> <b>备注</b>  </p></Col>
                     <Col span="9"><p> {{formData.comment}} </p></Col>
                 </Row>

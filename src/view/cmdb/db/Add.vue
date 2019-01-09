@@ -36,6 +36,10 @@
             </Select>
         </FormItem>
 
+        <FormItem label="区域">
+            <Input v-model="formData.region" placeholder=""></Input>
+        </FormItem>
+
         <FormItem label="数据库类型">
             <Select v-model="formData.db_type" placeholder="请选择" filterable>
                 <Option value="MySQL" >MySQL</Option>
