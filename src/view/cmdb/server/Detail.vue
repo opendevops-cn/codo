@@ -1,5 +1,5 @@
 <template>
-<Modal width="600px;" v-model="dialog.show"  :title="dialog.title" :loading=true :footer-hide=true> 
+<Modal width="600px;" v-model="dialog.show"  :title="dialog.title" :loading=true :footer-hide=true>
     <Card dis-hover>
       <div class="inner" >
         <Alert show-icon>基本信息</Alert>
@@ -80,11 +80,11 @@
 
 </template>
 <script>
-    export default {
-        name: 'detail',
-        props:{
-            dialog: Object,
-            formData: Object
-        }
-    }
+export default {
+  name: 'detail',
+  props: {
+    dialog: Object,
+    formData: Object
+  }
+}
 </script>

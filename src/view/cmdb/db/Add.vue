@@ -32,6 +32,7 @@
                 <Option value="qcloud" >腾讯云</Option>
                 <Option value="aliyun" >阿里云</Option>
                 <Option value="aws" >AWS</Option>
+                <Option value="internal" >内网</Option>
                 <Option value="other" >其他</Option>
             </Select>
         </FormItem>
@@ -175,7 +176,7 @@ export default {
     dialog: Object,
     formData: Object
   },
-  mounted(){
+  mounted () {
     getGroupList().then(res => {
       const data = res.data
       for (var item in data) {

@@ -186,7 +186,7 @@ export default {
         port: 3306,
         username: null,
         password: null,
-        role:'master',
+        role: 'master',
         idc: 'other',
         db_type: 'MySQL',
         db_version: '5.7',
@@ -307,11 +307,11 @@ export default {
       }
     },
     // 获取API
-    handleAPI(index, row) {
+    handleAPI (index, row) {
       this.api_dialog = {
         show: true,
         title: '获取API',
-        name: 'host='+row.host
+        name: 'host=' + row.host
       }
     },
     // 新增
@@ -430,7 +430,7 @@ export default {
         os_version: '',
         sn: '',
         comment: '',
-        role:'master',
+        role: 'master',
         idc: 'other',
         admin_user: null,
         group: [],
