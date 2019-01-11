@@ -10,6 +10,6 @@
 
 <template>
   <div>
-    <center><span> Copyright © 2018 Shinezone OPS </span> </center>
+    <center><span> Copyright © 2019 Codo </span> </center>
   </div>
 </template>
