@@ -216,6 +216,9 @@ export default {
         })
         this.btn_loading = false
       }, 1000)
+    },
+    handleReset(value) {
+      this.$refs[value].resetFields();
     }
   },
   mounted () {

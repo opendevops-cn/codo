@@ -34,7 +34,7 @@
           >
             <Select
               v-model="formValidate.temp_id"
-              placeholder="${temp_name} 请选择你要优化的数据库对应的区域模板"
+              placeholder="${temp_id} 请选择你要审核执行的数据库对应的区域任务模板"
             >
               <Option
                 v-for="(item, index) in sqlTempList"
@@ -44,22 +44,28 @@
             </Select>
           </FormItem>
           <FormItem
-            label="数据库名"
-            prop="db_name"
-          >
-            <Input v-model="formValidate.db_name" placeholder="请输入你的数据库名称"></Input>
-          </FormItem>
-          <FormItem
-            label="SQL语句"
-            prop="sqls"
+            label="SQL文件地址"
+            prop="db_file"
           >
             <Input
-              v-model="formValidate.sqls"
-              :maxlength=1500
-              type="textarea"
-              :autosize="{minRows: 20,maxRows: 50}"
-              placeholder="${sqls} 输入你想要优化的数据库语句"
+              v-model="formValidate.db_file"
+              placeholder="请输入你的数据语句的地址，当前只接受git库里的文件"
             ></Input>
+          </FormItem>
+          <FormItem
+            label="开始时间"
+            prop="start_time"
+          >
+            <DatePicker
+              v-model="formValidate.start_time"
+              type="datetime"
+              :options="optionsDate"
+              format="yyyy-MM-dd HH:mm:ss"
+              show-week-numbers
+              editable
+              placeholder="选择一个执行时间，用来触发模板中的定时触发器"
+              style="width: 330px"
+            ></DatePicker>
           </FormItem>
           <FormItem>
             <Button
@@ -80,8 +86,8 @@
         >
         <Alert show-icon>
           <h4 style="color: #ed4014">
-            <p>1.本服务根据应用配置应用关联相关的数据库和邮件发送人，本任务会把优化结果通过邮件告知.</p>
-            <p>2.本服务多部署在内网，为了适配多云多区域，需要经过跳板机来链接远端数据库，请用强制主机来制定当前区域的执行主机，并在次主机部署相关服务，具体请参考部署文档</p>
+            <p>1.当前页面使用应用关联数据库，去获取数据库信息，所以应用配置需关联相关的数据库.</p>
+            <p>2.本服务多部署在内网，为了适配多云多区域，需要经过跳板机来链接远端数据库，请用强制主机来制定当前区域的执行主机，并在此主机部署相关服务，具体请参考部署文档</p>
             <p>3.请自行创建SQL审核的模板，并以SQL审核开头命名，例如：SQL审核-内网，SQL审核-阿里云华东一</p>
             <p>4.请把要执行的数据库语句以文本格式放在git上，任务会通过地址进行下载</p>
           </h4>
@@ -95,7 +101,7 @@
 <script>
 import {
   getPublishApplist,
-  operationMysqlOptimizelist,
+  operationMysqlAudit,
   getTemplist
 } from "@/api/task";
 export default {
@@ -109,8 +115,12 @@ export default {
       formValidate: {
         publish_name: "",
         temp_id: "",
-        db_name: "",
-        sqls: ""
+        db_file: ""
+      },
+      optionsDate: {
+        disabledDate(date) {
+          return date && date.valueOf() < Date.now() - 86400000;
+        }
       },
       ruleValidate: {
         publish_name: [
@@ -124,21 +134,22 @@ export default {
           {
             required: true,
             message: "The task template cannot be empty",
-            trigger: "change"
-          }
-        ],
-        db_name: [
-          {
-            required: true,
-            message: "The databases name cannot be empty",
-            trigger: "change"
-          }
-        ],
-        sqls: [
-          {
-            required: true,
-            message: "sqls cannot be empty",
             trigger: "blur"
+          }
+        ],
+        db_file: [
+          {
+            required: true,
+            message: "The databases file cannot be empty",
+            trigger: "blur"
+          }
+        ],
+        start_time: [
+          {
+            required: true,
+            type: "date",
+            message: "Please select the date",
+            trigger: "change"
           }
         ]
       }
@@ -169,7 +180,7 @@ export default {
       getTemplist().then(res => {
         if (res.data.code === 0) {
           this.sqlTempList = res.data.data.filter(
-            res => res.temp_name.search("SQL优化") === 0
+            res => res.temp_name.search("SQL审核") === 0
           );
         } else {
           this.$Message.error(`${res.data.msg}`);
@@ -182,7 +193,7 @@ export default {
     handleSubmit(value) {
       this.btn_loading = true;
       setTimeout(() => {
-        operationMysqlOptimizelist(this.formValidate, "post").then(res => {
+        operationMysqlAudit(this.formValidate, "post").then(res => {
           if (res.data.code === 0) {
             this.$Message.success(`${res.data.msg}`);
           } else {
@@ -191,6 +202,9 @@ export default {
         });
         this.btn_loading = false;
       }, 1000);
+    },
+    handleReset(value) {
+      this.$refs[value].resetFields();
     }
   },
   mounted() {

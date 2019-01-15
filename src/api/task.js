@@ -243,3 +243,12 @@ export const operationMysqlOptimizelist = (data, meth) => {
     data
   })
 }
+
+// SQL 优化任务提交
+export const operationMysqlAudit = (data, meth) => {
+  return axios.request({
+    url: '/task/v2/task_other/mysql_audit/',
+    method: meth,
+    data
+  })
+}

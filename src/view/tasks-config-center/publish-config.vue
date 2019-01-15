@@ -85,7 +85,7 @@
           >
             <Radio label="service">服务器</Radio>
             <Radio label="bucket">存储桶</Radio>
-            <Radio disabled label="container">容器</Radio>
+            <Radio label="container">容器</Radio>
           </RadioGroup>
         </FormItem>
         <FormItem
@@ -208,13 +208,6 @@
               placeholder="${publish_path} 发布到目标主机的目录路径，例如： /var/www/"
             ></Input>
           </FormItem>
-          <FormItem label="邮件通知人">
-              <Input
-                v-model="formValidate.mail_to"
-                :maxlength=500
-                placeholder="${mail_to} 执行任务中如果需要发送邮件，则需要填写"
-              ></Input>
-            </FormItem>
         </div>
         <div v-else-if="formValidate.publish_type === 'bucket'">
           <FormItem
@@ -231,9 +224,12 @@
             </RadioGroup>
           </FormItem>
           <div v-if="formValidate.bucket_type === 'cos'">
-          <FormItem label="温馨提示">
-           <Alert type="warning" show-icon>${bucket_name} 腾讯云COS 存储桶名称需要带上APP ID</Alert>
-          </FormItem>
+            <FormItem label="温馨提示">
+              <Alert
+                type="warning"
+                show-icon
+              >${bucket_name} 腾讯云COS 存储桶名称需要带上APP ID</Alert>
+            </FormItem>
           </div>
           <FormItem
             label="区域region"
@@ -255,17 +251,17 @@
               placeholder="你要发布的存储桶名称 ${bucket_name}"
             ></Input>
           </FormItem>
-            <div v-if="formValidate.bucket_type === 'cos'">
-          <FormItem
-            label="存储路径"
-            prop="bucket_path"
-          >
-            <Input
-              v-model="formValidate.bucket_path"
-              :maxlength=50
-              placeholder="存储的路径 ${bucket_name}/${bucket_path}"
-            ></Input>
-          </FormItem>
+          <div v-if="formValidate.bucket_type === 'cos'">
+            <FormItem
+              label="存储路径"
+              prop="bucket_path"
+            >
+              <Input
+                v-model="formValidate.bucket_path"
+                :maxlength=50
+                placeholder="存储的路径 ${bucket_name}/${bucket_path}"
+              ></Input>
+            </FormItem>
           </div>
           <FormItem
             label="SecretID"
@@ -307,12 +303,12 @@
           </FormItem>
           <FormItem
             <FormItem
-            label="K8S API"
-            prop="k8s_api"
+            label="K8S主机"
+            prop="k8s_host"
           >
             <Input
-              v-model="formValidate.k8s_api"
-              placeholder="请选择输入K8S API 地址信息"
+              v-model="formValidate.k8s_host"
+              placeholder="请选择输入K8S  主机地址信息"
             ></Input>
           </FormItem>
           <FormItem
@@ -325,6 +321,22 @@
             ></Input>
           </FormItem>
         </div>
+        <FormItem label="邮件通知人">
+          <Input
+            v-model="formValidate.mail_to"
+            :maxlength=500
+            placeholder="${mail_to} 执行任务中如果需要发送邮件，则需要填写"
+          ></Input>
+        </FormItem>
+        <FormItem label="配置文件">
+          <Input
+            v-model="formValidate.config_file"
+            type="textarea"
+            :maxlength=500
+            :autosize="{minRows: 5,maxRows: 10}"
+            placeholder="可以多个，回车分割。格式： key,,path,,abs|rel(绝对路径|相对路径) /conf/shenshuo/dev/nginx/demo.conf,,/etc/nginx/conf.d,abs /conf/shenshuo/dev/app/settings.py,,settings.py,rel"
+          ></Input>
+        </FormItem>
         <FormItem>
           <Button
             type="primary"
@@ -347,307 +359,318 @@ import {
   getCoderepository,
   getTemplist,
   getDockerrepository
-} from '@/api/task'
+} from "@/api/task";
 export default {
-  data () {
+  data() {
     return {
       repositoryList: [],
       dockerRepositoryList: [],
       templateList: [],
       formValidate: {
-        publish_name: '',
-        publish_type: 'service',
-        build_host: '127.0.0.1',
-        repository: '',
-        temp_name: '',
-        exclude_file: '',
-        publish_type1: 'simple',
-        publish_hosts: '',
-        publish_hosts_api: '',
-        publish_path: '',
-        mail_to: '',
-        bucket_type: 'oss',
-        region: '',
-        bucket_name: '',
-        bucket_path: '',
-        SecretID: '',
-        SecretKey: '',
-        docker_registry: '',
-        k8s_api: '',
-        namespace: ''
+        publish_name: "",
+        publish_type: "service",
+        build_host: "127.0.0.1",
+        repository: "",
+        temp_name: "",
+        exclude_file: "",
+        publish_type1: "simple",
+        publish_hosts: "",
+        publish_hosts_api: "",
+        publish_path: "",
+        config_file:"",
+        mail_to: "",
+        bucket_type: "oss",
+        region: "",
+        bucket_name: "",
+        bucket_path: "",
+        SecretID: "",
+        SecretKey: "",
+        docker_registry: "",
+        k8s_host: "",
+        namespace: ""
       },
       ruleValidate: {
         publish_name: [
           {
             required: true,
-            message: 'The name cannot be empty',
-            trigger: 'blur'
+            message: "The name cannot be empty",
+            trigger: "blur"
           }
         ],
         build_host: [
           {
             required: true,
-            message: '构建主机不能为空',
-            trigger: 'blur'
+            message: "构建主机不能为空",
+            trigger: "blur"
           }
         ],
         repository: [
           {
             required: true,
-            message: '请选择一个仓库地址',
-            trigger: 'change'
+            message: "请选择一个仓库地址",
+            trigger: "change"
           }
         ],
         temp_name: [
           {
             required: true,
-            message: '请选择一个模板',
-            trigger: 'change'
+            message: "请选择一个模板",
+            trigger: "change"
           }
         ],
         publish_path: [
-          { required: true, message: '发布的目录不能为空', trigger: 'blur' }
+          { required: true, message: "发布的目录不能为空", trigger: "blur" }
         ],
-        region: [{ required: true, message: '区域不能为空', trigger: 'blur' }],
+        region: [{ required: true, message: "区域不能为空", trigger: "blur" }],
         bucket_name: [
-          { required: true, message: '存储桶名称不能为空', trigger: 'blur' }
+          { required: true, message: "存储桶名称不能为空", trigger: "blur" }
         ],
         bucket_path: [
-          { required: true, message: '存储路径不能为空', trigger: 'blur' }
+          { required: true, message: "存储路径不能为空", trigger: "blur" }
         ],
         SecretID: [
-          { required: true, message: 'SecretID不能为空', trigger: 'blur' }
+          { required: true, message: "SecretID不能为空", trigger: "blur" }
         ],
         SecretKey: [
-          { required: true, message: 'SecretKey不能为空', trigger: 'blur' }
+          { required: true, message: "SecretKey不能为空", trigger: "blur" }
+        ],
+        k8s_host: [
+          {
+            required: true,
+            message: "K8S master 主机不能为空",
+            trigger: "blur"
+          }
+        ],
+        namespace: [
+          { required: true, message: "K8S 命名空间不能为空", trigger: "blur" }
         ]
       },
       columns: [
         {
-          title: '应用名称',
-          key: 'publish_name',
-          align: 'center',
+          title: "应用名称",
+          key: "publish_name",
+          align: "center",
           width: 200,
           sortable: true
         },
         {
-          title: '发布类型',
-          key: 'publish_type',
+          title: "发布类型",
+          key: "publish_type",
           width: 150,
-          align: 'center',
+          align: "center",
           sortable: true
         },
         {
-          title: '构建主机',
-          key: 'build_host',
+          title: "构建主机",
+          key: "build_host",
           width: 180,
-          align: 'center',
+          align: "center",
           sortable: true
         },
         {
-          title: '关联模板',
-          key: 'temp_name',
+          title: "关联模板",
+          key: "temp_name",
           width: 200,
-          align: 'center',
+          align: "center",
           sortable: true
         },
         {
-          title: '仓库地址',
-          key: 'repository',
-          align: 'center',
+          title: "仓库地址",
+          key: "repository",
+          align: "center",
           sortable: true
         },
         {
-          title: '操作',
-          key: 'handle',
+          title: "操作",
+          key: "handle",
           width: 200,
-          align: 'center',
+          align: "center",
           render: (h, params) => {
-            return h('div', [
+            return h("div", [
               h(
-                'Button',
+                "Button",
                 {
                   props: {
-                    type: 'primary',
-                    size: 'small'
+                    type: "primary",
+                    size: "small"
                   },
                   style: {
-                    marginRight: '5px'
+                    marginRight: "5px"
                   },
                   on: {
                     click: () => {
-                      this.editModal(params.row.id, 'put', '编辑应用')
+                      this.editModal(params.row.id, "put", "编辑应用");
                     }
                   }
                 },
-                '编辑'
+                "编辑"
               ),
               h(
-                'Button',
+                "Button",
                 {
                   props: {
-                    type: 'error',
-                    size: 'small'
+                    type: "error",
+                    size: "small"
                   },
                   on: {
                     click: () => {
-                      this.delData(params)
+                      this.delData(params);
                     }
                   }
                 },
-                '删除'
+                "删除"
               )
-            ])
+            ]);
           }
         }
       ],
       tableData: [],
       modalMap: {
         modalVisible: false,
-        modalTitle: '新建'
+        modalTitle: "新建"
       },
       formList: [],
-      editModalData: '',
+      editModalData: "",
       //
-      searchKey: '',
-      searchValue: ''
-    }
+      searchKey: "",
+      searchValue: ""
+    };
   },
   methods: {
     // 获取发布配置信息
-    getPublishList (key, value) {
+    getPublishList(key, value) {
       getPublishlist(key, value).then(res => {
         if (res.data.code === 0) {
-          this.tableData = res.data.data
+          this.tableData = res.data.data;
         } else {
-          this.$Message.error(`${res.data.msg}`)
+          this.$Message.error(`${res.data.msg}`);
         }
-      })
+      });
     },
     // 获取模板
-    getTempList () {
+    getTempList() {
       getTemplist().then(res => {
         if (res.data.code === 0) {
           res.data.data.forEach(element => {
-            this.templateList.push(element.temp_name)
-          })
+            this.templateList.push(element.temp_name);
+          });
         } else {
-          this.$Message.error(`${res.data.msg}`)
+          this.$Message.error(`${res.data.msg}`);
         }
-      })
+      });
     },
     // 获取仓库地址
-    getCodeRepository () {
+    getCodeRepository() {
       getCoderepository().then(res => {
         if (res.data.code === 0) {
           res.data.data.forEach(element => {
-            this.repositoryList.push(element.repository)
-          })
+            this.repositoryList.push(element.repository);
+          });
         } else {
-          this.$Message.error(`${res.data.msg}`)
+          this.$Message.error(`${res.data.msg}`);
         }
-      })
+      });
     },
     // 获取docker仓库地址
-    getDockerRepository (key, value) {
+    getDockerRepository(key, value) {
       getDockerrepository(key, value).then(res => {
         if (res.data.code === 0) {
           res.data.data.forEach(element => {
-            this.dockerRepositoryList.push(element.registry_url)
-          })
+            this.dockerRepositoryList.push(element.registry_url);
+          });
         } else {
-          this.$Message.error(`${res.data.msg}`)
+          this.$Message.error(`${res.data.msg}`);
         }
-      })
+      });
     },
     // 选择类型
-    handlerSelectType (val) {
-      this.formValidate.publish_type = val
+    handlerSelectType(val) {
+      this.formValidate.publish_type = val;
     },
 
     // 选择类型
-    handlerSelectType1 (val) {
-      this.formValidate.publish_type1 = val
+    handlerSelectType1(val) {
+      this.formValidate.publish_type1 = val;
     },
-    handlerSelectType2 (val) {
-      this.formValidate.bucket_type = val
+    handlerSelectType2(val) {
+      this.formValidate.bucket_type = val;
     },
-    editModal (ID, meth, mtitle) {
-      this.modalMap.modalVisible = true
-      this.modalMap.modalTitle = mtitle
-      this.editModalData = meth
+    editModal(ID, meth, mtitle) {
+      this.modalMap.modalVisible = true;
+      this.modalMap.modalTitle = mtitle;
+      this.editModalData = meth;
       if (ID) {
-        getPublishlist('id', ID).then(res => {
+        getPublishlist("id", ID).then(res => {
           if (res.data.code === 0) {
-            this.formValidate = res.data.data[0]
+            this.formValidate = res.data.data[0];
           } else {
-            this.$Message.error(`${res.data.msg}`)
+            this.$Message.error(`${res.data.msg}`);
           }
-        })
+        });
       }
     },
 
-    handleSubmit (value) {
+    handleSubmit(value) {
       setTimeout(() => {
         operationPublishlist(this.formValidate, this.editModalData).then(
           res => {
             if (res.data.code === 0) {
-              this.$Message.success(`${res.data.msg}`)
-              this.getPublishList(this.searchKey, this.searchValue)
-              this.modalMap.modalVisible = false
+              this.$Message.success(`${res.data.msg}`);
+              this.getPublishList(this.searchKey, this.searchValue);
+              this.modalMap.modalVisible = false;
             } else {
-              this.$Message.error(`${res.data.msg}`)
+              this.$Message.error(`${res.data.msg}`);
             }
           }
-        )
-      }, 1000)
+        );
+      }, 1000);
     },
-    handleReset (name) {
-      this.$refs[name].resetFields()
+    handleReset(name) {
+      this.$refs[name].resetFields();
     },
     // 删除
-    delData (params) {
+    delData(params) {
       if (confirm(`确定要删除 ${params.row.publish_name}`)) {
-        operationPublishlist({ publish_app_id: params.row.id }, 'delete').then(
+        operationPublishlist({ publish_app_id: params.row.id }, "delete").then(
           res => {
             if (res.data.code === 0) {
-              this.$Message.success(`${res.data.msg}`)
-              this.tableData.splice(params.index, 1)
+              this.$Message.success(`${res.data.msg}`);
+              this.tableData.splice(params.index, 1);
             } else {
-              this.$Message.error(`${res.data.msg}`)
+              this.$Message.error(`${res.data.msg}`);
             }
           }
-        )
+        );
       }
     },
-    setDefaultSearchKey () {
+    setDefaultSearchKey() {
       this.searchKey =
-        this.columns[0].key && this.columns[0].key !== 'handle'
+        this.columns[0].key && this.columns[0].key !== "handle"
           ? this.columns[0].key
           : this.columns.length > 1
-            ? this.columns[1].key
-            : ''
+          ? this.columns[1].key
+          : "";
     },
-    handleClear (e) {
-      if (e.target.value === '') this.tableData = this.value
+    handleClear(e) {
+      if (e.target.value === "") this.tableData = this.value;
     },
-    handleSearch () {
-      this.getPublishList(this.searchKey, this.searchValue)
+    handleSearch() {
+      this.getPublishList(this.searchKey, this.searchValue);
     }
   },
   watch: {
-    searchValue (val) {
-      this.getPublishList(this.searchKey, val)
+    searchValue(val) {
+      this.getPublishList(this.searchKey, val);
     }
   },
-  mounted () {
-    this.getPublishList()
-    this.setDefaultSearchKey()
-    this.getCodeRepository()
-    this.getTempList()
-    this.getDockerRepository()
+  mounted() {
+    this.getPublishList();
+    this.setDefaultSearchKey();
+    this.getCodeRepository();
+    this.getTempList();
+    this.getDockerRepository();
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

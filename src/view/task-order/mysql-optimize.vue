@@ -34,7 +34,7 @@
           >
             <Select
               v-model="formValidate.temp_id"
-              placeholder="${temp_name} 请选择你要优化的数据库对应的区域模板"
+              placeholder="${temp_id} 请选择你要优化的数据库对应的区域模板"
             >
               <Option
                 v-for="(item, index) in sqlTempList"
@@ -123,14 +123,14 @@ export default {
           {
             required: true,
             message: "The task template cannot be empty",
-            trigger: "change"
+            trigger: "blur"
           }
         ],
         db_name: [
           {
             required: true,
             message: "The databases name cannot be empty",
-            trigger: "change"
+            trigger: "blur"
           }
         ],
         sqls: [
@@ -190,6 +190,9 @@ export default {
         });
         this.btn_loading = false;
       }, 1000);
+    },
+    handleReset(value) {
+      this.$refs[value].resetFields();
     }
   },
   mounted() {
