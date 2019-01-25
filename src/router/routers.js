@@ -126,6 +126,36 @@ export const routerMap = [
     ]
   },
   {
+    path: '/confd',
+    name: 'confd',
+    meta: {
+      icon: 'md-settings',
+      title: '配置中心'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'confd_project',
+        name: 'confd_project',
+        meta: {
+          icon: 'md-settings',
+          title: '配置中心'
+        },
+        component: () => import('@/view/confd/project/List2.vue')
+      },
+      {
+        path: 'confd_config/:project_code',
+        name: 'confd_config',
+        meta: {
+          hideInMenu: true,
+          icon: 'md-settings',
+          title: '配置管理'
+        },
+        component: () => import('@/view/confd/config/List.vue')
+      }
+    ]
+  },
+  {
     path: '/terminal',
     name: 'WebSSH',
     meta: {
