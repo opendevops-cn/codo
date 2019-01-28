@@ -100,6 +100,5 @@ export const rsyncPublicKeyData = (data) => {
 const theDomain = process.env.NODE_ENV === 'development' ? 'demo.opendevops.cn' : config.domainName.pro
 // const theDomain = process.env.NODE_ENV === 'development' ? config.domainName.dev : config.domainName.pro
 const wsuri = '/cmdb/v1/cmdb/ws/terminal'
-// const ws = config.isHttps ? 'wss' : 'ws'
-const ws = 'ws'
+const ws = config.isHttps ? 'wss' : 'ws'
 export const webSocketUrl = ws + '://' + theDomain + '/api' + wsuri
