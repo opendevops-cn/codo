@@ -81,8 +81,8 @@ export default {
   statisticaldata: "统计数据",
   statisticalImage:"统计图",
   historyTaskList: "历史任务",
-  config_center: "配置中心",
-  project_config_list: "配置中心",
-  my_config_list: "收藏项目",
+  confd:'配置中心',
+  confd_project: '配置中心',
+  confd_config:'配置管理'
 
 }

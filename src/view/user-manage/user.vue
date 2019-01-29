@@ -276,8 +276,7 @@ export default {
     },
     handleSubmit (value) {
       setTimeout(() => {
-        newuser(value.data)
-          .then(res => {
+        newuser(value.data).then(res=> {
             const data = res.data
             if (res.data.code === 0) {
               this.$Message.info(`${data.msg}`)
@@ -286,8 +285,7 @@ export default {
             } else {
               this.$Message.error(`${data.msg}`)
             }
-          })
-          .catch(err => {
+          }).catch(err => {
             this.$Message.error(err)
           })
         this.modalMap.modalVisible = false
