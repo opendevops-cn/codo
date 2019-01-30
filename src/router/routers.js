@@ -283,47 +283,9 @@ export const routerMap = [
           title: '镜像仓库'
         },
         component: () => import('@/view/tasks-config-center/docker-registry.vue')
-      },
-      // {
-      //   path: 'level_2_1',
-      //   name: 'level_2_1',
-      //   meta: {
-      //     icon: 'md-funnel',
-      //     title: '二级-1'
-      //   },
-      //   component: () => import('@/view/multilevel/level-2-1.vue')
-      // }
+      }
     ]
   },
-  // {
-  //   path: '/config_center',
-  //   name: 'config_center',
-  //   component: Main,
-  //   meta: {
-  //     icon: 'ios-hammer',
-  //     title: '模板配置'
-  //   },
-  //   children: [
-  //     {
-  //       path: '/project_config_list',
-  //       name: 'project_config_list',
-  //       meta: {
-  //         title: '配置中心',
-  //         icon: 'ios-browsers'
-  //       },
-  //       component: () => import('@/view/config-center/project-config-list.vue')
-  //     },
-  //     {
-  //       path: '/my_config_list',
-  //       name: 'my_config_list',
-  //       meta: {
-  //         title: '收藏项目',
-  //         icon: 'md-eye'
-  //       },
-  //       component: () => import('@/view/config-center/project-config-list.vue')
-  //     }
-  //   ]
-  // },
   {
     path: '/task_layout',
     name: 'task_layout',

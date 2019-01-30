@@ -40,16 +40,11 @@ export default {
     }
   },
   actions: {
-    // 登录
-    handleLogin({ commit }, { username, password, dynamic, nextUrl }) {
+    handleLogin({ commit }, { username, password, dynamic }) {
       username = username.trim()
+      password = password.trim()
       return new Promise((resolve, reject) => {
-        login({
-          username,
-          password,
-          dynamic,
-          next_url: nextUrl
-        }).then(res => {
+        login({ username, password, dynamic}).then(res => {
           const data = res.data
           if (data.code === 0) {
             commit('setToken', data.auth_key)
@@ -131,25 +126,5 @@ export default {
         })
       })
     }
-    // // 获取用户相关信息
-    // getUserInfo ({ state, commit }) {
-    //   return new Promise((resolve, reject) => {
-    //     try {
-    //       getUserInfo(state.token).then(res => {
-    //         const data = res.data
-    //         commit('setAvator', data.avator)
-    //         commit('setUserName', data.name)
-    //         commit('setUserId', data.user_id)
-    //         commit('setAccess', data.access)
-    //         commit('setHasGetInfo', true)
-    //         resolve(data)
-    //       }).catch(err => {
-    //         reject(err)
-    //       })
-    //     } catch (error) {
-    //       reject(error)
-    //     }
-    //   })
-    // }
   }
 }

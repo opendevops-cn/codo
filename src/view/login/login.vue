@@ -7,8 +7,8 @@
     <div class="login-con">
       <Card icon="log-in" title="欢迎登录codo系统" :bordered="false">
         <div class="form-con">
-          <login-form @on-success-valid="handleSubmit"></login-form>
-          <p class="login-tip">demo环境可以不用多因子验证</p>
+          <login-form :secoundAuth=secoundAuth @on-success-valid="handleSubmit"></login-form>
+          <p class="login-tip">这里是备注</p>
         </div>
       </Card>
     </div>
@@ -20,16 +20,18 @@
 </template>
 
 <script>
-import { LoginForm, RegisterForm, MFA } from '_c/login-form'
+import { LoginForm,LoginMFA, RegisterForm, MFA } from '_c/login-form'
 import { mapActions } from 'vuex'
 export default {
   components: {
     LoginForm,
+    LoginMFA,
     RegisterForm,
     MFA
   },
   data () {
     return {
+      secoundAuth: false,
       modalVisible: false,
       modalTitle: '',
       mail: '',
@@ -43,13 +45,17 @@ export default {
       const nextUrl = this.$route.query.next_url
         ? this.$route.query.next_url
         : ''
-      this.handleLogin({ username, password, dynamic, nextUrl }).then(res => {
+      this.handleLogin({ username, password, dynamic}).then(res => {
         if (res.code === 0) {
           this.$Message.success(`${res.msg}`)
           this.$router.push({
             name: this.$config.homeName
           })
-        } else if (res.code === -3) {
+        } else if (res.code === 1) {
+          // 这里弹出二次认证
+          this.secoundAuth = true
+          this.$Message.success(`${res.msg}`)
+        }  else if (res.code === -3) {
           this.mail = username
           this.$Message.success({
             content: `${res.msg}`,

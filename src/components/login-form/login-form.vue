@@ -1,5 +1,5 @@
 <template>
-  <Form ref="loginForm" :model="form" :rules="rules" @keydown.enter.native="handleSubmit">
+  <Form ref="loginForm" :model="form" :rules="rules"   @keydown.enter.native="handleSubmit">
     <FormItem prop="username">
       <Input v-model="form.username" placeholder="请输入用户名">
         <span slot="prepend">
@@ -14,8 +14,8 @@
         </span>
       </Input>
     </FormItem>
-    <FormItem prop="dynamic">
-      <Input type="text" v-model="form.dynamic" placeholder="请输入动态码">
+    <FormItem v-if="secoundAuth" prop="dynamic">
+      <Input type="text" :maxlength=6 v-model="form.dynamic" autofocus="autofocus" placeholder="请输入动态码">
         <span slot="prepend">
           <Icon :size="14" type="md-key"></Icon>
         </span>
@@ -30,6 +30,10 @@
 export default {
   name: 'LoginForm',
   props: {
+    secoundAuth: {
+      type: Boolean,
+      default: false
+    },
     userNameRules: {
       type: Array,
       default: () => {
@@ -60,7 +64,7 @@ export default {
       form: {
         username: 'demo',
         password: '2ZbFYNv9WibWcR7GB6kcEY',
-        dynamic: '654321'
+        dynamic:''
       }
     }
   },
