@@ -1,28 +1,31 @@
 <template>
   <div class="confd-def">
-    <Row type="flex" justify="center" :gutter="20">
-      <Col>
-      <Card class="card-create">
-        <div style="">
-          <a href="#" slot="extra" @click.prevent="handlerCreate()">
-            <h2><Icon type="md-add"/> 创建项目</h2>
+      <Row >
+       <i-col  span="4">
+        <Card style="margin: 0 5px 10px; text-align: center; background:#aee888">
+          <a @click="handlerCreate()">
+            <Icon type="md-add" />
+            <p>新建项目</p>
           </a>
-        </div>
-      </Card>
-      </Col>
-      <div v-for="value in project_list">
-      <Col>
-        <Card style="width:305px; height:70px;">
-          <div style="text-align:center;">
-            <a href="#" slot="extra" @click.prevent="handlerCheck(value.project_code)">
-              <h2><Icon type="ios-albums-outline" /> {{value.project_code}} {{value.project_name}}</h2>
-            </a>
-          </div>
         </Card>
-        <br>
-      </Col>
-      </div>
-    </Row>
+      </i-col >
+        <i-col span="4" v-for="item in project_list" :key="`custom-icon-${item.project_code}`">
+          <Card style="margin: 0 5px 10px; text-align: center;">
+            <a  @click="handlerCheck(item.project_code)">
+              <p>{{item.project_code}}</p>
+              <p>{{item.project_name}}</p>
+            </a>
+          </Card>
+        </i-col>
+        <i-col  span="4">
+        <Card style="margin: 0 5px 10px; text-align: center; background:">
+          <a @click="handlerMore()">
+            <Icon type="ios-more" />
+            <p>查看更多</p>
+          </a>
+        </Card>
+      </i-col >
+      </Row>
     <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal"></Add>
   </div>
 </template>

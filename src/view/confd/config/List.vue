@@ -50,21 +50,23 @@
               <span>{{config_path}}</span>
               <Button type="info" size="small" class="search-inputright" @click="is_history=true;is_history_one=false">返回列表</Button>
               <Button type="error" size="small" class="search-inputright" @click="goCallBack()">回滚</Button>
-              <Button type="primary" size="small" class="search-inputright" @click="publishEditor()">对比</Button>
+              <Button type="primary" size="small" class="search-inputright" @click="diffConfData('diffHistory')">对比</Button>
             </div> </br> 
               <editor v-model="history_content" @init="editorInit" @setCompletions="setCompletions" :mode_type="mode_type" :read="editor.read"></editor>
         </Card>
 
         <Card v-show="is_history">
             <div class="search-con">
-              <h4 class="search-title">历史列表</h4> 
+              <h4 class="search-title">发布历史</h4> 
               <span>{{display_name}}</span>
               <Button type="info" size="small" class="search-inputright" @click="is_history=false;is_editor=true">返回</Button>
             </div> </br> 
             <div>
-              <CellGroup @on-click="clickOneHistory">
-                <Cell :title="historyTitle(value.create_time,value.config)" v-for="value in history_data" :name="value.content">
-                  <Tag color="success" slot="extra">{{value.create_user}}</Tag>
+              <!-- <CellGroup @on-click="clickOneHistory"> -->
+              <CellGroup>  
+                <Cell  v-for="value in history_data" :name="value.content">
+                  <span color="success" slot=""><a @click="clickOneHistory(value.content,value.id)">{{value.create_time}}&nbsp;&nbsp;&nbsp;&nbsp; {{value.config}}&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
+                  <Tag color="success" slot="extra"><p @click="clickOneHistory"> {{value.create_user}}</p></Tag>
                 </Cell>
               </CellGroup>
             </div>  
@@ -107,7 +109,7 @@ import editor from '@/components/public/editor'
 import Tables from '_c/tables'
 import Add from './Add'
 // import History from './History'
-import { getConfTree, getConf, putConf, patchConf, diffConf, getHistory, setAuth, getAuth} from '@/api/confd/conf.js'
+import { getConfTree, getConf, putConf, patchConf, diffConf, getHistory,backHistory,setAuth, getAuth} from '@/api/confd/conf.js'
 import { highlight } from '@/libs/util.js'
 export default {
   name: 'list',
@@ -138,6 +140,7 @@ export default {
       config_id: null,
       file_data: '',
       history_data: [],
+      history_id: null,
       history_content : 'history_content....',
       is_published: true,
       wordList:[],
@@ -189,7 +192,21 @@ export default {
     },
     // 版本回滚
     backConfig(){
-      consoe.log(111111)
+      backHistory({history_id:this.history_id}).then(res => {
+        const data = res.data
+        if (data.code === 0) {
+          this.$Message.success('History回滚成功获取成功')
+          this.back_dialog.show = false
+          // this.history_data = data.data
+        } else {
+          this.$Message.error(data.msg)
+        }
+      }).catch(error => {
+        this.$Message.error({
+          content: JSON.stringify(error.response.data),
+          duration: 10
+        })
+      })
     },
 
     delConfig(){
@@ -221,17 +238,24 @@ export default {
         })
       })
     },
-    clickOneHistory(content){
+    clickOneHistory(content,id){
       this.is_history = false
       this.is_history_one = true
       this.history_content = content 
-      // console.log(this.history_content)
+      this.history_id = id
+      console.log('id--->',id)
     },
 
     diffConfData(arg){
       this.show_publish_btn = arg
       // 配置文件对比
-      diffConf({config_id:this.config_id}).then(res => {
+      let params = {}
+      if(arg==='diffHistory'){
+        params = {history_id:this.history_id}
+      }else{
+        params = {config_id:this.config_id}
+      }
+      diffConf(params).then(res => {
         // console.log(res)
         const data = res.data
         if (data.code === 0) {

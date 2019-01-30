@@ -26,8 +26,14 @@ export default {
   data () {
     return {
       ruleValidate: {
-        project_code: [{ required: true, message: '项目代号不能为空', trigger: 'blur' }],
-        project_name: [{ required: true, message: '项目名称不能为空', trigger: 'blur' }]
+        project_code: [
+          { required: true, message: '项目代号不能为空', trigger: 'blur' },
+          { type: 'string', max: 18, message: '超出最大长度', trigger: 'change' }
+        ],
+        project_name: [
+          { required: true, message: '项目名称不能为空', trigger: 'blur' },
+          { type: 'string', max: 18, message: '超出最大长度', trigger: 'change' }
+        ]
       }
     }
   },
