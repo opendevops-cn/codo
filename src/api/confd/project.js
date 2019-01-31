@@ -1,11 +1,13 @@
 import axios from '@/libs/api.request'
 
 // 获取所有项目
-export const getProject = (params) => {
+export const getProject = (limit) => {
   return axios.request({
     url: '/kerrigan/v1/conf/project/',
     method: 'get',
-    params
+    params:{
+      limit
+    }
   })
 }
 

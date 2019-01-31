@@ -144,7 +144,7 @@ export const routerMap = [
         component: () => import('@/view/confd/project/List2.vue')
       },
       {
-        path: 'confd_config/:project_code',
+        path: 'confd_config/',
         name: 'confd_config',
         meta: {
           hideInMenu: true,

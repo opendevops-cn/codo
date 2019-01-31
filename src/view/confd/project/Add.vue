@@ -1,13 +1,12 @@
 <template>
-<!-- <div> -->
-  <!-- <Card> -->
-<Modal width="600px;" v-model="dialog.show"  :title="dialog.title" :loading=true :footer-hide=true @on-cancel="handleCancel">
+<div>
+  <Modal width="600px;" v-model="dialog.show"  :title="dialog.title" :loading=true :footer-hide=true @on-cancel="handleCancel">
     <Form ref="formData" :model="formData" :rules="ruleValidate" :label-width="80">
         <FormItem label="项目代号" prop="project_code">
-            <Input v-model="formData.project_code" placeholder=""></Input>
+            <Input v-model="formData.project_code" :maxlength=18 placeholder="项目英文名称或者代号"></Input>
         </FormItem>
         <FormItem label="项目名称" prop="project_name">
-            <Input v-model="formData.project_name" placeholder=""></Input>
+            <Input v-model="formData.project_name" :maxlength=18 placeholder="项目中文名"></Input>
         </FormItem>
 
         <FormItem>
@@ -15,9 +14,8 @@
             <Button @click="handleReset('formData')" style="margin-left: 8px">重置</Button>
         </FormItem>
     </Form>
-</Modal>
-  <!-- </Card>     -->
-<!-- </div> -->
+  </Modal>
+</div>
 </template>
 <script>
 import { addProject } from '@/api/confd/project.js'
@@ -44,9 +42,7 @@ export default {
     handleSubmit (name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          console.log(2222222)
           addProject(this.formData).then(res => {
-            console.log(res)
             if (res.data.code === 0) {
               this.$Message.success({
                 content: res.data.msg,

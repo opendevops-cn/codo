@@ -1,13 +1,14 @@
 <template>
   <div>
     <Row>
-      <Col span="24">        
+      <Col span="24">
         <div class="search-con">
+          <p v-show="false">{{ $route.query.project_code }}</p>
           <h2 class="search-title">项目配置</h2>
           <span>{{display_name}}</span>
           <Button type="success" class="search-add" size="small" @click="addEditor()">添加配置</Button>
-        </div>  
-        <Alert type="success" closable>添加/编辑/保存权限请点击项目环境如[dev]进行授权; 发布权限请点击项目名进行授权</Alert>
+        </div>
+        <Alert type="success" closable>添加/编辑/保存权限请点击项目环境如[dev]进行授权, 发布权限请点击项目名进行授权。 历史版本的最后一个为线上版本。</Alert>
       </Col>
       <Col span="6">
         <Card>
@@ -16,13 +17,14 @@
       </Col>
 
       <Col span="17" offset="1">
-        <Card v-show="is_editor">
+        <Card v-show="is_editor && config_id">
             <div class="search-con">
                 <Button :type="editor.color" size="small" class="search-input" @click="editEditor(editor.read)">{{ editor.title }}</Button>
                 <Button v-show="!editor.read" type="info" size="small" class="search-input" @click="editBack()">返回</Button>
                 <Button v-show="editor.read" type="error" size="small" class="search-input" @click="delConfig()">删除</Button>
                 <Button v-show="editor.read" type="info" size="small" class="search-input" @click="goHistory()">历史版本</Button>
-                
+                <Button v-show="editor.read && config_id" type="info" size="small" class="search-input" @click="getApi()">API</Button>
+
               <Select v-model="mode_type" placeholder="格式校验" filterable @on-change="selectModeType" class="search-col">
                   <Option value="python" >Python</Option>
                   <Option value="json" >JSON</Option>
@@ -37,43 +39,43 @@
                   <Option value="golang" >GO</Option>
                   <Option value="javascript" >JavaScript</Option>
               </Select>
-            </div>  
+            </div>
             <div class="search-con" v-if="!is_published" v-show="editor.read">
               <Alert type="warning" show-icon>当前版本未发布，你可以选择：<Button type="info" size="small" class="search-publish" @click="diffConfData('diff')">与线上配置进行对比</Button> OR <Button v-show="editor.read" type="error" size="small" class="search-publish" @click="publishEditor()">发布当前版本至线上</Button></Alert>
-            </div> 
+            </div>
             <editor v-model="file_data" @init="editorInit" @setCompletions="setCompletions" :mode_type="mode_type" :read="editor.read"></editor>
         </Card>
-        
+
         <Card v-show="is_history_one">
             <div class="search-con">
-              <h4 class="search-title">项目文件路径</h4> 
+              <h4 class="search-title">项目文件路径</h4>
               <span>{{config_path}}</span>
-              <Button type="info" size="small" class="search-inputright" @click="is_history=true;is_history_one=false">返回列表</Button>
+              <Button type="info" size="small" class="search-inputright" @click="is_history=true; is_history_one=false">返回列表</Button>
               <Button type="error" size="small" class="search-inputright" @click="goCallBack()">回滚</Button>
               <Button type="primary" size="small" class="search-inputright" @click="diffConfData('diffHistory')">对比</Button>
-            </div> </br> 
+            </div> </br>
               <editor v-model="history_content" @init="editorInit" @setCompletions="setCompletions" :mode_type="mode_type" :read="editor.read"></editor>
         </Card>
 
         <Card v-show="is_history">
             <div class="search-con">
-              <h4 class="search-title">发布历史</h4> 
+              <h4 class="search-title">发布历史</h4>
               <span>{{display_name}}</span>
               <Button type="info" size="small" class="search-inputright" @click="is_history=false;is_editor=true">返回</Button>
-            </div> </br> 
+            </div> </br>
             <div>
               <!-- <CellGroup @on-click="clickOneHistory"> -->
-              <CellGroup>  
+              <CellGroup>
                 <Cell  v-for="value in history_data" :name="value.content">
                   <span color="success" slot=""><a @click="clickOneHistory(value.content,value.id)">{{value.create_time}}&nbsp;&nbsp;&nbsp;&nbsp; {{value.config}}&nbsp;&nbsp;&nbsp;&nbsp;</a></span>
-                  <Tag color="success" slot="extra"><p @click="clickOneHistory"> {{value.create_user}}</p></Tag>
+                  <Tag color="success" slot="extra"><p @click="clickOneHistory(value.content,value.id)"> {{value.create_user}}</p></Tag>
                 </Cell>
               </CellGroup>
-            </div>  
+            </div>
         </Card>
       </Col>
     </Row>
-    <Add :dialog="dialog" :display_name="display_name" :wordList="wordList" :project_code="project_code" @e-update="getData" @e-close="closeModal"></Add>
+    <Add :dialog="dialog" :display_name="display_name" :wordList="wordList" :project_code="project_code" @e-update="getData(project_code)" @e-close="closeModal"></Add>
     <!-- <Modal v-model="del_dialog.show" :title="del_dialog.title" :loading=true @on-ok="removePerm(del_dialog.id)" @on-cancel="closeDelModal">
        <p>确定要进行删除操作?</p>
     </Modal> -->
@@ -92,29 +94,40 @@
     </Modal>
 
     <Modal v-model="back_dialog.show" :title="back_dialog.title" :loading=true @on-ok="backConfig()" @on-cancel="back_dialog=false">
-       <p>确定要进行删除操作?</p>
+       <p>确定要进行回滚操作?</p>
     </Modal>
 
     <Modal v-model="del_dialog.show" :title="del_dialog.title" :loading=true @on-ok="removeConfig()" @on-cancel="del_dialog=false">
        <p>确定要进行删除操作?</p>
     </Modal>
-    <copyRight> </copyRight>
+    <Modal v-model="config_api_dialog.show" :title="config_api_dialog.title" :loading=true >
+      <div slot="footer"> </div>
+    <Alert type="success" closable>已发布配置API地址，第一个是当前配置，第二个为当前服务下所有的配置</Alert>
+      <Input v-model="config_api">
+        <Button slot="append" v-clipboard:copy="config_api" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
+      </Input><br/>
+      <Input v-model="service_api">
+        <Button slot="append" v-clipboard:copy="service_api" v-clipboard:success="onCopy" v-clipboard:error="onError">复制</Button>
+      </Input>
+    </Modal>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 import {Tag} from 'iview'
-import copyRight from '@/components/public/copyright'
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 import editor from '@/components/public/editor'
 import Tables from '_c/tables'
 import Add from './Add'
 // import History from './History'
-import { getConfTree, getConf, putConf, patchConf, diffConf, getHistory,backHistory,setAuth, getAuth} from '@/api/confd/conf.js'
+import { getConfTree, getConf, putConf, patchConf,deleteConf, diffConf, getHistory,backHistory,setAuth, getAuth} from '@/api/confd/conf.js'
+import { getuserlist } from '@/api/user'
 import { highlight } from '@/libs/util.js'
 export default {
   name: 'list',
   components: {
-    copyRight,
     editor,
     Tables,
     Tag,
@@ -124,6 +137,8 @@ export default {
   data () {
     return {
       // 弹出框
+      config_api: '',
+      service_api: '',
       loading: true,
       is_history: false,
       is_history_one: false,
@@ -136,7 +151,8 @@ export default {
       },
       params: {},
       mode_type : 'python',
-      project_code: null,
+      // 项目代号
+      project_code: '',
       config_id: null,
       file_data: '',
       history_data: [],
@@ -169,13 +185,14 @@ export default {
         show: false,
         title: '删除配置'
       },
+      config_api_dialog:{
+        show: false,
+        title: '获取API'
+      },
       auth_env: null,
       auth_type: null,
       authUser:[],
-      allUser:[
-        {nickname: '杨铭威'},
-        {nickname: 'ss'}
-      ],
+      allUser:[],
       del_dialog: {
         show: false,
         title: ''
@@ -192,12 +209,11 @@ export default {
     },
     // 版本回滚
     backConfig(){
-      backHistory({history_id:this.history_id}).then(res => {
+      backHistory({history_id: this.history_id}).then(res => {
         const data = res.data
         if (data.code === 0) {
           this.$Message.success('History回滚成功获取成功')
           this.back_dialog.show = false
-          // this.history_data = data.data
         } else {
           this.$Message.error(data.msg)
         }
@@ -210,12 +226,26 @@ export default {
     },
 
     delConfig(){
-      console.log('del...')
       this.del_dialog.show = true
     },
 
     removeConfig(){
-      console.log('start del....')
+      if (!this.params) {
+         this.$Message.error(`你总要选中一个呀`)
+      }else{
+        const params = this.params
+        delete params['content']
+        deleteConf(params).then(res => {
+          const data = res.data
+          if (data.code === 0) {
+            this.$Message.info(data.msg)
+            this.getData(this.project_code)
+          } else {
+            this.$Message.error(data.msg)
+          }
+        })
+      }
+      this.del_dialog.show = false
     },
 
     // 历史版本
@@ -241,9 +271,8 @@ export default {
     clickOneHistory(content,id){
       this.is_history = false
       this.is_history_one = true
-      this.history_content = content 
+      this.history_content = content
       this.history_id = id
-      console.log('id--->',id)
     },
 
     diffConfData(arg){
@@ -317,13 +346,13 @@ export default {
         })
       }
     },
-    
+
     //设置要选则的编辑器语言
     selectModeType(value){
       this.mode_type = value
     },
 
-    editorInit: function () {               
+    editorInit: function () {
       require(`brace/mode/${this.mode_type}`)    //language
       require('brace/theme/terminal')
       require('brace/theme/xcode')
@@ -331,7 +360,6 @@ export default {
 
     getWordList () {
       for (let i of highlight.split('|')) {
-        console.log(i)
         this.wordList.push({'vl': i, 'meta': '关键字'})
       }
     },
@@ -398,7 +426,7 @@ export default {
           duration: 3
         })
         this.closeDelModal()
-        this.getData()
+        this.getData(project_code)
       }).catch(error => {
         this.$Message.error({
           content: JSON.stringify(error.response.data),
@@ -433,22 +461,19 @@ export default {
     changePage (value) {
       // 切换页码时
       this.getParams.pageNum = value
-      this.getData()
+      this.getData(project_code)
     },
     // 切换每页显示条数时
     handlePageSize (value) {
       this.getParams.pageSize = value
-      this.getData()
+      this.getData(project_code)
     },
 
     //获取项目Tree
-    getData () {
-      this.project_code = this.$route.params.project_code
-      getConfTree(this.project_code).then(res => {
-        // console.log(res)
+    getData (project_code) {
+      getConfTree(project_code).then(res => {
         const data = res.data
         if (data.code === 0) {
-          this.$Message.success('Tree获取成功')
           this.treeData = data.data
           this.display_name = data.data[0].display_name
         } else {
@@ -464,10 +489,12 @@ export default {
 
     // 获取配置文件内容
     getConfData(params){
+      delete params['content']
       getConf(params).then(res => {
         const data = res.data
+        this.config_api = `${res.request.responseURL.split('/kerrigan/')[0]}/kerrigan/v1/conf/publish/config/?project_code=${params['project_code']}&environment=${params['environment']}&service=${params['service']}&filename=${params['filename']}`
+        this.service_api = `${res.request.responseURL.split('/kerrigan/')[0]}/kerrigan/v1/conf/publish/service/?project_code=${params['project_code']}&environment=${params['environment']}&service=${params['service']}`
         if (data.code === 0) {
-          // this.$Message.success('Config获取成功')
           this.file_data = data.data.content
           this.is_published = data.data.is_published
           this.config_path = data.data.config_key
@@ -518,6 +545,16 @@ export default {
           content: JSON.stringify(error.response.data),
           duration: 10
         })
+      })
+    },
+        // 获取用户列表
+    getUserList () {
+      getuserlist(1, 10000).then(res => {
+        if (res.data.code === 0) {
+          this.allUser = res.data.data
+        } else {
+          this.$Message.error(`${res.data.msg}`)
+        }
       })
     },
     //授权
@@ -612,15 +649,14 @@ export default {
             title: '授权用户【可对配置文件 编辑/保存】'
           },
           this.auth_env = data.title
-          console.log('set授权用户')
           this.getAuthUser()
-
-
         }else if(data.data_type === 'project'){
           //授权管理员权限
           this.auth_env = data.title
-          console.log('set授权管理员')
           this.getAuthAdmin()
+        }else if(data.data_type === 'service'){
+         console.log(xxx)
+
         }
       }
     },
@@ -636,7 +672,21 @@ export default {
         method: null
       },
       this.dialog.show = false
+    },
+    getApi() {
+      this.config_api_dialog.show = true
+    },
+    onCopy(){
+       this.$Message.success('复制成功')
+    },
+    onError(){
+      this.$Message.error('复制失败')
     }
+  },
+  watch: {
+    project_code (val) {
+      this.getData(this.project_code)
+    },
   },
   computed:{
     historyTitle(){
@@ -645,10 +695,19 @@ export default {
       }
     }
   },
-  created () {
+  updated: function() {
+    this.project_code = this.$route.query.project_code
+  },
+  mounted () {
     /** 获取表格数据 **/
+    if (!this.$route.query.project_code) {
+      this.project_code = ''
+    } else {
+      this.project_code = this.$route.query.project_code
+    }
+    // this.getData(this.project_code)
+    this.getUserList()
     this.getWordList()
-    this.getData()
   }
 }
 </script>

@@ -11,7 +11,11 @@
               <Radio label="dev"></Radio>
               <Radio label="qa"></Radio>
               <Radio label="staging"></Radio>
+              <Radio label="sandbox"></Radio>
+              <Radio label="pre"></Radio>
               <Radio label="release"></Radio>
+              <Radio label="hidden"></Radio>
+              <Radio label="public"></Radio>
           </RadioGroup>
         </FormItem>
         <FormItem label="服务名" prop="service">
@@ -20,11 +24,11 @@
         <FormItem label="文件名" prop="filename">
             <Input v-model="formData.filename" placeholder="如: nginx.conf"></Input>
         </FormItem>
-        <FormItem label="文件内容" prop="filename">
+        <FormItem label="内容" prop="content">
             <editor v-model="formData.content" :read="read" :mode_type="mode_type" :editorHeight=550></editor>
         </FormItem>
 
-        
+
         <FormItem>
             <Button type="primary" @click="handleSubmit('formData')">提交</Button>
             <Button @click="handleReset('formData')" style="margin-left: 8px">重置</Button>
@@ -59,7 +63,8 @@ export default {
       ruleValidate: {
         service: [{ required: true, message: '服务名称不能为空', trigger: 'blur' }],
         filename: [{ required: true, message: '文件名称不能为空', trigger: 'blur' }],
-        environment: [{ required: true, message: '环境必须要勾选', trigger: 'blur' }]
+        environment: [{ required: true, message: '环境必须要勾选', trigger: 'blur' }],
+        content: [{ required: true, message: '内容不能为空', trigger: 'blur' }]
       }
     }
   },

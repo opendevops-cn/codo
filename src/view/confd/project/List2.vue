@@ -1,7 +1,7 @@
 <template>
   <div class="confd-def">
       <Row >
-       <i-col  span="4">
+       <i-col  :lg=4 :md=6 :sm=8 :xs=12>
         <Card style="margin: 0 5px 10px; text-align: center; background:#aee888">
           <a @click="handlerCreate()">
             <Icon type="md-add" />
@@ -9,7 +9,7 @@
           </a>
         </Card>
       </i-col >
-        <i-col span="4" v-for="item in project_list" :key="`custom-icon-${item.project_code}`">
+        <i-col :lg=4 :md=6 :sm=8 :xs=12 v-for="item in project_list" :key="`custom-icon-${item.project_code}`">
           <Card style="margin: 0 5px 10px; text-align: center;">
             <a  @click="handlerCheck(item.project_code)">
               <p>{{item.project_code}}</p>
@@ -17,7 +17,7 @@
             </a>
           </Card>
         </i-col>
-        <i-col  span="4">
+        <i-col :lg=4 :md=6 :sm=8 :xs=12>
         <Card style="margin: 0 5px 10px; text-align: center; background:">
           <a @click="handlerMore()">
             <Icon type="ios-more" />
@@ -26,7 +26,7 @@
         </Card>
       </i-col >
       </Row>
-    <Add :dialog="dialog" :formData="formData" @e-update="getData" @e-close="closeModal"></Add>
+    <Add :dialog="dialog" :formData="formData" @e-update="getProjectData" @e-close="closeModal"></Add>
   </div>
 </template>
 
@@ -49,23 +49,34 @@ export default {
         project_code: null,
         project_name: null
       },
+      project_limit: 50,
     };
   },
   methods: {
     handlerCreate(){
-      console.log('新建项目')
       this.dialog.show = true
     },
-    handlerCheck(val){
-      console.log(val)
-      this.$router.push({ path:'/confd/confd_config/'+val})
+    handlerMore(){
+      this.project_limit = this.project_limit + 30
+      this.getProjectData()
     },
-    getData () {
+    handlerCheck(val){
+      const route = {
+        name: 'confd_config',
+        query: {
+          "project_code":val
+        },
+        meta: {
+          title: `项目配置-${val}`
+        }
+      }
+      this.$router.push(route)
+      // this.$router.push({ path:'/confd/confd_config/'+val, query: {project_code: val}})
+    },
+    getProjectData () {
       // 获取数据
-      getProject(this.getParams).then(res => {
+      getProject(this.project_limit).then(res => {
         if (res.data.code === 0) {
-          //this.$Message.success(res.data.msg)
-          console.log(res.data.data)
           this.project_list = res.data.data
         } else {
           this.$Message.error(res.data.msg)
@@ -89,7 +100,7 @@ export default {
     }
   },
   mounted () {
-    this.getData()
+    this.getProjectData()
   }
 };
 </script>

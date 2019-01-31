@@ -43,6 +43,14 @@ export const patchConf = (data) => {
   })
 }
 
+export const deleteConf = (data) => {
+  return axios.request({
+    url: '/kerrigan/v1/conf/config/',
+    method: 'delete',
+    data
+  })
+}
+
 export const diffConf = (params) => {
   return axios.request({
     url: '/kerrigan/v1/conf/diff/',
@@ -56,6 +64,14 @@ export const getHistory = (params) => {
     url: '/kerrigan/v1/conf/history/',
     method: 'get',
     params
+  })
+}
+
+export const backHistory = (data) => {
+  return axios.request({
+    url: '/kerrigan/v1/conf/history/',
+    method: 'patch',
+    data
   })
 }
 
