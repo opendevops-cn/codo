@@ -654,9 +654,6 @@ export default {
           //授权管理员权限
           this.auth_env = data.title
           this.getAuthAdmin()
-        }else if(data.data_type === 'service'){
-         console.log(xxx)
-
         }
       }
     },
