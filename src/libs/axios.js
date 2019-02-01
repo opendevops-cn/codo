@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Message } from 'iview'
 import Vue from 'vue'
+import Cookies from 'js-cookie'
 // import { router } from '@/router'
 
 class HttpRequest {
@@ -12,7 +13,8 @@ class HttpRequest {
     const config = {
       baseURL: this.baseUrl,
       headers: {
-        //
+        // 添加xsrf验证
+        "X-Xsrftoken": Cookies.get('_xsrf')
       }
     }
     return config
