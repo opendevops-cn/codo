@@ -1,7 +1,12 @@
 <template>
   <div class="confd-def">
-      <Row >
-       <i-col  :lg=4 :md=6 :sm=8 :xs=12>
+    <Row>
+      <i-col>
+        <Affix :offset-top="80">
+          <Input autofocus="autofocus" v-model="searchVal" style="padding:6px;" placeholder="输入名称或者代号进行搜索"/>
+        </Affix>
+      </i-col>
+       <i-col :lg=4 :md=6 :sm=8 :xs=12>
         <Card style="margin: 0 5px 10px; text-align: center; background:#aee888">
           <a @click="handlerCreate()">
             <Icon type="md-add" />
@@ -9,7 +14,7 @@
           </a>
         </Card>
       </i-col >
-        <i-col :lg=4 :md=6 :sm=8 :xs=12 v-for="item in project_list" :key="`custom-icon-${item.project_code}`">
+        <i-col :lg=4 :md=6 :sm=8 :xs=12 v-for="item in project_list" :key="`custom-icon-${item.project_code}-${_uid}`">
           <Card style="margin: 0 5px 10px; text-align: center;">
             <a  @click="handlerCheck(item.project_code)">
               <p>{{item.project_code}}</p>
@@ -17,6 +22,7 @@
             </a>
           </Card>
         </i-col>
+      </i-col >
         <i-col :lg=4 :md=6 :sm=8 :xs=12>
         <Card style="margin: 0 5px 10px; text-align: center; background:">
           <a @click="handlerMore()">
@@ -50,6 +56,7 @@ export default {
         project_name: null
       },
       project_limit: 50,
+      searchVal:''
     };
   },
   methods: {
@@ -71,11 +78,10 @@ export default {
         }
       }
       this.$router.push(route)
-      // this.$router.push({ path:'/confd/confd_config/'+val, query: {project_code: val}})
     },
     getProjectData () {
       // 获取数据
-      getProject(this.project_limit).then(res => {
+      getProject({limit: this.project_limit,'key': this.searchVal}).then(res => {
         if (res.data.code === 0) {
           this.project_list = res.data.data
         } else {
@@ -87,8 +93,6 @@ export default {
           duration: 10
         })
       })
-        //this.tableData = res.data.message
-        // console.log(this.tableData)
     },
     closeModal () {
       // 关闭modal
@@ -99,6 +103,11 @@ export default {
       this.dialog.show = false
     }
   },
+  watch:{
+    searchVal (val) {
+      this.getProjectData()
+    }
+  },
   mounted () {
     this.getProjectData()
   }
@@ -107,7 +116,7 @@ export default {
 
 <style lang="less" scoped>
   .confd-def{
-    background:#eee;padding: 40px 5px 0px 5px;
+    background:#eee;padding: 10px 5px 0px 5px;
   }
   .card{
     &-create{
@@ -117,5 +126,4 @@ export default {
       text-align:center
     }
   }
-
 </style>
