@@ -24,6 +24,8 @@
                 <Button v-show="editor.read" type="error" size="small" class="search-input" @click="delConfig()">删除</Button>
                 <Button v-show="editor.read" type="info" size="small" class="search-input" @click="goHistory()">历史版本</Button>
                 <Button v-show="editor.read && config_id" type="info" size="small" class="search-input" @click="getApi()">API</Button>
+                <h4 class="search-title">项目文件KEY</h4>
+                <span>{{config_path}}</span>
 
               <Select v-model="mode_type" placeholder="格式校验" filterable @on-change="selectModeType" class="search-col">
                   <Option value="python" >Python</Option>
@@ -48,7 +50,7 @@
 
         <Card v-show="is_history_one">
             <div class="search-con">
-              <h4 class="search-title">项目文件路径</h4>
+              <h4 class="search-title">项目文件KEY</h4>
               <span>{{config_path}}</span>
               <Button type="info" size="small" class="search-inputright" @click="is_history=true; is_history_one=false">返回列表</Button>
               <Button type="error" size="small" class="search-inputright" @click="goCallBack()">回滚</Button>
