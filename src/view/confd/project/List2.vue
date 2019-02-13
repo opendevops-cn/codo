@@ -108,7 +108,7 @@ export default {
       this.getProjectData()
     }
   },
-  mounted () {
+  created () {
     this.getProjectData()
   }
 };

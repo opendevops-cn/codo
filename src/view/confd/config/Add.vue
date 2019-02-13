@@ -16,6 +16,7 @@
               <Radio label="release"></Radio>
               <Radio label="hidden"></Radio>
               <Radio label="public"></Radio>
+              <Radio label="deployment"></Radio>
           </RadioGroup>
         </FormItem>
         <FormItem label="服务名" prop="service">

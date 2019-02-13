@@ -23,11 +23,12 @@ router.beforeEach((to, from, next) => {
           router.addRoutes(routers)
           next({ ...to, replace: true })
         }).catch((err) => {
-          console.log(err)
+          // console.log(err)
+          setToken('')
           next({ name: 'login' })
         })
       }).catch((err1) => {
-        console.log(err1)
+        // console.log(err1)
         setToken('')
         next({ name: 'login' })
       })

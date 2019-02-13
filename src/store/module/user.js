@@ -77,10 +77,10 @@ export default {
       return new Promise((resolve, reject) => {
         authorization().then(res => {
           if (parseInt(res.status) === 401) {
+            commit('setToken', '')
+            commit('setAccess', [])
             reject(new Error('token error'))
           } else {
-            // resolve(res.data.data.rules.page)
-            // commit('SET_RULES', res.data.data.rules.component)
             if (!res.data.data) {
               authorization().then(res => {
                 if (parseInt(res.status) === 200) {
