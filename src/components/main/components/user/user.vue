@@ -99,7 +99,7 @@ export default {
             new_password2: this.form.passwdCheck
           }
           this.handlePassword(dataInfo).then(res => {
-            if (res.data.code === '0') {
+            if (res.code === 0) {
               this.$Message.success(`${res.msg}`)
             } else {
               this.$Message.error(`${res.msg}`)
