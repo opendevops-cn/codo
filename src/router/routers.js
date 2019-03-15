@@ -364,6 +364,35 @@ export const routerMap = [
     ]
   },
   {
+    path: '/devopstools',
+    name: 'devopstools',
+    meta: {
+      icon: 'ios-construct',
+      title: '运维工具'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'prometheus_alert',
+        name: 'prometheus_alert',
+        meta: {
+          icon: 'ios-alert',
+          title: '告警管理'
+        },
+        component: () => import('@/view/devops-tools/prometheus-alert.vue')
+      },
+      {
+        path: 'event_reminder',
+        name: 'event_reminder',
+        meta: {
+          icon: 'ios-stopwatch',
+          title: '提醒管理'
+        },
+        component: () => import('@/view/devops-tools/event-reminder.vue')
+      }
+    ]
+  },
+  {
     path: '/usermanage',
     name: 'usermanage',
     meta: {

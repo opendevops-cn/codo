@@ -83,6 +83,8 @@ export default {
   historyTaskList: "历史任务",
   confd:'配置中心',
   confd_project: '配置中心',
-  confd_config:'配置管理'
-
+  confd_config:'配置管理',
+  devopstools:'运维工具',
+  prometheus_alert: '告警管理',
+  event_reminder: '提醒管理'
 }
