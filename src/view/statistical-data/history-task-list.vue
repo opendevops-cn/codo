@@ -165,6 +165,7 @@ export default {
           align: 'center',
           render: (h, params) => {
             let status = params.row.status
+            console.log(params.row.schedule ,params.row.status)
             if (status === '0') {
               return h('div', [
                 h('Tag', { props: { color: 'default' } }, '新建')
@@ -182,6 +183,10 @@ export default {
             } else if (status === '4') {
               return h('div', [
                 h('Tag', { props: { color: 'error' } }, '错误')
+              ])
+            } else if (params.row.schedule == 'OK') {
+              return h('div', [
+                h('Tag', { props: { color: 'success' } }, '完成')
               ])
             } else if (status === '5') {
               return h('div', [
