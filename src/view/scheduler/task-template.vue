@@ -167,7 +167,7 @@ export default {
           title: '执行用户',
           key: 'exec_user',
           align: 'center',
-          width: 100,
+          width: 150,
           render: (h, params) => {
             return h(
               'Select',
@@ -352,7 +352,7 @@ export default {
       getExecUserlist().then(res => {
         if (res.data.code === 0) {
           res.data.data.forEach(item => {
-            this.execUser.push(item.exec_user)
+            this.execUser.push(item.alias_user)
           })
         } else {
           this.$Message.error(`${res.data.msg}`)
@@ -401,6 +401,7 @@ export default {
           type: 'i-input',
           value: '',
           label: '模板名称',
+          maxlength: 25,
           placeholder: '请输入一个有意义的名称，并且不可修改',
           rule: [{ required: true, message: '名称不能为空', trigger: 'blur' }]
         }

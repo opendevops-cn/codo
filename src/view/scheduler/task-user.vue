@@ -3,7 +3,7 @@
   <Alert banner closable type="success">
     <h3>说明文档：</h3>
     <br/>
-    <p>任务一般是通过ssh连接到远程主机执行，编排模板的时候会从此处选择执行用户</p>
+    <p>任务一般是通过ssh连接到远程主机执行，编排模板的时候会从此处选择执行用户，执行的时候会匹配系统用户的信息进行登录</p>
     <p>用户为ssh的时候使用的用户，端口为ssh端口，密钥为ssh的私钥，
       你需要把当对应公钥放入远端需要执行的主机，一般我们把CMDB里面的系统级管理用户导入，当作执行用户来使用</p>
   </Alert>
@@ -28,10 +28,16 @@ export default {
     return {
       columns: [
         {
-          title: '用户名称',
+          title: '执行用户',
+          key: 'alias_user',
+          align: 'center',
+          width: 150
+        },
+        {
+          title: '系统用户',
           key: 'exec_user',
           align: 'center',
-          width: 120
+          width: 150
         },
         {
           title: 'SSH端口',
@@ -122,18 +128,30 @@ export default {
           value: meth === 'put' ? this.tableData[index].id : ''
         },
         {
+          name: 'alias_user',
+          type: 'i-input',
+          maxlength: 80,
+          value: meth === 'put' ? this.tableData[index].alias_user : '',
+          label: '执行用户',
+
+          placeholder: '请输入执行用户名称，编辑模板的时候会选择，必须使用英文字母',
+          rule: [{ required: true, message: '执行用户名称不能为空', trigger: 'blur' }]
+        },
+        {
           name: 'exec_user',
           type: 'i-input',
           value: meth === 'put' ? this.tableData[index].exec_user : '',
-          label: '用户名称',
-          placeholder: '请输入执行用户名称，执行任务的时候会使用此用户',
-          rule: [{ required: true, message: '名称不能为空', trigger: 'blur' }]
+          label: '系统用户',
+          maxlength: 35,
+          placeholder: '执行任务的时候会使用此用户来执行，必须使用英文字母',
+          rule: [{ required: true, message: '系统用户名称不能为空', trigger: 'blur' }]
         },
         {
           name: 'ssh_port',
           type: 'i-input',
           value: meth === 'put' ? this.tableData[index].ssh_port : '22',
           label: 'SSH端口',
+          maxlength: 5,
           placeholder: '请输入端口号，一般为22',
           rule: [
             { required: true, message: 'SSH端口不能为空', trigger: 'blur' }
@@ -144,6 +162,7 @@ export default {
           type: 'i-input',
           value: meth === 'put' ? this.tableData[index].remarks : '',
           label: '备注信息',
+          maxlength: 120,
           placeholder: '请简单的备注一下。'
         },
         {
