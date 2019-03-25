@@ -98,6 +98,14 @@ export const resetPassword = (data) => {
     data
   })
 }
+// token
+export const getToken = (data) => {
+  return axios.request({
+    url: '/mg/v2/accounts/token/',
+    method: 'put',
+    data
+  })
+}
 // role
 export const getrolelist = (page, limit, key, value) => {
   return axios.request({

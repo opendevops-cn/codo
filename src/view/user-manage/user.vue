@@ -9,6 +9,7 @@
           <Button v-if="rules.new_user_btn" type="info" class="search-btn"  @click="showModal">新建用户</Button>
           <Button v-if="rules.reset_pwd_btn" type="error" class="search-btn"  @click="handleResetPWD">重置密码</Button>
           <Button v-if="rules.reset_mfa_btn" type="error" class="search-btn"  @click="handleResetMFA">重置MFA</Button>
+          <Button v-if="rules.get_token_btn" type="error" class="search-btn"  @click="handleToken">长期Token</Button>
         </div>
       </tables>
       <div style="margin: 10px; overflow: hidden">
@@ -34,7 +35,8 @@ import {
   updateuser,
   patchuser,
   resetMFA,
-  resetPassword
+  resetPassword,
+  getToken
 } from '@/api/user'
 export default {
   components: {
@@ -360,6 +362,21 @@ export default {
           })
         }
       }
+    },
+    handleToken () {
+      if (!this.selectionList.length) {
+        this.$Message.error('必须也只能选择一个用户')
+      } else {
+        if (confirm(`选中用户的toekn会发送到你邮箱`)) {
+          getToken({ user_list: this.selectionList }).then(res => {
+            if (res.data.code === 0) {
+              this.$Message.success(`${res.data.msg}`)
+            } else {
+              this.$Message.error(`${res.data.msg}`)
+            }
+          })
+        }
+      }
     }
   },
   mounted () {
@@ -374,7 +391,7 @@ export default {
   .search {
     &-col {
       display: inline-block;
-      width: 300px;
+      width: 350px;
     }
     &-input {
       display: inline-block;
