@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { getPublishApplist, operationPublishApplist } from '@/api/task'
+import { getPublishApplist, operationPublishApplist } from '@/api/task-other'
 export default {
   name: '',
   data () {

@@ -155,3 +155,22 @@ export const operationPosttask = (data, meth) => {
     data
   })
 }
+
+// 发布应用选择
+export const getPublishApplist = (value) => {
+  return axios.request({
+    url: '/task/v1/submission/publish/',
+    method: 'get',
+    params: {
+      'publish_name': value
+    }
+  })
+}
+
+export const operationPublishApplist = (data, meth) => {
+  return axios.request({
+    url: '/task/v1/submission/publish/',
+    method: meth,
+    data
+  })
+}
