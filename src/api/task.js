@@ -156,7 +156,7 @@ const ws = config.isHttps ? 'wss': 'ws'
 const theDomain = process.env.NODE_ENV === 'development' ? config.domainName.dev : config.domainName.pro
 // 日志websocket
 // export const logWS =  ws + '://' + theDomain + '/api' + '/task/v2/task/ws_log/'
-export const logWS =  ws + '://' + theDomain + '/api' + '/ws/v1/task/log/'
+export const logWS =  ws + '://' + theDomain + '/api' + '/task/ws/v1/task/log/'
 
 // 代码仓库
 export const getCoderepository = (key, value) => {
@@ -217,24 +217,6 @@ export const operationPublishlist = (data, meth) => {
   })
 }
 
-// 发布应用选择
-export const getPublishApplist = (value) => {
-  return axios.request({
-    url: '/task/v2/task_other/publish_list/',
-    method: 'get',
-    params: {
-      'publish_name': value
-    }
-  })
-}
-
-export const operationPublishApplist = (data, meth) => {
-  return axios.request({
-    url: '/task/v2/task_other/publish_list/',
-    method: meth,
-    data
-  })
-}
 
 // SQL 优化任务提交
 export const operationMysqlOptimizelist = (data, meth) => {
