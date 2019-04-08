@@ -1,10 +1,7 @@
 <template>
   <Card>
     <div class="search-con search-con-top">
-      <Select
-        v-model="searchKey"
-        class="search-col"
-      >
+      <Select v-model="searchKey" class="search-col">
         <Option
           v-for="item in columns"
           v-if="item.key !== 'handle' && item.key !== 'status' && item.key !== ''"
@@ -181,16 +178,21 @@
             </FormItem>
           </div>
           <div v-else>
+            <FormItem label="标签主机" prop="tag_name">
+              <Select class="search-input-long" v-model="formValidate.tag_name" filterable  placeholder="根据标签来选择主机, 第一优先，如果选择了标签，就会忽略目标主机和组API">
+                <Option v-for="item in allTagList" :value="item.tag_name" :key="item.id" >{{ item.tag_name }}</Option>
+              </Select>
+            </FormItem>
             <FormItem label="目标主机">
               <Input
                 v-model="formValidate.publish_hosts"
                 type="textarea"
                 :maxlength="300"
-                :autosize="{minRows: 5,maxRows: 10}"
+                :autosize="{minRows: 3,maxRows: 10}"
                 placeholder="输入要发布的主机，格式： ip port user password，如果不输入密码，则默认为免密钥"
               ></Input>
             </FormItem>
-            <FormItem label="目标主机组">
+            <FormItem label="主机组API">
               <Input
                 v-model="formValidate.publish_hosts_api"
                 :maxlength="120"
@@ -333,8 +335,8 @@
             v-model="formValidate.config_file"
             type="textarea"
             :maxlength=500
-            :autosize="{minRows: 5,maxRows: 10}"
-            placeholder="可以多个，回车分割。格式： key,,path,,abs|rel(绝对路径|相对路径) /conf/shenshuo/dev/nginx/demo.conf,,/etc/nginx/conf.d,abs /conf/shenshuo/dev/app/settings.py,,settings.py,rel"
+            :autosize="{minRows: 3,maxRows: 10}"
+            placeholder="可以多个，回车分割。格式： key,,path,,abs|rel(绝对路径|相对路径) /conf/shenshuo/dev/nginx/demo.conf,,/etc/nginx/conf.d,,abs /conf/shenshuo/dev/app/settings.py,,settings.py,,rel       这只是一种使用方法，如果不理解，请自行查看配置中心的文档，来实现"
           ></Input>
         </FormItem>
         <FormItem>
@@ -360,12 +362,14 @@ import {
   getTemplist,
   getDockerrepository
 } from "@/api/task";
+import {getTaglist} from '@/api/task-other'
 export default {
   data() {
     return {
       repositoryList: [],
       dockerRepositoryList: [],
       templateList: [],
+      allTagList:[],
       formValidate: {
         publish_name: "",
         publish_type: "service",
@@ -376,6 +380,7 @@ export default {
         publish_type1: "simple",
         publish_hosts: "",
         publish_hosts_api: "",
+        tag_name:"",
         publish_path: "",
         config_file:"",
         mail_to: "",
@@ -483,7 +488,7 @@ export default {
         {
           title: "操作",
           key: "handle",
-          width: 200,
+          width: 160,
           align: "center",
           render: (h, params) => {
             return h("div", [
@@ -583,6 +588,15 @@ export default {
         }
       });
     },
+    getAllTagList() {
+      getTaglist(1, 888).then(res => {
+        if (res.data.code === 0) {
+          this.allTagList = res.data.data
+        } else {
+          this.$Message.error(`${res.data.msg}`)
+        }
+      })
+    },
     // 选择类型
     handlerSelectType(val) {
       this.formValidate.publish_type = val;
@@ -669,6 +683,7 @@ export default {
     this.getCodeRepository();
     this.getTempList();
     this.getDockerRepository();
+    this.getAllTagList()
   }
 };
 </script>

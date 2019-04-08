@@ -32,13 +32,33 @@ export const routerMap = [
         component: () => import('@/view/task-order/task-order-list.vue')
       },
       {
+        path: 'historyTaskList',
+        name: 'historyTaskList',
+        meta: {
+          icon: 'ios-options',
+          title: '历史任务'
+        },
+        component: () => import('@/view/task-order/history-task-list.vue')
+      },
+    ]
+  },
+  {
+    path: '/taskCenter',
+    name: 'taskCenter',
+    meta: {
+      icon: 'ios-hammer',
+      title: '任务发布'
+    },
+    component: Main,
+    children: [
+      {
         path: 'publishApp',
         name: 'publishApp',
         meta: {
           icon: 'md-add',
           title: '发布应用'
         },
-        component: () => import('@/view/task-order/publish-app.vue')
+        component: () => import('@/view/tasks-center/task-submit/publish-app.vue')
       },
       {
         path: 'mysqlAudit',
@@ -47,7 +67,7 @@ export const routerMap = [
           icon: 'ios-help-circle',
           title: 'SQL审核'
         },
-        component: () => import('@/view/task-order/mysql-audit.vue')
+        component: () => import('@/view/tasks-center/task-submit/mysql-audit.vue')
       },
       {
         path: 'mysqlOptimize',
@@ -56,16 +76,25 @@ export const routerMap = [
           icon: 'md-alarm',
           title: 'SQL优化'
         },
-        component: () => import('@/view/task-order/mysql-optimize.vue')
+        component: () => import('@/view/tasks-center/task-submit/mysql-optimize.vue')
       },
       {
-        path: 'resourceApplication',
-        name: 'resourceApplication',
+        path: 'assetPurchase',
+        name: 'assetPurchase',
         meta: {
           icon: 'md-alarm',
-          title: '资源申请'
+          title: '资源申购'
         },
-        component: () => import('@/view/task-order/publish-app.vue')
+        component: () => import('@/view/tasks-center/task-submit/asset-purchase.vue')
+      },
+      {
+        path: 'nodeAdd',
+        name: 'nodeAdd',
+        meta: {
+          icon: 'md-alarm',
+          title: 'Node添加'
+        },
+        component: () => import('@/view/tasks-center/task-submit/k8s-node-add.vue')
       },
       {
         path: 'customTasks',
@@ -74,8 +103,17 @@ export const routerMap = [
           icon: 'md-alarm',
           title: '自定义任务'
         },
-        component: () => import('@/view/task-order/publish-app.vue')
-      }
+        component: () => import('@/view/tasks-center/task-submit/task-custom.vue')
+      },
+      {
+        path: 'postTasks',
+        name: 'postTasks',
+        meta: {
+          icon: 'md-alarm',
+          title: '自定义提交'
+        },
+        component: () => import('@/view/tasks-center/task-submit/task-post.vue')
+      },
     ]
   },
   //
@@ -122,36 +160,6 @@ export const routerMap = [
           title: '发布列表'
         },
         component: () => import('@/view/k8s/publish/List.vue')
-      }
-    ]
-  },
-  {
-    path: '/confd',
-    name: 'confd',
-    meta: {
-      icon: 'ios-hammer',
-      title: '配置中心'
-    },
-    component: Main,
-    children: [
-      {
-        path: 'confd_project',
-        name: 'confd_project',
-        meta: {
-          icon: 'ios-hammer',
-          title: '配置中心'
-        },
-        component: () => import('@/view/confd/project/List2.vue')
-      },
-      {
-        path: 'confd_config/',
-        name: 'confd_config',
-        meta: {
-          hideInMenu: true,
-          icon: 'md-settings',
-          title: '配置管理'
-        },
-        component: () => import('@/view/confd/config/List.vue')
       }
     ]
   },
@@ -264,7 +272,7 @@ export const routerMap = [
           icon: 'md-funnel',
           title: '应用配置'
         },
-        component: () => import('@/view/tasks-config-center/publish-config.vue')
+        component: () => import('@/view/tasks-center/publish-config.vue')
       },
       {
         path: 'codeRepository',
@@ -273,7 +281,7 @@ export const routerMap = [
           icon: 'logo-github',
           title: '代码仓库'
         },
-        component: () => import('@/view/tasks-config-center/code-repository.vue')
+        component: () => import('@/view/tasks-center/code-repository.vue')
       },
       {
         path: 'dockerRegistry',
@@ -282,7 +290,25 @@ export const routerMap = [
           icon: 'ios-boat',
           title: '镜像仓库'
         },
-        component: () => import('@/view/tasks-config-center/docker-registry.vue')
+        component: () => import('@/view/tasks-center/docker-registry.vue')
+      },
+      {
+        path: 'tagTree',
+        name: 'tagTree',
+        meta: {
+          icon: 'ios-git-merge',
+          title: '标签树'
+        },
+        component: () => import('@/view/tasks-center/assets/tag-tree.vue')
+      },
+      {
+        path: 'proxyInfo',
+        name: 'proxyInfo',
+        meta: {
+          icon: 'ios-git-network',
+          title: '代理配置'
+        },
+        component: () => import('@/view/tasks-center/assets/proxy-info.vue')
       }
     ]
   },
@@ -360,6 +386,36 @@ export const routerMap = [
           title: '任务日志'
         },
         component: () => import('@/view/cron/cron-logs.vue')
+      }
+    ]
+  },
+  {
+    path: '/confd',
+    name: 'confd',
+    meta: {
+      icon: 'ios-hammer',
+      title: '配置中心'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'confd_project',
+        name: 'confd_project',
+        meta: {
+          icon: 'ios-hammer',
+          title: '配置中心'
+        },
+        component: () => import('@/view/confd/project/List2.vue')
+      },
+      {
+        path: 'confd_config/',
+        name: 'confd_config',
+        meta: {
+          hideInMenu: true,
+          icon: 'md-settings',
+          title: '配置管理'
+        },
+        component: () => import('@/view/confd/config/List.vue')
       }
     ]
   },
@@ -468,35 +524,35 @@ export const routerMap = [
       }
     ]
   },
-  {
-    path: '/statisticaldata',
-    name: 'statisticaldata',
-    meta: {
-      icon: 'ios-stats',
-      title: '统计数据'
-    },
-    component: Main,
-    children: [
-      {
-        path: 'statisticalImage',
-        name: 'statisticalImage',
-        meta: {
-          icon: 'ios-pie',
-          title: '统计图'
-        },
-        component: () => import('@/view/statistical-data/statistical-images.vue')
-      },
-      {
-        path: 'historyTaskList',
-        name: 'historyTaskList',
-        meta: {
-          icon: 'ios-options',
-          title: '历史任务'
-        },
-        component: () => import('@/view/statistical-data/history-task-list.vue')
-      }
-    ]
-  }
+  // {
+  //   path: '/statisticaldata',
+  //   name: 'statisticaldata',
+  //   meta: {
+  //     icon: 'ios-stats',
+  //     title: '统计数据'
+  //   },
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: 'statisticalImage',
+  //       name: 'statisticalImage',
+  //       meta: {
+  //         icon: 'ios-pie',
+  //         title: '统计图'
+  //       },
+  //       component: () => import('@/view/statistical-data/statistical-images.vue')
+  //     },
+  //     {
+  //       path: 'historyTaskList',
+  //       name: 'historyTaskList',
+  //       meta: {
+  //         icon: 'ios-options',
+  //         title: '历史任务'
+  //       },
+  //       component: () => import('@/view/statistical-data/history-task-list.vue')
+  //     }
+  //   ]
+  // }
 ]
 
 export const routes = [

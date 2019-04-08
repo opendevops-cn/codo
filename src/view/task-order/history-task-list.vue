@@ -165,7 +165,6 @@ export default {
           align: 'center',
           render: (h, params) => {
             let status = params.row.status
-            console.log(params.row.schedule ,params.row.status)
             if (status === '0') {
               return h('div', [
                 h('Tag', { props: { color: 'default' } }, '新建')
