@@ -71,6 +71,7 @@ import { logWS } from '@/api/task'
 export default {
   data() {
     return {
+      log_key:"",
       logInfo: [],
       allTagList: [],
       submitInfo: [],
@@ -129,7 +130,6 @@ export default {
               if (res.data.code === 0) {
                 this.$Message.success(`${res.data.msg}`);
                 const resData= res.data.data
-                console.log(resData.list_id, resData.task_group, resData.task_level, resData.exec_ip)
                 this.handlerCheckLog (resData.list_id, resData.task_group, resData.task_level, resData.exec_ip)
               } else {
                 this.$Message.error(`${res.data.msg}`);
@@ -147,9 +147,8 @@ export default {
       this.$refs[value].resetFields();
     },
     handlerCheckLog (listID, taskGroup, taskLevel, execIP) {
-      let log_key = listID + '_' + taskGroup + '_' + taskLevel + '_' + execIP
-      console.log(log_key)
-      this.websocket(log_key)
+      this.log_key = listID + '_' + taskGroup + '_' + taskLevel + '_' + execIP
+      this.websocket(this.log_key )
     },
     websocket (log_key) {
       if (ws) {
@@ -175,6 +174,21 @@ export default {
         this.logInfo = []
       }
     },
+    closeWebsocket (log_key) {
+      if (ws) {
+        ws.close()
+      }
+      let ws = new WebSocket(logWS)
+      ws.close()
+    },
+  },
+  watch: {
+    logInfo (val) {
+      console.log('10S后连接关闭...')
+      setTimeout(() => {
+        this.closeWebsocket(this.log_key )
+      }, 10000);
+    }
   },
   mounted() {
     this.getAllTagList()
