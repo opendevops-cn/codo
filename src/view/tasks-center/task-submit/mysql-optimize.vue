@@ -54,8 +54,8 @@
         <Col span="11" offset="1">
           <div style="background-color: #000000">
             <Row  v-for="log in logInfo">
-              <Col>
-                <p style="color: #FFFFFF">{{log}}</p>
+              <Col span="23">
+                <p style="color: #FFFFFF; font-size:12px;">{{log}}</p>
               </Col>
             </Row>
           </div>
@@ -168,9 +168,10 @@ export default {
       ws.onclose = function () {
         console.log('连接已关闭...')
       }
+       console.log('20S后关闭websocket')
       setTimeout(() => {
         ws.close()
-      }, 15000);
+      }, 20000);
       // 组件销毁时调用，中断websocket链接
       this.over = () => {
         ws.close()
