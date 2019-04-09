@@ -52,14 +52,14 @@
         </Form>
         </Col>
         <Col span="8" offset="1">
-          此处为ws 日志
-           <Row>
-            <div style="background-color: #000000" v-for="log in logInfo">
-            <Col span="23">
-              <p style="color: #FFFFFF">{{log}}</p>
-            </Col>
+           此处为ws 日志{{logInfo}}
+             <div style="background-color: #000000">
+              <Row  v-for="log in logInfo">
+                <Col span="23">
+                  <p style="color: #FFFFFF">{{log}}</p>
+                </Col>
+              </Row>
             </div>
-          </Row>
         </Col>
       </Row>
     </Card>
