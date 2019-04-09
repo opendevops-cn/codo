@@ -52,10 +52,14 @@
         </Form>
         </Col>
         <Col span="8" offset="1">
-        此处为ws 日志
-          <div style="background-color: #000000" v-for="log in logInfo">
-            <p style="color: #FFFFFF">{{log}}</p>
-          </div>
+          此处为ws 日志
+           <Row>
+            <div style="background-color: #000000" v-for="log in logInfo">
+            <Col span="23">
+              <p style="color: #FFFFFF">{{log}}</p>
+            </Col>
+            </div>
+          </Row>
         </Col>
       </Row>
     </Card>
@@ -126,6 +130,7 @@ export default {
               if (res.data.code === 0) {
                 this.$Message.success(`${res.data.msg}`);
                 const resData= res.data.data
+                console.log(resData.list_id, resData.task_group, resData.task_level, resData.exec_ip)
                 this.handlerCheckLog (resData.list_id, resData.task_group, resData.task_level, resData.exec_ip)
               } else {
                 this.$Message.error(`${res.data.msg}`);
@@ -143,8 +148,8 @@ export default {
       this.$refs[value].resetFields();
     },
     handlerCheckLog (listID, taskGroup, taskLevel, execIP) {
-      this.logModal = true
       let log_key = listID + '_' + taskGroup + '_' + taskLevel + '_' + execIP
+      console.log(log_key)
       this.websocket(log_key)
     },
     websocket (log_key) {
