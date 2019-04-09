@@ -168,27 +168,25 @@ export default {
       ws.onclose = function () {
         console.log('连接已关闭...')
       }
+      setTimeout(() => {
+        ws.close()
+      }, 15000);
       // 组件销毁时调用，中断websocket链接
       this.over = () => {
         ws.close()
         this.logInfo = []
       }
     },
-    closeWebsocket (log_key) {
-      if (ws) {
-        ws.close()
-      }
-      let ws = new WebSocket(logWS)
-      ws.close()
-    },
-  },
-  watch: {
-    logInfo (val) {
-      console.log('10S后连接关闭...')
-      setTimeout(() => {
-        this.closeWebsocket(this.log_key )
-      }, 10000);
-    }
+      // setTimeout(() => {
+      //   this.closeWebsocket(this.log_key )
+      // }, 10000);
+    // closeWebsocket (log_key) {
+    //   if (ws) {
+    //     ws.close()
+    //   }
+    //   let ws = new WebSocket(logWS)
+    //   ws.close()
+    // },
   },
   mounted() {
     this.getAllTagList()
