@@ -92,8 +92,12 @@
       </div>
     </Modal>
     <Modal v-model="logModal" :footer-hide=true :scrollable=true :mask-closable="false" width='750' title="任务日志" @on-cancel="closeModal">
-      <div style="background-color: #000000" v-for="log in logInfo">
-        <p style="color: #FFFFFF">{{log}}</p>
+       <div style="background-color: #000000">
+        <Row  v-for="log in logInfo">
+          <Col>
+            <p style="color: #FFFFFF">{{log}}</p>
+          </Col>
+        </Row>
       </div>
     </Modal>
 </div>

@@ -2,7 +2,7 @@
   <div style="background:#eee">
      <Card style="height:100%; ">
       <Row style="margin-top:5px;">
-        <Col span="22">
+        <Col span="24">
           <Alert show-icon>
             <h4 style="color: #ed4014">
               <p>1.当前页面使用标签关联相关数据库，选取标签下的mysql, SQL优化使用内建模板ID：9901 主机组为1，在没有熟悉模板的使用之前，不要随意更改相关任务模板</p>
@@ -51,15 +51,14 @@
           </FormItem>
         </Form>
         </Col>
-        <Col span="8" offset="1">
-           此处为ws 日志{{logInfo}}
-             <div style="background-color: #000000">
-              <Row  v-for="log in logInfo">
-                <Col span="23">
-                  <p style="color: #FFFFFF">{{log}}</p>
-                </Col>
-              </Row>
-            </div>
+        <Col span="11" offset="1">
+          <div style="background-color: #000000">
+            <Row  v-for="log in logInfo">
+              <Col>
+                <p style="color: #FFFFFF">{{log}}</p>
+              </Col>
+            </Row>
+          </div>
         </Col>
       </Row>
     </Card>
