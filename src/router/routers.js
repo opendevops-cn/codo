@@ -438,13 +438,49 @@ export const routerMap = [
         component: () => import('@/view/devops-tools/prometheus-alert.vue')
       },
       {
-        path: 'event_reminder',
-        name: 'event_reminder',
+        path: 'paid_reminder',
+        name: 'paid_reminder',
         meta: {
           icon: 'ios-stopwatch',
           title: '提醒管理'
         },
-        component: () => import('@/view/devops-tools/event-reminder.vue')
+        component: () => import('@/view/devops-tools/paid-reminder.vue')
+      },
+      {
+        path: 'project_manager',
+        name: 'project_manager',
+        meta: {
+          icon: 'md-document',
+          title: '项目管理'
+        },
+        component: () => import('@/view/devops-tools/project-manager.vue')
+      },
+      {
+        path: 'event_manager',
+        name: 'event_manager',
+        meta: {
+          icon: 'ios-paper',
+          title: '事件管理'
+        },
+        component: () => import('@/view/devops-tools/event-manager.vue')
+      },
+      {
+        path: 'fault_manager',
+        name: 'fault_manager',
+        meta: {
+          icon: 'ios-paper',
+          title: '故障管理'
+        },
+        component: () => import('@/view/devops-tools/fault-manager.vue')
+      },
+      {
+        path: 'password_mycrypy',
+        name: 'password_mycrypy',
+        meta: {
+          icon: 'md-key',
+          title: '加密解密'
+        },
+        component: () => import('@/view/devops-tools/password-mycrypy.vue')
       }
     ]
   },

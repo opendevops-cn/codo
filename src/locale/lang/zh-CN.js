@@ -92,5 +92,9 @@ export default {
   confd_config:'配置管理',
   devopstools:'运维工具',
   prometheus_alert: '告警管理',
-  event_reminder: '提醒管理'
+  paid_reminder: '提醒管理',
+  event_manager: '事件管理',
+  fault_manager: '故障管理',
+  password_mycrypy: '加密解密',
+  project_manager: '项目管理'
 }
