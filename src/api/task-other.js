@@ -178,4 +178,4 @@ export const operationPublishApplist = (data, meth) => {
 
 const ws = config.isHttps ? 'wss': 'ws'
 const theDomain = process.env.NODE_ENV === 'development' ? config.domainName.dev : config.domainName.pro
-export const logWS =  ws + '://' + theDomain + '/api' + '/task/ws/v1/task/log_data/'
+export const logWSUrl=  ws + '://' + theDomain + '/api' + '/task/ws/v1/task/log_data/'
