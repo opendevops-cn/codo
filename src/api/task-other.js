@@ -1,4 +1,5 @@
 import axios from '@/libs/api.request'
+import config from '@/config'
 
 export const getTagtree= (key, value) => {
   return axios.request({
@@ -174,3 +175,7 @@ export const operationPublishApplist = (data, meth) => {
     data
   })
 }
+
+const ws = config.isHttps ? 'wss': 'ws'
+const theDomain = process.env.NODE_ENV === 'development' ? config.domainName.dev : config.domainName.pro
+export const logWS =  ws + '://' + theDomain + '/api' + '/task/ws/v1/task/log_data/'

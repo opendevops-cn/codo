@@ -67,7 +67,7 @@
 
 <script>
 import { getTaglist, getMySQLOpt, operationMySQLOpt} from '@/api/task-other'
-import { logWS } from '@/api/task'
+import { logWSUrl } from '@/api/task-other'
 export default {
   data() {
     return {
@@ -155,7 +155,7 @@ export default {
         ws.close()
         this.logInfo = []
       }
-      let ws = new WebSocket(logWS)
+      let ws = new WebSocket(logWSUrl)
       ws.onopen = () => {
         // Web Socket 已连接上，使用 send() 方法发送数据
         ws.send(log_key)
@@ -178,16 +178,6 @@ export default {
         this.logInfo = []
       }
     },
-      // setTimeout(() => {
-      //   this.closeWebsocket(this.log_key )
-      // }, 10000);
-    // closeWebsocket (log_key) {
-    //   if (ws) {
-    //     ws.close()
-    //   }
-    //   let ws = new WebSocket(logWS)
-    //   ws.close()
-    // },
   },
   mounted() {
     this.getAllTagList()
