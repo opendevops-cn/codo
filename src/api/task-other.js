@@ -3,7 +3,7 @@ import config from '@/config'
 
 export const getTagtree= (key, value) => {
   return axios.request({
-    url: '/task/v1/record/tree/',
+    url: '/task/other/v1/record/tree/',
     method: 'get',
     params: {
       key,
@@ -14,7 +14,7 @@ export const getTagtree= (key, value) => {
 
 export const getTaglist= ( page, limit, key, value) => {
   return axios.request({
-    url: '/task/v1/record/tag/',
+    url: '/task/other/v1/record/tag/',
     method: 'get',
     params: {
       key,
@@ -27,7 +27,7 @@ export const getTaglist= ( page, limit, key, value) => {
 
 export const operationTag= (data, meth) => {
   return axios.request({
-    url: '/task/v1/record/tag/',
+    url: '/task/other/v1/record/tag/',
     method: meth,
     data
   })
@@ -35,7 +35,7 @@ export const operationTag= (data, meth) => {
 
 export const getDBlist= ( page, limit, key, value) => {
   return axios.request({
-    url: '/task/v1/record/db/',
+    url: '/task/other/v1/record/db/',
     method: 'get',
     params: {
       key,
@@ -48,7 +48,7 @@ export const getDBlist= ( page, limit, key, value) => {
 
 export const operationDB = (data, meth) => {
   return axios.request({
-    url: '/task/v1/record/db/',
+    url: '/task/other/v1/record/db/',
     method: meth,
     data
   })
@@ -56,7 +56,7 @@ export const operationDB = (data, meth) => {
 
 export const getServerlist= ( page, limit, key, value) => {
   return axios.request({
-    url: '/task/v1/record/server/',
+    url: '/task/other/v1/record/server/',
     method: 'get',
     params: {
       key,
@@ -69,7 +69,7 @@ export const getServerlist= ( page, limit, key, value) => {
 
 export const operationServer = (data, meth) => {
   return axios.request({
-    url: '/task/v1/record/server/',
+    url: '/task/other/v1/record/server/',
     method: meth,
     data
   })
@@ -77,14 +77,14 @@ export const operationServer = (data, meth) => {
 
 export const getProxylist= () => {
   return axios.request({
-    url: '/task/v1/record/proxy/',
+    url: '/task/other/v1/record/proxy/',
     method: 'get'
   })
 }
 
 export const operationProxy = (data, meth) => {
   return axios.request({
-    url: '/task/v1/record/proxy/',
+    url: '/task/other/v1/record/proxy/',
     method: meth,
     data
   })
@@ -93,7 +93,7 @@ export const operationProxy = (data, meth) => {
 // 数据库审核
 export const getMysqlAudit = (key, value) => {
   return axios.request({
-    url: '/task/v1/submission/mysql_audit/',
+    url: '/task/other/v1/submission/mysql_audit/',
     method: 'get',
     params: {
       key,
@@ -104,7 +104,7 @@ export const getMysqlAudit = (key, value) => {
 
 export const operationMysqlAudit = (data, meth) => {
   return axios.request({
-    url: '/task/v1/submission/mysql_audit/',
+    url: '/task/other/v1/submission/mysql_audit/',
     method: meth,
     data
   })
@@ -113,7 +113,7 @@ export const operationMysqlAudit = (data, meth) => {
 // 数据库优化
 export const getMySQLOpt  = (key, value) => {
   return axios.request({
-    url: '/task/v1/submission/mysql_opt/',
+    url: '/task/other/v1/submission/mysql_opt/',
     method: 'get',
     params: {
       key,
@@ -124,7 +124,7 @@ export const getMySQLOpt  = (key, value) => {
 
 export const operationMySQLOpt = (data, meth) => {
   return axios.request({
-    url: '/task/v1/submission/mysql_opt/',
+    url: '/task/other/v1/submission/mysql_opt/',
     method: meth,
     data
   })
@@ -132,7 +132,7 @@ export const operationMySQLOpt = (data, meth) => {
 
 export const getCustomtask = (key, value) => {
   return axios.request({
-    url: '/task/v1/submission/custom_task/',
+    url: '/task/other/v1/submission/custom_task/',
     method: 'get',
     params: {
       key,
@@ -143,7 +143,7 @@ export const getCustomtask = (key, value) => {
 
 export const operationCustomtask = (data, meth) => {
   return axios.request({
-    url: '/task/v1/submission/custom_task/',
+    url: '/task/other/v1/submission/custom_task/',
     method: meth,
     data
   })
@@ -151,7 +151,7 @@ export const operationCustomtask = (data, meth) => {
 
 export const operationPosttask = (data, meth) => {
   return axios.request({
-    url: '/task/v1/submission/post_task/',
+    url: '/task/other/v1/submission/post_task/',
     method: meth,
     data
   })
@@ -160,7 +160,7 @@ export const operationPosttask = (data, meth) => {
 // 发布应用选择
 export const getPublishApplist = (value) => {
   return axios.request({
-    url: '/task/v1/submission/publish/',
+    url: '/task/other/v1/submission/publish/',
     method: 'get',
     params: {
       'publish_name': value
@@ -170,7 +170,7 @@ export const getPublishApplist = (value) => {
 
 export const operationPublishApplist = (data, meth) => {
   return axios.request({
-    url: '/task/v1/submission/publish/',
+    url: '/task/other/v1/submission/publish/',
     method: meth,
     data
   })
@@ -179,3 +179,63 @@ export const operationPublishApplist = (data, meth) => {
 const ws = config.isHttps ? 'wss': 'ws'
 const theDomain = process.env.NODE_ENV === 'development' ? config.domainName.dev : config.domainName.pro
 export const logWSUrl=  ws + '://' + theDomain + '/api' + '/task/ws/v1/task/log_data/'
+
+
+// 代码仓库
+export const getCoderepository = (key, value) => {
+  return axios.request({
+    url: '/task/other/v2/task_other/repository/',
+    method: 'get',
+    params: {
+      key,
+      value
+    }
+  })
+}
+
+export const operationCoderepository = (data, meth) => {
+  return axios.request({
+    url: '/task/other/v2/task_other/repository/',
+    method: meth,
+    data
+  })
+}
+// 镜像仓库
+export const getDockerrepository = (key, value) => {
+  return axios.request({
+    url: '/task/other/v2/task_other/docker_registry/',
+    method: 'get',
+    params: {
+      key,
+      value
+    }
+  })
+}
+
+export const operationDockerrepository = (data, meth) => {
+  return axios.request({
+    url: '/task/other/v2/task_other/docker_registry/',
+    method: meth,
+    data
+  })
+}
+
+// 发布应用
+export const getPublishlist = (key, value) => {
+  return axios.request({
+    url: '/task/other/v2/task_other/publish_cd/',
+    method: 'get',
+    params: {
+      key,
+      value
+    }
+  })
+}
+
+export const operationPublishlist = (data, meth) => {
+  return axios.request({
+    url: '/task/other/v2/task_other/publish_cd/',
+    method: meth,
+    data
+  })
+}

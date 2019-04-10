@@ -54,7 +54,7 @@
 
 <script>
 import FormGroup from '_c/form-group'
-import { getDockerrepository, operationDockerrepository } from '@/api/task'
+import { getDockerrepository, operationDockerrepository } from '@/api/task-other'
 export default {
   components: {
     FormGroup

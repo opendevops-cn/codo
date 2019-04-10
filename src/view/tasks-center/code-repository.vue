@@ -81,7 +81,7 @@
 
 <script>
 import FormGroup from '_c/form-group'
-import { getCoderepository, operationCoderepository } from '@/api/task'
+import { getCoderepository, operationCoderepository } from '@/api/task-other'
 import { getuserlist } from '@/api/user'
 export default {
   components: {

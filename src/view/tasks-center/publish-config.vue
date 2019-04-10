@@ -355,14 +355,8 @@
 </template>
 
 <script>
-import {
-  getPublishlist,
-  operationPublishlist,
-  getCoderepository,
-  getTemplist,
-  getDockerrepository
-} from "@/api/task";
-import {getTaglist} from '@/api/task-other'
+import { getTemplist } from "@/api/task";
+import { getPublishlist, getCoderepository, operationPublishlist, getTaglist,  getDockerrepository } from '@/api/task-other'
 export default {
   data() {
     return {
