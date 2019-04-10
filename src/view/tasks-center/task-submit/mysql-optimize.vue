@@ -33,7 +33,7 @@
             </RadioGroup>
           </FormItem>
           <FormItem label="SQL语句" prop="sql_data" >
-            <Input v-model="formValidate.sql_data" type="textarea"  :rows="20" :maxlength=6000
+            <Input v-model="formValidate.sql_data" type="textarea"  :rows="18" :maxlength=6000
                placeholder="请输入你的数据语句语句，长度不超过6000">
             </Input>
           </FormItem>
@@ -52,13 +52,14 @@
         </Form>
         </Col>
         <Col span="11" offset="1">
-          <div style="background-color: #000000">
-            <Row  v-for="log in logInfo">
+         <Alert>
+           <p>查询结果/SOAR 语法检查</p>
+         </Alert>
+            <Row v-for="log in logInfo">
               <Col span="23">
-                <p style="color: #FFFFFF; font-size:12px;">{{log}}</p>
+                <p style="font-size:12px;">{{log}}</p>
               </Col>
             </Row>
-          </div>
         </Col>
       </Row>
     </Card>
