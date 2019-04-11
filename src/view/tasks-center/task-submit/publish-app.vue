@@ -6,21 +6,16 @@
           span="12"
           offset="1"
         >
-        <Form
-          ref="formValidate"
-          :model="formValidate"
-          :rules="ruleValidate"
-          :label-width="80"
-        >
-          <FormItem
-            label="选择应用"
-            prop="publish_name"
-          >
+         <Alert>
+           请选择你要发布的应用，具体配置参考【作业配置】-【应用配置】。发布权限关联代码仓库权限【作业配置】-【代码仓库】。
+         </Alert>
+         <br>
+        <Form  ref="formValidate"  :model="formValidate" :rules="ruleValidate" :label-width="75">
+          <FormItem label="选择应用" prop="publish_name">
             <Select
               v-model="formValidate.publish_name"
               @on-change="handleSelect(formValidate.publish_name)"
-              placeholder="${publish_name} Select your publish app name"
-            >
+              placeholder="PUBLISH_NAME Select your publish app name" >
               <Option
                 v-for="(name, index) in publishAppList"
                 :value="name"
@@ -28,19 +23,9 @@
               >{{name}}</Option>
             </Select>
           </FormItem>
-          <FormItem
-            v-if="publishInfo.all_host_info"
-            label="目标主机"
-          >
-            <span
-              v-for="(item, host) in publishInfo.all_host_info"
-              :key="host"
-            >
-              <tag
-                color="success"
-                closable
-                @on-close="handleClose"
-              >{{host}}</tag>
+          <FormItem v-if="publishInfo.host_list" label="目标主机">
+            <span v-for="(host, index) in publishInfo.host_list" :key="host">
+              <tag color="success" closable @on-close="handleClose">{{host}}</tag>
             </span>
           </FormItem>
           <FormItem
@@ -50,8 +35,18 @@
             <Input
               v-model="formValidate.publish_tag"
               :maxlength=40
-              placeholder="${publish_tag} 输入你的TAG"
+              placeholder="PUBLISH_TAG  输入你的TAG"
             ></Input>
+          </FormItem>
+          <FormItem formValidate.custom label="自定义参数 ">
+            <Row>
+              <Col span="7">
+                <Input type="text" v-model="formValidate.custom.custom_key" placeholder="请输入参数名，会把参数传给脚本"></Input>
+              </Col>
+              <Col span="16" offset="1">
+                <Input type="text"  v-model="formValidate.custom.custom_value"  placeholder="请输入参数值"></Input>
+              </Col>
+            </Row>
           </FormItem>
           <FormItem
             label="开始时间"
@@ -75,9 +70,8 @@
               v-model="formValidate.desc"
               type="textarea"
               :maxlength=50
-              :autosize="{minRows: 3,maxRows: 5}"
+              :autosize="{minRows: 2,maxRows: 5}"
               value="Enter something.................."
-              disabled
               placeholder="Enter something..."
             ></Input>
           </FormItem>
@@ -129,6 +123,10 @@ export default {
         publish_name: '',
         publish_tag: '',
         start_time: '',
+        custom: {
+          custom_key: "",
+          custom_value: ""
+        },
         desc: ''
       },
       optionsDate: {
@@ -195,27 +193,41 @@ export default {
     handleSelect (value) {
       getPublishApplist(value).then(res => {
         if (res.data.code === 0) {
+           this.$Message.info(`${res.data.msg}`)
           this.publishInfo = res.data.data
         } else {
           this.$Message.error(`${res.data.msg}`)
         }
       })
     },
-    handleClose (event, value) {
-      this.$Message.error(`暂不提供删除功能`)
+    handleClose(event, name) {
+      if (this.publishInfo.host_list.length > 1) {
+        const index = this.publishInfo.host_list.indexOf(name);
+        this.publishInfo.host_list.splice(index, 1);
+      }else{
+         this.$Message.error('目标主机不能为空')
+      }
     },
     handleSubmit (value) {
-      this.btn_loading = true
-      setTimeout(() => {
-        operationPublishApplist(this.formValidate, 'post').then(res => {
-          if (res.data.code === 0) {
-            this.$Message.success(`${res.data.msg}`)
+      this.$refs[value].validate((valid) => {
+        if (valid) {
+          this.btn_loading = true
+          setTimeout(() => {
+            this.formValidate['host_list'] = this.publishInfo.host_list
+            operationPublishApplist(this.formValidate, 'post').then(res => {
+              if (res.data.code === 0) {
+                this.$Message.success(`${res.data.msg}`)
+              } else {
+                this.$Message.error(`${res.data.msg}`)
+              }
+            })
+            this.btn_loading = false
+          }, 1000)
           } else {
-            this.$Message.error(`${res.data.msg}`)
-          }
-        })
-        this.btn_loading = false
-      }, 1000)
+          this.$Message.error('表单校验错误');
+          this.btn_loading = false;
+        }
+      })
     },
     handleReset(value) {
       this.$refs[value].resetFields();

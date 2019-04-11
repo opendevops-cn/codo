@@ -40,7 +40,7 @@
       :loading=true
       :footer-hide=true
     >
-      <Alert show-icon>请确保构建主机可以从仓库拉取代码。</Alert>
+      <Alert show-icon> 任务在构建主机执行，确保构建主机可从仓库拉取代码和访问目标主机。</Alert>
       <Form
         ref="formValidate"
         :model="formValidate"
@@ -56,7 +56,7 @@
               v-model="formValidate.publish_name"
               disabled
               :maxlength="45"
-              placeholder="请输入发布应用的名称，建议加上发布类型，发布环境的后缀"
+              placeholder="参数名：PUBLISH_NAME 发布应用的名称，建议加上发布类型，发布环境的后缀"
             ></Input>
           </FormItem>
         </div>
@@ -68,7 +68,7 @@
             <Input
               v-model="formValidate.publish_name"
               :maxlength="45"
-              placeholder="请输入发布应用的名称，建议加上发布类型，发布环境的后缀"
+              placeholder="参数名：PUBLISH_NAME 发布应用的名称，建议加上发布类型，发布环境的后缀"
             ></Input>
           </FormItem>
         </div>
@@ -92,7 +92,7 @@
           <Input
             v-model="formValidate.build_host"
             :maxlength=20
-            placeholder="构建 发布应用的主机"
+            placeholder="参数名：BUILD_HOST 构建、发布应用的主机"
           ></Input>
         </FormItem>
         <FormItem
@@ -101,7 +101,7 @@
         >
           <Select
             v-model="formValidate.repository"
-            placeholder="${repository} 选择代码仓库"
+            placeholder="参数名：REPOSITORY 选择代码仓库"
           >
             <Option
               v-for="(repository, index) in repositoryList"
@@ -112,11 +112,11 @@
         </FormItem>
         <FormItem
           label="关联模板"
-          prop="repository"
+          prop="temp_name"
         >
           <Select
             v-model="formValidate.temp_name"
-            placeholder="${temp_name} 关联一个模板，用来执行发布任务"
+            placeholder="关联一个模板，用来执行发布任务"
           >
             <Option
               v-for="temp in templateList"
@@ -134,7 +134,7 @@
             type="textarea"
             :autosize="{minRows: 2,maxRows: 5}"
             :maxlength="200"
-            placeholder="${exclude_file} 需要排除的文件, 默认排除.git。使用回车分割。"
+            placeholder="参数名：EXCLUDE_FILE 需要排除的文件, 默认排除.git。使用回车分割。"
           ></Input>
         </FormItem>
         <div v-if="formValidate.publish_type === 'service'">
@@ -178,36 +178,27 @@
             </FormItem>
           </div>
           <div v-else>
-            <FormItem label="标签主机" prop="tag_name">
-              <Select class="search-input-long" v-model="formValidate.tag_name" filterable  placeholder="根据标签来选择主机, 第一优先，如果选择了标签，就会忽略目标主机和组API">
+            <FormItem label="目标主机" prop="tag_name">
+              <Alert>
+                根据标签来选择主机，要保证构建主机可连通选择的主机 HOSTNAME_LIST 可以当作salt name 来使用，IP_LIST使用SSH协议
+              </Alert>
+              <Select class="search-input-long" v-model="formValidate.tag_name" filterable  placeholder="参数名：HOSTNAME_LIST 和 IP_LIST">
                 <Option v-for="item in allTagList" :value="item.tag_name" :key="item.id" >{{ item.tag_name }}</Option>
               </Select>
             </FormItem>
-            <FormItem label="目标主机">
-              <Input
-                v-model="formValidate.publish_hosts"
-                type="textarea"
-                :maxlength="300"
-                :autosize="{minRows: 3,maxRows: 10}"
-                placeholder="输入要发布的主机，格式： ip port user password，如果不输入密码，则默认为免密钥"
-              ></Input>
-            </FormItem>
-            <FormItem label="主机组API">
+            <FormItem label="API(自定义)">
               <Input
                 v-model="formValidate.publish_hosts_api"
                 :maxlength="120"
-                placeholder="请选择要能获取到主机组的API地址。"
+                placeholder="参数名：HOSTS_API 输入一个参数。系统会把此参数传给任务"
               ></Input>
             </FormItem>
           </div>
-          <FormItem
-            label="发布目录"
-            prop="publish_path"
-          >
+          <FormItem label="发布目录" prop="publish_path">
             <Input
               v-model="formValidate.publish_path"
               :maxlength=35
-              placeholder="${publish_path} 发布到目标主机的目录路径，例如： /var/www/"
+              placeholder="参数名：PUBLISH_PATH 发布到目标主机的目录路径，例如： /var/www/"
             ></Input>
           </FormItem>
         </div>
@@ -240,7 +231,7 @@
             <Input
               v-model="formValidate.region"
               :maxlength=30
-              placeholder="${region}参考云厂商的可用区编号，例如："
+              placeholder="参数名：REGION 参考云厂商的可用区编号，例如："
             ></Input>
           </FormItem>
           <FormItem
@@ -250,7 +241,7 @@
             <Input
               v-model="formValidate.bucket_name"
               :maxlength=45
-              placeholder="你要发布的存储桶名称 ${bucket_name}"
+              placeholder="参数名：BUCKET_NAME  你要发布的存储桶名称"
             ></Input>
           </FormItem>
           <div v-if="formValidate.bucket_type === 'cos'">
@@ -261,7 +252,7 @@
               <Input
                 v-model="formValidate.bucket_path"
                 :maxlength=50
-                placeholder="存储的路径 ${bucket_name}/${bucket_path}"
+                placeholder="参数名：BUCKET_PATH 存储的路径 ${bucket_name}/${bucket_path}"
               ></Input>
             </FormItem>
           </div>
@@ -272,7 +263,7 @@
             <Input
               v-model="formValidate.SecretID"
               :maxlength=60
-              placeholder="${SecretID} 相对应云厂商的SecretID"
+              placeholder="参数名：SecretID 相对应云厂商的SecretID"
             ></Input>
           </FormItem>
           <FormItem
@@ -283,7 +274,7 @@
               v-model="formValidate.SecretKey"
               :maxlength=120
               type="password"
-              placeholder="${SecretKey} 相对应云厂商的SecretKey"
+              placeholder="参数名：SecretKey 相对应云厂商的SecretKey"
             ></Input>
           </FormItem>
         </div>
@@ -294,7 +285,7 @@
           >
             <Select
               v-model="formValidate.docker_registry"
-              placeholder="${docker_registry} 选择镜像仓库项目地址"
+              placeholder="参数名：DOCKER_REGISTRY 选择镜像仓库项目地址"
             >
               <Option
                 v-for="(item, index) in dockerRepositoryList"
@@ -310,7 +301,7 @@
           >
             <Input
               v-model="formValidate.k8s_host"
-              placeholder="请选择输入K8S  主机地址信息"
+              placeholder="参数名：K8S_HOST 输入K8S主机地址信息，通过构建主机连接此主机执行命令"
             ></Input>
           </FormItem>
           <FormItem
@@ -319,7 +310,7 @@
           >
             <Input
               v-model="formValidate.namespace"
-              placeholder="${namespace} 请输入namespace"
+              placeholder="参数名：NAMESPACE 请输入namespace"
             ></Input>
           </FormItem>
         </div>
@@ -327,7 +318,7 @@
           <Input
             v-model="formValidate.mail_to"
             :maxlength=500
-            placeholder="${mail_to} 执行任务中如果需要发送邮件，则需要填写"
+            placeholder="参数名：MAIL_TO 执行任务中如果需要发送邮件，则需要填写"
           ></Input>
         </FormItem>
         <FormItem label="配置文件">
@@ -335,8 +326,8 @@
             v-model="formValidate.config_file"
             type="textarea"
             :maxlength=500
-            :autosize="{minRows: 3,maxRows: 10}"
-            placeholder="可以多个，回车分割。格式： key,,path,,abs|rel(绝对路径|相对路径) /conf/shenshuo/dev/nginx/demo.conf,,/etc/nginx/conf.d,,abs /conf/shenshuo/dev/app/settings.py,,settings.py,,rel       这只是一种使用方法，如果不理解，请自行查看配置中心的文档，来实现"
+            :autosize="{minRows: 5,maxRows: 10}"
+            placeholder="参数名：CONFIG_FILE。格式： key,,path,,abs|rel(绝对路径|相对路径) /conf/shenshuo/dev/nginx/demo.conf,,/etc/nginx/conf.d,,abs /conf/shenshuo/dev/app/settings.py,,settings.py,,rel     这只是一种使用方法，如果不理解，请自行查看配置中心的文档，来实现"
           ></Input>
         </FormItem>
         <FormItem>
@@ -615,23 +606,54 @@ export default {
             this.$Message.error(`${res.data.msg}`);
           }
         });
+      }else{
+        this.formValidate = {
+          publish_name: "",
+          publish_type: "service",
+          build_host: "127.0.0.1",
+          repository: "",
+          temp_name: "",
+          exclude_file: "",
+          publish_type1: "simple",
+          publish_hosts: "",
+          publish_hosts_api: "",
+          tag_name:"",
+          publish_path: "",
+          config_file:"",
+          mail_to: "",
+          bucket_type: "oss",
+          region: "",
+          bucket_name: "",
+          bucket_path: "",
+          SecretID: "",
+          SecretKey: "",
+          docker_registry: "",
+          k8s_host: "",
+          namespace: ""
+        }
       }
     },
 
     handleSubmit(value) {
-      setTimeout(() => {
-        operationPublishlist(this.formValidate, this.editModalData).then(
-          res => {
-            if (res.data.code === 0) {
-              this.$Message.success(`${res.data.msg}`);
-              this.getPublishList(this.searchKey, this.searchValue);
-              this.modalMap.modalVisible = false;
-            } else {
-              this.$Message.error(`${res.data.msg}`);
-            }
-          }
-        );
-      }, 1000);
+      this.$refs[value].validate((valid) => {
+        if (valid) {
+          setTimeout(() => {
+            operationPublishlist(this.formValidate, this.editModalData).then(
+              res => {
+                if (res.data.code === 0) {
+                  this.$Message.success(`${res.data.msg}`);
+                  this.getPublishList(this.searchKey, this.searchValue);
+                  this.modalMap.modalVisible = false;
+                } else {
+                  this.$Message.error(`${res.data.msg}`);
+                }
+              }
+            );
+          }, 1000);
+        } else {
+          this.$Message.error('表单校验错误');
+        }
+      })
     },
     handleReset(name) {
       this.$refs[name].resetFields();

@@ -34,15 +34,6 @@
                 参与人员：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.associated_user}}</p>
               </div>
               </Col>
-             <Col span="24">
-            </Col>
-              <div v-if="checkData.args_keys" v-for="item in checkData.args_keys">
-                <Col span="12">
-                <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
-                {{item}}：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkArgs[item]}}</p>
-              </div>
-              </Col>
-              </div>
             <Col>
               <CellGroup>
                 <Cell v-if="checkData.schedule === 'new'" title="审批执行：">
@@ -55,6 +46,10 @@
                   <Button type="error" style="marginRight: 2px; marginLeft: 10px" size="small" slot="extra" @click="handlerStop()">终止全部</Button>
                 </Cell> -->
               </CellGroup>
+            </Col>
+            <Col span="24" style="padding: 10px">
+              <Table v-if="dataArgs.length > 0" :columns="columnsArgs" :data="dataArgs"  :border="false" :show-header=false  size='small'></Table>
+              <Alert  v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
             </Col>
           </Row>
         </Card>
@@ -313,6 +308,18 @@ export default {
           }
         }
       ],
+      columnsArgs: [
+          {
+              title: '参数',
+              key: 'args_key',
+              width: 245,
+          },
+          {
+              title: '值',
+              key: 'args_value'
+          },
+      ],
+      dataArgs: [],
       tableData: [],
       tableData1: [],
       // formList: [],
@@ -352,6 +359,7 @@ export default {
           this.tableData1 = resData.scheduler_list
           this.valueDate = resData.start_time
           this.runHost = resData.this_host
+          this.dataArgs =  resData.new_args_list
           if (this.checkData.group_list) {
             this.checkData.group_list.forEach(item => {
               newTabs.push({
