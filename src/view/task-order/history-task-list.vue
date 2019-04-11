@@ -34,20 +34,14 @@
                 参与人员：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.associated_user}}</p>
               </div>
               </Col>
-            <Col>
+            <Col v-if="list_id">
               <CellGroup>
                 <Cell v-if="checkData.schedule === 'new'" title="审批执行：">
                   <Button v-if="checkData.schedule === 'new' && checkData.approval_button" type="success" style="marginRight: 2px" size ="small" slot="extra" @click="handlerApproval">审批</Button>
                 </Cell>
-                <!-- <Cell title="审批干预：">
-                  <span  slot="extra" v-if="checkData.hand_list" v-for="item, index in checkData.hand_list">
-                    <Button type="info" style="marginRight: 10px" size ="small" slot="extra" @click="handlerHand(item)">{{item}}</Button>
-                  </span>
-                  <Button type="error" style="marginRight: 2px; marginLeft: 10px" size="small" slot="extra" @click="handlerStop()">终止全部</Button>
-                </Cell> -->
               </CellGroup>
             </Col>
-            <Col span="24" style="padding: 10px">
+            <Col v-if="list_id" span="24" style="padding: 10px">
               <Table v-if="dataArgs.length > 0" :columns="columnsArgs" :data="dataArgs"  :border="false" :show-header=false  size='small'></Table>
               <Alert  v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
             </Col>

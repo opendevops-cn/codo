@@ -20,22 +20,21 @@
                 </div>
               </Col>
               <Col span="12">
-              <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
-                发起人：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.creator}}</p>
-              </div>
+                <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
+                  发起人：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.creator}}</p>
+                </div>
               </Col>
               <Col span="12">
-               <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
-                审批人：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.executor}}</p>
-              </div>
+                <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
+                  审批人：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.executor}}</p>
+                </div>
               </Col>
               <Col span="24">
-              <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
-                参与人员：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.associated_user}}</p>
-              </div>
+                <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
+                  参与人员：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.associated_user}}</p>
+                </div>
               </Col>
-
-            <Col>
+            <Col v-if="list_id">
               <CellGroup>
                 <Cell v-if="checkData.schedule === 'new'" title="审批执行：">
                   <Button v-if="checkData.schedule === 'new' && checkData.approval_button" type="success" style="marginRight: 2px" size ="small" slot="extra" @click="handlerApproval">审批</Button>
@@ -48,7 +47,7 @@
                 </Cell>
               </CellGroup>
             </Col>
-            <Col span="24" style="padding: 10px">
+            <Col v-if="list_id" span="24" style="padding: 10px">
               <Table v-if="dataArgs.length > 0" height="122" :columns="columnsArgs" :data="dataArgs"  :border="false" :show-header=false  size='small'></Table>
               <Alert v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
             </Col>
