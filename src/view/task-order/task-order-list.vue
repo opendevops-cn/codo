@@ -49,8 +49,8 @@
               </CellGroup>
             </Col>
             <Col span="24" style="padding: 10px">
-              <Table v-if="dataArgs.length > 0" :columns="columnsArgs" :data="dataArgs"  :border="false" :show-header=false  size='small'></Table>
-              <Alert  v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
+              <Table v-if="dataArgs.length > 0" height="122" :columns="columnsArgs" :data="dataArgs"  :border="false" :show-header=false  size='small'></Table>
+              <Alert v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
             </Col>
           </Row>
         </Card>
