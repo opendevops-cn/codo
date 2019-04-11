@@ -34,13 +34,11 @@
       :columns="columns"
       :data="tableData"
     ></Table>
-    <Modal
-      v-model="modalMap.modalVisible"
-      :title="modalMap.modalTitle"
-      :loading=true
-      :footer-hide=true
-    >
-      <Alert show-icon> 任务在构建主机执行，确保构建主机可从仓库拉取代码和访问目标主机。</Alert>
+    <Modal  v-model="modalMap.modalVisible" :title="modalMap.modalTitle" :loading=true :footer-hide=true >
+      <Alert show-icon>
+        <p>1. 任务在构建主机执行，确保构建主机可从仓库拉取代码和访问目标主机。</p>
+        <p>2. 考虑到安全性，任务会屏蔽 Secret secret 开头的参数，请通过API获取。</p>
+      </Alert>
       <Form
         ref="formValidate"
         :model="formValidate"
@@ -263,7 +261,7 @@
             <Input
               v-model="formValidate.SecretID"
               :maxlength=60
-              placeholder="参数名：SecretID 相对应云厂商的SecretID"
+              placeholder="相对应云厂商的SecretID, 注意使用方法，不要泄露"
             ></Input>
           </FormItem>
           <FormItem
@@ -274,7 +272,7 @@
               v-model="formValidate.SecretKey"
               :maxlength=120
               type="password"
-              placeholder="参数名：SecretKey 相对应云厂商的SecretKey"
+              placeholder="相对应云厂商的SecretKey  注意使用方法，不要泄露"
             ></Input>
           </FormItem>
         </div>
