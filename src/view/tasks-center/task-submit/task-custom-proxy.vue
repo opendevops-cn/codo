@@ -5,7 +5,8 @@
         <Col span="22" offset="1">
           <Alert show-icon>
             <h4 style="color: #ed4014">
-              <p>1.当前页面使用标签关联相关主机，选取标签下的主机, 系统直连主机并发执行选择模板的任务，为了减轻任务压力，限制并发100以内</p>
+              <p>1.当前页面使用标签关联相关主机，选取标签下的主机, 在代理主机上执行选择模板的任务，并把主机名，IP地址传给任务，
+                任务本身通过ansible、saltsatck、多线程、多进程等方法来进行并发。参数IP： SERVER_IP， 主机名：SERVER_HOST 一般可以作为salt name。</p>
             </h4>
           </Alert>
            <br>
@@ -13,13 +14,18 @@
         <Col span="16" offset="1">
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="70">
           <FormItem label="目标标签" prop="tag" >
-            <Select v-model="formValidate.tag" filterable  placeholder="请选择关联的标签"  @on-change="handleSelect(formValidate.tag)">
+            <Select v-model="formValidate.tag" filterable  multiple placeholder="请选择关联的标签"  @on-change="handleSelect(formValidate.tag)">
               <Option v-for="item in allTagList" :value="item.tag_name" :key="item.id" >{{ item.tag_name }}</Option>
             </Select>
           </FormItem>
           <FormItem v-if="submitInfo.length > 0 " label="目标主机">
             <span v-for="item in submitInfo">
               <tag color="success" closable :key="item" :name="item" @on-close="handleClose">{{item}}</tag>
+            </span>
+          </FormItem>
+          <FormItem v-if="proxy_list.length > 0 " label="代理主机">
+            <span v-for="item in proxy_list">
+              <tag color="success" closable :key="item" :name="item" @on-close="handleCloseProxy">{{item}}</tag>
             </span>
           </FormItem>
            <FormItem label="选择模板" prop="temp_id" >
@@ -70,7 +76,7 @@
 </template>
 
 <script>
-import { getTaglist, getCustomtask, operationCustomtask} from '@/api/task-other'
+import { getTaglist, getCustomtaskProxy, operationCustomtaskProxy} from '@/api/task-other'
 import { getTemplist } from "@/api/task";
 import { getuserlist } from '@/api/user'
 export default {
@@ -79,6 +85,7 @@ export default {
       index: 1,
       allTagList: [],
       submitInfo: [],
+      proxy_list: [],
       tempList: [],
       btn_loading: false,
       optionsDate: {
@@ -87,7 +94,7 @@ export default {
         }
       },
       formValidate: {
-        tag: "",
+        tag: [],
         temp_id: "",
         args_items: [
           {
@@ -99,7 +106,7 @@ export default {
         ]
       },
       ruleValidate: {
-        tag: [ {required: true, message: "The databases cannot be empty", trigger: "blur"}],
+        tag: [ {type: 'array', required: true, message: "The databases cannot be empty", trigger: "blur"}],
         temp_id: [ {required: true, type: 'number', message: "必须选择一个执行模板", trigger: "blur"}],
         start_time: [{ required: true, type: 'date', message: 'Please select the date', trigger: 'change'}],
       }
@@ -107,14 +114,10 @@ export default {
   },
   methods: {
     handleSelect(value) {
-      getCustomtask('tag_name', value).then(res => {
+      getCustomtaskProxy({'tag_list': this.formValidate.tag}).then(res => {
         if (res.data.code === 0) {
-          this.submitInfo = res.data.data;
-          // let dataList = []
-          // data.forEach(element => {
-          //     dataList.push(element.hostname)
-          // });
-          // this.submitInfo = dataList
+          this.submitInfo = res.data.data.server_list;
+          this.proxy_list = res.data.data.proxy_list
         } else {
           this.$Message.error(`${res.data.msg}`);
         }
@@ -134,13 +137,14 @@ export default {
       getTemplist().then(res => {
         if (res.data.code === 0) {
           this.tempList =  res.data.data
-          // this.sqlTempList = res.data.data.filter(
-          //   res => res.temp_name.search("SQL审核") === 0
-          // );
         } else {
           this.$Message.error(`${res.data.msg}`);
         }
       });
+    },
+    handleCloseProxy(event, name){
+      const index = this.proxy_list.indexOf(name);
+      this.proxy_list.splice(index, 1);
     },
     handleClose(event, name) {
       const index = this.submitInfo.indexOf(name);
@@ -148,8 +152,13 @@ export default {
     },
     handleSubmit(value) {
       this.btn_loading = true;
-      if (this.submitInfo.length === 0 || this.submitInfo.length > 100) {
-         this.$Message.error('请选择一个标签，并确保标签下有主机，并且主机不能大于100');
+      if (this.submitInfo.length === 0) {
+         this.$Message.error('请选择一个标签，并确保标签下有主机');
+        this.btn_loading = false;
+        return
+      }
+      if (this.proxy_list.length !== 1) {
+         this.$Message.error('只能选择一个代理主机');
         this.btn_loading = false;
         return
       }
@@ -157,7 +166,8 @@ export default {
         if (valid) {
           setTimeout(() => {
             this.formValidate['hostnames'] = this.submitInfo
-            operationCustomtask(this.formValidate, "post").then(res => {
+             this.formValidate['proxy_list'] = this.proxy_list
+            operationCustomtaskProxy(this.formValidate, "post").then(res => {
               if (res.data.code === 0) {
                 this.$Message.success(`${res.data.msg}`);
               } else {

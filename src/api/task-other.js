@@ -149,6 +149,25 @@ export const operationCustomtask = (data, meth) => {
   })
 }
 
+export const getCustomtaskProxy = (key, value) => {
+  return axios.request({
+    url: '/task/other/v1/submission/custom_task_proxy/',
+    method: 'get',
+    params: {
+      key,
+      value,
+    }
+  })
+}
+
+export const operationCustomtaskProxy = (data, meth) => {
+  return axios.request({
+    url: '/task/other/v1/submission/custom_task_proxy/',
+    method: meth,
+    data
+  })
+}
+
 export const operationPosttask = (data, meth) => {
   return axios.request({
     url: '/task/other/v1/submission/post_task/',

@@ -106,11 +106,20 @@ export const routerMap = [
         component: () => import('@/view/tasks-center/task-submit/task-custom.vue')
       },
       {
+        path: 'customTasksProxy',
+        name: 'customTasksProxy',
+        meta: {
+          icon: 'md-alarm',
+          title: '自定义任务-代理'
+        },
+        component: () => import('@/view/tasks-center/task-submit/task-custom-proxy.vue')
+      },
+      {
         path: 'postTasks',
         name: 'postTasks',
         meta: {
           icon: 'md-alarm',
-          title: '自定义提交'
+          title: '自定义任务-JSON'
         },
         component: () => import('@/view/tasks-center/task-submit/task-post.vue')
       },
