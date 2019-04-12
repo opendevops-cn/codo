@@ -46,7 +46,7 @@ export const routerMap = [
     path: '/taskCenter',
     name: 'taskCenter',
     meta: {
-      icon: 'ios-hammer',
+      icon: 'ios-cafe',
       title: '任务发布'
     },
     component: Main,
@@ -55,7 +55,7 @@ export const routerMap = [
         path: 'publishApp',
         name: 'publishApp',
         meta: {
-          icon: 'md-add',
+          icon: 'ios-cafe-outline',
           title: '发布应用'
         },
         component: () => import('@/view/tasks-center/task-submit/publish-app.vue')
@@ -73,7 +73,7 @@ export const routerMap = [
         path: 'mysqlOptimize',
         name: 'mysqlOptimize',
         meta: {
-          icon: 'md-alarm',
+          icon: 'ios-cafe',
           title: 'SQL优化'
         },
         component: () => import('@/view/tasks-center/task-submit/mysql-optimize.vue')
@@ -82,7 +82,7 @@ export const routerMap = [
         path: 'assetPurchase',
         name: 'assetPurchase',
         meta: {
-          icon: 'md-alarm',
+          icon: 'md-cafe',
           title: '资源申购'
         },
         component: () => import('@/view/tasks-center/task-submit/asset-purchase.vue')
@@ -91,7 +91,7 @@ export const routerMap = [
         path: 'nodeAdd',
         name: 'nodeAdd',
         meta: {
-          icon: 'md-alarm',
+          icon: 'md-cafe',
           title: 'Node添加'
         },
         component: () => import('@/view/tasks-center/task-submit/k8s-node-add.vue')
@@ -100,7 +100,7 @@ export const routerMap = [
         path: 'customTasks',
         name: 'customTasks',
         meta: {
-          icon: 'md-alarm',
+          icon: 'md-beer',
           title: '自定义任务'
         },
         component: () => import('@/view/tasks-center/task-submit/task-custom.vue')
@@ -109,7 +109,7 @@ export const routerMap = [
         path: 'customTasksProxy',
         name: 'customTasksProxy',
         meta: {
-          icon: 'md-alarm',
+          icon: 'md-beer',
           title: '自定义任务-代理'
         },
         component: () => import('@/view/tasks-center/task-submit/task-custom-proxy.vue')
@@ -118,7 +118,7 @@ export const routerMap = [
         path: 'postTasks',
         name: 'postTasks',
         meta: {
-          icon: 'md-alarm',
+          icon: 'md-beer',
           title: '自定义任务-JSON'
         },
         component: () => import('@/view/tasks-center/task-submit/task-post.vue')
