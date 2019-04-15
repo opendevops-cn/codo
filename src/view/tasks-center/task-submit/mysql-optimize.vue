@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { getTaglist, getMySQLOpt, operationMySQLOpt} from '@/api/task-other'
+import { getAuthTaglist, getMySQLOpt, operationMySQLOpt} from '@/api/task-other'
 import { logWSUrl } from '@/api/task-other'
 export default {
   data() {
@@ -103,7 +103,7 @@ export default {
     },
     // 获取标签列表
     getAllTagList () {
-      getTaglist(1, 888).then(res => {
+      getAuthTaglist().then(res => {
         if (res.data.code === 0) {
           this.allTagList = res.data.data
         } else {

@@ -12,6 +12,13 @@ export const getTagtree= (key, value) => {
   })
 }
 
+export const getAuthTaglist= () => {
+  return axios.request({
+    url: '/task/other/v1/record/tag_auth/',
+    method: 'get'
+  })
+}
+
 export const getTaglist= ( page, limit, key, value) => {
   return axios.request({
     url: '/task/other/v1/record/tag/',
@@ -24,6 +31,7 @@ export const getTaglist= ( page, limit, key, value) => {
     }
   })
 }
+
 
 export const operationTag= (data, meth) => {
   return axios.request({
@@ -239,7 +247,7 @@ export const operationDockerrepository = (data, meth) => {
   })
 }
 
-// 发布应用
+// 应用配置
 export const getPublishlist = (key, value) => {
   return axios.request({
     url: '/task/other/v2/task_other/publish_cd/',

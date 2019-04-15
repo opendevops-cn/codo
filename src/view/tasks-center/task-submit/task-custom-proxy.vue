@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { getTaglist, getCustomtaskProxy, operationCustomtaskProxy} from '@/api/task-other'
+import { getAuthTaglist, getCustomtaskProxy, operationCustomtaskProxy} from '@/api/task-other'
 import { getTemplist } from "@/api/task";
 import { getuserlist } from '@/api/user'
 export default {
@@ -125,7 +125,7 @@ export default {
     },
     // 获取标签列表
     getAllTagList () {
-      getTaglist(1, 888).then(res => {
+      getAuthTaglist().then(res => {
         if (res.data.code === 0) {
           this.allTagList = res.data.data
         } else {
