@@ -119,7 +119,7 @@
             placeholder="故障处理人员，接手人，参与人"
           ></Input>
         </FormItem>
-        
+
        <FormItem
         label="上传附件"
        >
@@ -135,20 +135,20 @@
                 :format="['jpg','jpeg','png','md','pptx','ppt','docx','doc','pdf']"
                 :on-format-error="handleFormatError"
                 :on-success="handleSuccess"
-                
+
                 >
                 <div style="padding: 1px 0">
                     <Icon type="ios-cloud-upload" size="50" style="color: #3399ff"></Icon>
                     <p>点击上传故障报告附件</p>
                 </div>
-                
+
             </Upload>
         <!-- 手动上传 -->
         <!-- <div>
             <Upload
             :before-upload="handleUpload"
             action="'/tools/v1/tools/fault/upload/">
-            
+
             <Button icon="ios-cloud-upload-outline">选择你要上传的文件</Button>
             </Upload>
             <div v-if="file !== null">Upload file: {{ file.name }} <Button type="text" @click="upload" :loading="loadingStatus">{{ loadingStatus ? 'Uploading' : '点击上传文件' }}</Button></div>
@@ -163,7 +163,7 @@
         >
             <DatePicker
               v-model="formValidate.fault_start_time"
-              type="datetime" 
+              type="datetime"
               format="yyyy-MM-dd HH:mm:ss"
               show-week-numbers
               editable
@@ -411,7 +411,6 @@ export default {
         modalVisible: false,
         modalTitle: "新建"
       },
-      UploadUrl: UploadUrl,
       formList: [],
       editModalData: "",
       pageNum: 1, // 当前页码
@@ -485,7 +484,7 @@ export default {
             });
         }
         return check;
-       
+
     },
     handleDetail (index) {
         this.$Modal.info({
@@ -543,7 +542,7 @@ export default {
                         setTimeout(() => {
                             operationFaultManager(this.formValidate, this.editModalData).then(res => {
                                 if (res.data.code === 0) {
-            
+
                                     this.$Message.success(`${res.data.msg}`)
                                     this.getFaultManagerList(
                                     this.pageNum,
@@ -612,14 +611,14 @@ export default {
     handlePageSize (value) {
         this.pageSize = value
         this.getFaultManagerList(1, this.pageSize, this.searchKey, this.searchValue)
-    }    
+    }
 //   },
 //   watch: {
 //     searchValue(val) {
 //       this.getFaultManagerList(this.pageNum,this.pageSize,this.searchKey, val);
 //     }
   },
-  
+
   mounted() {
     this.getFaultManagerList();
     this.GetOSSBucketInfo();

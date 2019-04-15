@@ -1,5 +1,6 @@
 import axios from '@/libs/api.request'
 import config from '@/config'
+const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
 
 export const getPrometheusAlertlist = (key, value) => {
   return axios.request({
@@ -143,4 +144,5 @@ export const GetOSSBucketInfo = () => {
   })
 }
 
-export const UploadUrl = '/tools/v1/tools/fault/upload/'
+// export const UploadUrl = '/tools/v1/tools/fault/upload/'
+export const UploadUrl = baseUrl + '/tools/v1/tools/fault/upload/'
