@@ -144,5 +144,4 @@ export const GetOSSBucketInfo = () => {
   })
 }
 
-// export const UploadUrl = '/tools/v1/tools/fault/upload/'
 export const UploadUrl = baseUrl + '/tools/v1/tools/fault/upload/'

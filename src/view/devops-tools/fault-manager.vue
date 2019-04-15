@@ -130,7 +130,7 @@
                 :before-upload="handleBeforeUpload"
                 type="drag"
                 :action=UploadUrl
-                :max-size="50 * 1024"
+                :max-size="5 * 1024"
                 :on-exceeded-size="handleMaxSize"
                 :format="['jpg','jpeg','png','md','pptx','ppt','docx','doc','pdf']"
                 :on-format-error="handleFormatError"
@@ -139,7 +139,7 @@
                 >
                 <div style="padding: 1px 0">
                     <Icon type="ios-cloud-upload" size="50" style="color: #3399ff"></Icon>
-                    <p>点击上传故障报告附件</p>
+                    <p>点击上传故障报告附件，nginx默认限制1M，有需求请自行修改</p>
                 </div>
 
             </Upload>
@@ -450,7 +450,7 @@ export default {
     handleMaxSize (file) {
         this.$Notice.warning({
             title: '文件大小超限',
-            desc: '文件  ' + file.name + ' 太大，上传文件大小不能超过50M.'
+            desc: '文件  ' + file.name + ' 太大，上传文件大小不能超过5M.'
         });
     },
     handleFormatError (file) {
