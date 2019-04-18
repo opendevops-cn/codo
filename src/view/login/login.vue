@@ -8,12 +8,12 @@
       <Card icon="log-in" title="欢迎登录codo系统" :bordered="false">
         <div class="form-con">
           <login-form :secoundAuth=secoundAuth @on-success-valid="handleSubmit"></login-form>
-          <p class="login-tip">这里是备注</p>
+          <p class="login-tip">支持 本地 e-mail LDAP登录</p>
         </div>
       </Card>
     </div>
-    <Modal v-model="modalVisible"  :title="modalTitle" :loading=true :footer-hide=true>
-      <register-form v-if="!mfa" :mail="mail" @on-submit-success="handleRegisterSubmit"></register-form>
+    <Modal v-model="modalVisible"  :title="modalTitle" :loading=true :footer-hide=true :mask-closable=false>
+      <register-form v-if="!mfa" :mail="mail" :username='username' @on-submit-success="handleRegisterSubmit"></register-form>
       <m-f-a  v-else :mfa="mfa" :mail="mail" ></m-f-a>
     </Modal>
   </div>
@@ -35,6 +35,7 @@ export default {
       modalVisible: false,
       modalTitle: '',
       mail: '',
+      username: '',
       mfa: ''
     }
   },
@@ -56,7 +57,8 @@ export default {
           this.secoundAuth = true
           this.$Message.success(`${res.msg}`)
         }  else if (res.code === -3) {
-          this.mail = username
+          this.mail = res.email ? res.email : username
+          this.username = res.username ? res.username : username.split('@')[0]
           this.$Message.success({
             content: `${res.msg}`,
             duration: 5,

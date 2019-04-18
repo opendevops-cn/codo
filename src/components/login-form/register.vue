@@ -26,7 +26,7 @@
             <Input v-model="formValidate.no" placeholder="请输入你的工号"></Input>
           </FormItem>
           <FormItem label="邮箱" prop="email">
-            <Input readonly v-model="formValidate.email" placeholder="Enter your e-mail "></Input>
+            <Input readonly v-model="formValidate.email" disabled  placeholder="Enter your e-mail "></Input>
           </FormItem>
           <FormItem label="性别" prop="sex">
             <RadioGroup v-model="formValidate.sex">
@@ -51,6 +51,9 @@ export default {
   name: 'RegisterForm',
   props: {
     mail: {
+      type: String
+    },
+    username: {
       type: String
     }
   },
@@ -153,7 +156,9 @@ export default {
   watch: {
     mail (value) {
       this.formValidate.email = value
-      this.formValidate.username = value.split('@')[0]
+    },
+    username (value) {
+      this.formValidate.username = value
     }
   },
   methods: {

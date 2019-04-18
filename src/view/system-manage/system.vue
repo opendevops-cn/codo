@@ -10,25 +10,41 @@
         :name="item.name"
         :disabled='item.disabled ? item.disabled : false'
       >
-        <form-group
-          :list="formList"
-          @on-submit-success="handleSubmit"
-        >
-          <slot slot="left-btn">
-            <Button
-              v-if="theTabName === 'EMAIL'"
-              type="success"
-              style="margin-left: 8px"
-              @click="handlerCheckTest(theTabName)"
-            >测试邮件</Button>
-            <Button
-              v-if="theTabName === 'SMS'"
-              type="success"
-              style="margin-left: 8px"
-              @click="handlerCheckTest(theTabName)"
-            >测试短信</Button>
-          </slot>
-        </form-group>
+        <Row>
+          <Col span="12">
+          <form-group :list="formList" @on-submit-success="handleSubmit">
+            <slot slot="left-btn">
+              <Button v-if="theTabName === 'EMAIL'" type="success" style="margin-left: 8px"@click="handlerCheckTest(theTabName)">测试邮件</Button>
+              <Button v-if="theTabName === 'SMS'" type="success" style="margin-left: 8px" @click="handlerCheckTest(theTabName)">测试短信</Button>
+              <Button v-if="theTabName === 'LDAP'" type="success" style="margin-left: 8px" @click="handlerCheckTest(theTabName)">测试LDAP</Button>
+            </slot>
+            </form-group>
+          </Col>
+          <Col span="10"  offset='1'>
+            <Alert  v-if="theTabName === 'LDAP'">
+            <h5>LDAP地址  serverurl</h5><br>
+
+            <h5>LDAP端口  默认389   开启SSL 要使用 636</h5><br>
+
+            <h5> 绑定DN  cn=Manager,DC=opendevops,DC=cn</h5>
+            <p>这里是设置认证用户的信息, 系统会使用这个用户去校验ldap的信息是否正确</p><br>
+            <h5>密码   # 上面认证用户的密码</h5><br>
+
+            <h5>用户OU  ou=opendevops,dc=opendevops,dc=cn</h5>
+            <p>这里是设置用来登录codo的组织单元, 比如我要用某个ou的用户来登录codo</p><br>
+
+            <h5>用户过滤器  cn</h5>
+            <p>这里是设置认证用户的信息, 系统会使用这个用户去校验ldap的信息是否正确 一般使用cn 或者 sAMAccountName</p><br>
+
+            <h5> LADP属性映射  {"username": "cn", "email": "mail"}或者{"username": "cn", "email": "email"}</h5>
+            <p> 系统用户名 usernmae 映射LDAP的cn。 系统用户邮箱映射LDAP的email或者mail属性，取存在的，强制关联，如果缺失报错</p>
+            <p> 这里的意思是, 把ldap用户的属性映射到系统上，如果都不存在的 认证无法通过，系统用户的email是必填项</p><br>
+
+            <h5> 启动LDAP认证</h5>
+            <p> 如果需要使用LDAP登录 codo, 则必选</p>
+            </Alert>
+          </Col>
+        </Row>
       </TabPane>
     </Tabs>
   </Card>
@@ -48,12 +64,7 @@ export default {
         { label: '系统设置', icon: 'logo-tux', name: 'WEBSITE' },
         { label: '邮件设置', icon: 'ios-mail', name: 'EMAIL' },
         { label: '短信接口', icon: 'ios-notifications', name: 'SMS' },
-        {
-          label: 'LDAP设置',
-          icon: 'ios-flag',
-          name: 'LDAP',
-          disabled: true
-        },
+        { label: 'LDAP设置', icon: 'ios-flag', name: 'LDAP', disabled: false},
         { label: '邮箱登录', icon: 'md-mail', name: 'EMAILLOGIN' },
         { label: '存储配置', icon: 'md-folder', name: 'STORAGE' },
         {
@@ -87,7 +98,18 @@ export default {
         STORAGE_NAME: '',
         STORAGE_PATH: '',
         STORAGE_KEY_ID: '',
-        STORAGE_KEY_SECRET: ''
+        STORAGE_KEY_SECRET: '',
+        //LDAP
+        LDAP_SERVER_HOST: 'ldap.example.org',
+        LDAP_SERVER_PORT: '389',
+        LDAP_ADMIN_DN: "",
+        LDAP_ADMIN_PASSWORD:'',
+        LDAP_SEARCH_BASE: '',        //相当于你要在那个组织查询你的登录用户
+        LDAP_SEARCH_FILTER: '',      //用户过滤器
+        LDAP_ATTRIBUTES: '',         //属性映射
+        LDAP_USE_SSL: false,         // 是否启用SSL
+        LDAP_ENABLE: false,          //是否启用
+
       }
     }
   },
@@ -95,7 +117,6 @@ export default {
     getSttings (value) {
       getSysconfig(value).then(res => {
         if (res.data.code === 0) {
-          // this.$Message.success(`${res.data.msg}`);
           this.CONFIG_DATA = res.data.data
         } else {
           this.$Message.error(`${res.data.msg}`)
@@ -281,7 +302,101 @@ export default {
           ]
           break
         case 'LDAP':
-          this.formList = []
+          this.formList = [
+            {
+              name: 'LDAP_SERVER_HOST',
+              type: 'i-input',
+              maxlength: 35,
+              value: this.CONFIG_DATA.LDAP_SERVER_HOST,
+              placeholder: '${LDAP_SERVER_HOST}，LDAP的服务器地址ldap://serverurl:389 或者 ldaps://serverurl:636',
+              label: 'LDAP地址',
+              rule: [
+                { required: true, message: 'LDAP地址不能为空', trigger: 'blur' }
+              ]
+            },
+            {
+              name: 'LDAP_SERVER_PORT',
+              type: 'i-input',
+              maxlength: 5,
+              value: this.CONFIG_DATA.LDAP_SERVER_PORT,
+              placeholder: '${LDAP_SERVER_PORT}，LDAP的服务器端口 默认389',
+              label: 'LDAP端口',
+              rule: [
+                { required: true, message: 'LDAP端口不能为空', trigger: 'blur' }
+              ]
+            },
+            {
+              name: 'LDAP_ADMIN_DN',
+              type: 'i-input',
+              maxlength: 40,
+              value: this.CONFIG_DATA.LDAP_ADMIN_DN,
+              placeholder: '${LDAP_ADMIN_DN}  这里是设置认证用户的信息, 系统会使用这个用户去校验ldap的信息是否正确',
+              label: '绑定DN',
+              rule: [{required: true, message: '认证用户绑定DN不能为空', trigger: 'blur'}]
+            },
+            {
+              name: 'LDAP_ADMIN_PASSWORD',
+              type: 'i-input',
+              type1: 'password',
+              maxlength: 35,
+              value: this.CONFIG_DATA.LDAP_ADMIN_PASSWORD,
+              placeholder: '${LDAP_ADMIN_PASSWORD} 上面认证用户的密码',
+              label: '认证密码',
+              rule: [ { required: true, message: '认证用户的密码不能为空', trigger: 'blur' }]
+            },
+            {
+              name: 'LDAP_SEARCH_BASE',
+              type: 'i-input',
+              maxlength: 60,
+              value: this.CONFIG_DATA.LDAP_SEARCH_BASE,
+              placeholder: '${LDAP_SEARCH_BASE} 这里是设置用来登录codo的组织单元, 比如我要用某个ou的用户来登录',
+              label: '用户OU',
+              rule: [
+                {
+                  required: true,
+                  message: '这里是设置用来登录codo的组织单元，不能为空',
+                  trigger: 'blur'
+                }
+              ]
+            },
+            {
+              name: 'LDAP_SEARCH_FILTER',
+              type: 'i-input',
+              maxlength: 15,
+              value: this.CONFIG_DATA.LDAP_SEARCH_FILTER,
+              placeholder: '${LDAP_SEARCH_FILTER} 不能为空',
+              label: '用户过滤器',
+              rule: [
+                {
+                  required: true,
+                  message: '用户过滤不能为空，系统需要知道你需要认证的用户是那个字段',
+                  trigger: 'blur'
+                }
+              ]
+            },
+            {
+              name: 'LDAP_ATTRIBUTES',
+              type: 'i-input',
+              maxlength: 60,
+              disabled: true,
+              value: ' {"username": "cn", "email": "mail"}或者{"username": "cn", "email": "email"}',
+              placeholder: '${LDAP_ATTRIBUTES} 不能为空',
+              label: 'LDAP属性映射',
+              rule: [ { required: true, message: 'LDAP 属性映射不能为空，并且一定要映射出邮箱地址', trigger: 'blur'}]
+            },
+            {
+              name: 'LDAP_USE_SSL',
+              type: 'i-switch',
+              value: this.CONFIG_DATA.LDAP_USE_SSL === '1',
+              label: '启用SSL认证'
+            },
+             {
+              name: 'LDAP_ENABLE',
+              type: 'i-switch',
+              value: this.CONFIG_DATA.LDAP_ENABLE === '1',
+              label: '启用LDAP认证'
+            },
+          ]
           break
         case 'STORAGE':
           this.formList = [
@@ -311,21 +426,6 @@ export default {
                 }
               ]
             },
-            // {
-            //   name: 'STORAGE_PATH',
-            //   type: 'i-input',
-            //   maxlength: 25,
-            //   value: this.CONFIG_DATA.STORAGE_PATH,
-            //   placeholder: '${STORAGE_PATH}, 存储桶的路径',
-            //   label: '存储路径',
-            //   rule: [
-            //     {
-            //       required: true,
-            //       message: 'STORAGE_PATH不能为空',
-            //       trigger: 'blur'
-            //     }
-            //   ]
-            // },
             {
               name: 'STORAGE_KEY_ID',
               type: 'i-input',
