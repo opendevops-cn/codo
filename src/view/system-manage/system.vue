@@ -308,7 +308,7 @@ export default {
               type: 'i-input',
               maxlength: 35,
               value: this.CONFIG_DATA.LDAP_SERVER_HOST,
-              placeholder: '${LDAP_SERVER_HOST}，LDAP的服务器地址ldap://serverurl:389 或者 ldaps://serverurl:636',
+              placeholder: '${LDAP_SERVER_HOST}，LDAP的服务器地址 例如：ldap.example.org',
               label: 'LDAP地址',
               rule: [
                 { required: true, message: 'LDAP地址不能为空', trigger: 'blur' }
