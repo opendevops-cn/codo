@@ -89,17 +89,15 @@
         </Row>
       </div>
     </Modal> -->
-    <Drawer v-model="logModal" :closable="false"  width="820" @on-close="closeModal">
-      <h3>任务日志</h3>
-      <div>
-         <!-- <div style="background-color: #000000"> -->
+    <Drawer v-model="logModal" :closable="false"  styles="background-color: #f8f8f9" width="820" @on-close="closeModal">
+      <!-- <div style="background-color: #000000"> -->
+        <h2 style="color: #000000">任务日志：</h2><br>
         <Row  v-for="log in logInfo">
           <Col span="23">
-          <p>{{log}}</p>
-            <!-- <p style="color: #FFFFFF">{{log}}</p> -->
+            <p style="color: #000000">{{log}}</p>
           </Col>
         </Row>
-      </div>
+      <!-- </div> -->
     </Drawer>
 </div>
 </template>

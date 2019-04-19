@@ -86,23 +86,13 @@
         <Button type="success" style="marginRight: 2px; marginLeft: 50px"  @click="handlerApprovalSubmit()">选择定时执行时间</Button>
       </div>
     </Modal>
-    <!-- <Modal v-model="logModal" :footer-hide=true :scrollable=true :mask-closable="false" width='850' title="任务日志" @on-cancel="closeModal">
-       <div style="background-color: #000000">
+    <Drawer v-model="logModal" :closable="false"  styles="background-color: #f8f8f9" width="820" @on-close="closeModal">
+        <h2 style="color: #000000">任务日志：</h2><br>
         <Row  v-for="log in logInfo">
           <Col span="23">
-            <p style="color: #FFFFFF; font-size:12px;">{{log}}</p>
+            <p style="color: #000000">{{log}}</p>
           </Col>
         </Row>
-      </div>
-    </Modal> -->
-    <Drawer v-model="logModal" :closable="true"  width="820" @on-close="closeModal">
-    <div style="background-color: #000000">
-        <Row  v-for="log in logInfo">
-          <Col span="23">
-            <p style="color: #FFFFFF">{{log}}</p>
-          </Col>
-        </Row>
-      </div>
     </Drawer>
   </div>
 </template>
