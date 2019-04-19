@@ -22,7 +22,7 @@ export default {
     setUserName(state, name) {
       state.userName = name
     },
-    setNickName(state, nick) {
+    setNickName(state, name) {
       state.nickName = name
     },
     setAccess(state, access) {

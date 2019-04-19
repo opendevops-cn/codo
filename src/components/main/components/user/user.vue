@@ -1,7 +1,9 @@
 <template>
   <div class="user-avator-dropdown">
+
     <Dropdown @on-click="handleClick">
-      <Avatar :src="userAvator"/>
+      <Avatar :src="userAvator"/>{{nickName}}
+      <!-- <p style="" >xxxx</p> -->
       <Icon :size="18" type="md-arrow-dropdown"></Icon>
       <DropdownMenu slot="list">
         <DropdownItem name="changepasswrod">修改密码</DropdownItem>
@@ -37,6 +39,10 @@ export default {
     userAvator: {
       type: String,
       default: ''
+    },
+    nickName: {
+      type: String,
+      default: '张三'
     }
   },
   data () {
@@ -99,7 +105,6 @@ export default {
             new_password2: this.form.passwdCheck
           }
           this.handlePassword(dataInfo).then(res => {
-            console.log(res)
             if (res.code === 0) {
               this.$Message.success(`${res.msg}`)
               location.reload()
