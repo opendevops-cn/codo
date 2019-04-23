@@ -86,7 +86,7 @@
         <Button type="success" style="marginRight: 2px; marginLeft: 50px"  @click="handlerApprovalSubmit()">选择定时执行时间</Button>
       </div>
     </Modal>
-    <Drawer v-model="logModal" :closable="false"  styles="background-color: #f8f8f9" width="820" @on-close="closeModal">
+    <Drawer v-model="logModal" :closable="false"  style="background-color: #f8f8f9" width="820" @on-close="closeModal">
       <h2 style="color: #000000; marginLeft: 10px">任务日志：</h2>
       <div style="padding: 10px">
         <Row  v-for="log in logInfo">

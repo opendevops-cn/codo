@@ -183,6 +183,29 @@ export const operationPosttask = (data, meth) => {
     data
   })
 }
+// 资源申请
+export const operationAssetPurchaseAWS = (data, meth) => {
+  return axios.request({
+    url: '/task/other/v1/submission/purchase_aws/',
+    method: meth,
+    data
+  })
+}
+
+export const operationAssetPurchaseALY = (data, meth) => {
+  return axios.request({
+    url: '/task/other/v1/submission/purchase_aly/',
+    method: meth,
+    data
+  })
+}
+export const operationAssetPurchaseQcloud = (data, meth) => {
+  return axios.request({
+    url: '/task/other/v1/submission/purchase_qcloud/',
+    method: meth,
+    data
+  })
+}
 
 // 发布应用选择
 export const getPublishApplist = (value) => {

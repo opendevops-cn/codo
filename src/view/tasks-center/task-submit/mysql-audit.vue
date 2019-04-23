@@ -1,6 +1,6 @@
 <template>
   <div style="background:#eee">
-    <Card style="height:100%; ">
+    <Card style="height:100%;">
       <Row style="margin-top: 5px;">
         <Col span="13">
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="85">

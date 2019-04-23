@@ -79,24 +79,6 @@ export const routerMap = [
         component: () => import('@/view/tasks-center/task-submit/mysql-optimize.vue')
       },
       {
-        path: 'assetPurchase',
-        name: 'assetPurchase',
-        meta: {
-          icon: 'md-cafe',
-          title: '资源申购'
-        },
-        component: () => import('@/view/tasks-center/task-submit/asset-purchase.vue')
-      },
-      {
-        path: 'nodeAdd',
-        name: 'nodeAdd',
-        meta: {
-          icon: 'md-cafe',
-          title: 'Node添加'
-        },
-        component: () => import('@/view/tasks-center/task-submit/k8s-node-add.vue')
-      },
-      {
         path: 'customTasks',
         name: 'customTasks',
         meta: {
@@ -122,6 +104,54 @@ export const routerMap = [
           title: '自定义任务-JSON'
         },
         component: () => import('@/view/tasks-center/task-submit/task-post.vue')
+      },
+      {
+        path: 'assetPurchase',
+        name: 'assetPurchase',
+        meta: {
+          icon: 'logo-yen',
+          title: '资源申购',
+          showAlways: true,
+        },
+        component: parentView,
+        children: [
+          {
+            path: 'assetPurchaseALY',
+            name: 'assetPurchaseALY',
+            meta: {
+              icon: 'md-cafe',
+              title: '资源申购-阿里云'
+            },
+            component: () => import('@/view/tasks-center/task-submit/asset-purchase-aly.vue')
+          },
+          {
+            path: 'assetPurchaseAWS',
+            name: 'assetPurchaseAWS',
+            meta: {
+              icon: 'md-cafe',
+              title: '资源申购-亚马逊'
+            },
+            component: () => import('@/view/tasks-center/task-submit/asset-purchase-aws.vue')
+          },
+          {
+            path: 'assetPurchaseQcloud',
+            name: 'assetPurchaseQcloud',
+            meta: {
+              icon: 'md-cafe',
+              title: '资源申购-腾讯云'
+            },
+            component: () => import('@/view/tasks-center/task-submit/asset-purchase-qcloud.vue')
+          },
+          {
+            path: 'nodeAdd',
+            name: 'nodeAdd',
+            meta: {
+              icon: 'md-cafe',
+              title: 'Node添加'
+            },
+            component: () => import('@/view/tasks-center/task-submit/k8s-node-add.vue')
+          },
+        ]
       },
     ]
   },
