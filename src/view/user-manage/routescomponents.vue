@@ -103,8 +103,7 @@ export default {
       newDataType: "",
       editModalData: "",
       columns: [
-        // { title: "角色ID", key: "role_id", width: 80, sortable: true },
-        { title: "菜单名称", key: "menu_name", width: 120, sortable: true },
+        { title: "菜单名称", key: "menu_name", width: 200, sortable: true },
         {
           title: "状态",
           key: "status",
@@ -180,7 +179,7 @@ export default {
         {
           title: "组件名称",
           key: "component_name",
-          width: 120,
+          width: 200,
           sortable: true
         },
         {
