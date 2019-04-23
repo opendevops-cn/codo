@@ -34,10 +34,15 @@
         </FormItem>
         <div v-if="select_server">
         <FormItem label="主机名称" prop="hostname">
-           <Input v-model="formValidate.hostname" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder='请输入主机名，并以半角逗号分隔，请严格按照规范填写。例如：FT-VA-01-Web01，磁盘默认为100G，系统默认获取 FT-VA-01 为当前组的标签。购买主机时，默认使用标签命名的镜像，如果不存在，则取默认镜像。'></Input>
+           <Input v-model="formValidate.hostname" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder='请输入主机名，并以半角逗号分隔，请严格按照规范填写。例如：FT-HK_ALY-01-Web01，磁盘默认为100G，系统默认获取 FT-VA-01 为当前组的标签。购买主机时，默认使用标签命名的镜像，如果不存在，则取默认镜像。'></Input>
         </FormItem>
         <FormItem label="主机类型" prop="instance_type">
-            <Input v-model="formValidate.instance_type" placeholder="请输入EC2的instance type，类型需要参考文档"></Input>
+            <Input v-model="formValidate.instance_type" placeholder="请输入ECS的instance type，类型需要参考文档"></Input>
+        </FormItem>
+        <FormItem label="主机磁盘" prop="disk_size">
+          <Select v-model="formValidate.disk_size">
+            <Option v-for="item in rdsSize" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="环境-工具" prop="host_env">
           <CheckboxGroup v-model="formValidate.host_env">
@@ -151,6 +156,7 @@ import { getTaglist, operationAssetPurchaseALY} from '@/api/task-other'
           exec_host: '127.0.0.1',
           temp_name: 'ALY资源申请',
           hostname: '',
+          disk_size: '100',
           tag_list:'',
           instance_type: '',
           host_env: ['zabbix','salt','Python3',' Nginx'],
@@ -206,6 +212,9 @@ import { getTaglist, operationAssetPurchaseALY} from '@/api/task-other'
           ],
           hostname: [
               { required: true, message: '请输入主机名，并以半角逗号分隔，请严格按照规范填写', trigger: 'blur' }
+          ],
+          disk_size: [
+              { required: true, message: '请选择服务器磁盘大小', trigger: 'blur' }
           ],
           tag_name: [
               { required: true, message: '请输入关联标签，如果有主机 则会自动获取', trigger: 'blur' }
