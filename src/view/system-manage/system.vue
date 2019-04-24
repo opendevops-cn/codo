@@ -1,5 +1,5 @@
 <template>
-  <Card style="">
+  <Card>
     <p slot="title">系统参数配置</p>
     <Tabs @on-click="handleTabs">
       <TabPane
@@ -21,11 +21,24 @@
             </form-group>
           </Col>
           <Col span="10"  offset='1'>
+            <Alert  v-if="theTabName === 'WEBSITE'">
+              <h5>API地址：暂为记录API地址方便后续调用</h5>
+            </Alert>
+            <Alert  v-if="theTabName === 'EMAIL'">
+              <a href="http://docs.opendevops.cn/zh/latest/faq.html#id1" target="_blank">参考文档</a>
+            </Alert>
+            <Alert  v-if="theTabName === 'SMS'">
+              <h5>这块主要配置短信接口信息，短信接口只支持阿里云阿里大鱼，后续平台所涉及到发短信会调用此接口</h5><br>
+              <p>短信区域： cn-hangzhou 目前阿里官方给出必须是这个</p><br>
+              <p>API名称： Dysmsapi 目前官方给出一般都是这个名称</p><br>
+              <p>API域名：dysmsapi.aliyuncs.com 目前官方给出必须是这个地址</p><br>
+              <p>KEY_ID： 你的IAM访问控制密钥ID</p><br>
+              <p>KEY_SECRET： 你的access_secret密钥，备注：这里需要必须有SMS的权限</p><br>
+              <p>点击测试端口系统会向阿里大鱼进行发送查询接口，如果配置验证不通过则提示报错信息</p><br>
+            </Alert>
             <Alert  v-if="theTabName === 'LDAP'">
             <h5>LDAP地址  serverurl</h5><br>
-
             <h5>LDAP端口  默认389   开启SSL 要使用 636</h5><br>
-
             <h5> 绑定DN  cn=Manager,DC=opendevops,DC=cn</h5>
             <p>这里是设置认证用户的信息, 系统会使用这个用户去校验ldap的信息是否正确</p><br>
             <h5>密码   # 上面认证用户的密码</h5><br>
@@ -42,6 +55,19 @@
 
             <h5> 启动LDAP认证</h5>
             <p> 如果需要使用LDAP登录 codo, 则必选</p>
+            </Alert>
+              <Alert  v-if="theTabName === 'EMAILLOGIN'">
+              <h5>这块主要是支持第三方邮箱登陆，当你想要使用邮箱登陆此平台时，你可以在此进行配置 比如我们企业邮箱是腾讯的,域名就是opendevops.cn，
+                SMTP就是腾讯的stmp.exmail.qq.com,这样配置完成后我就可以使用我yanghongfei@opendevops.cn邮箱+密码登陆此平台了。</h5><br>
+              <h5>邮箱SMTP： 这里输入你邮箱服务商的SMTP地址</h5><br>
+              <h5>邮箱域名：这里是你的邮箱后缀名字，系统会根据这个后缀来判断你是否在用邮箱登录</h5><br>
+            </Alert>
+            <Alert  v-if="theTabName === 'STORAGE'">
+              <h5>这块主要是配置Bucket信息，目前只支持阿里云的OSS，这里目前主要用于将跳板日志审计的内容存放到OSS目录里面，若不配置此项则存本地数据库（可能会很大，建议配置OSS)</h5><br>
+              <h5>区域Region：阿里云的可用区域，如：cn-hangzhou</h5><br>
+              <h5>存储桶名称: Bucket名称</h5><br>
+              <h5>SecretID: 密钥ID，需要有OSS权限</h5><br>
+              <h5>Secret Key： 密钥Key，需要有OSS权限</h5><br>
             </Alert>
           </Col>
         </Row>
