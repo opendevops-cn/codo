@@ -142,38 +142,40 @@ export default {
           maxlength: 5,
           placeholder: '请输入inception端口',
           rule: [{ required: true, message: 'inception端口不能为空', trigger: 'blur' }]
-        },{
-          name: 'back_host',
-          type: 'i-input',
-          value: data ? data.back_host : '',
-          label: '备份库主机',
-          maxlength: 50,
-          placeholder: '请输入备份库主机地址',
-          rule: [{ required: true, message: '备份库主机不能为空', trigger: 'blur' }]
-        },{
-          name: 'back_port',
-          type: 'i-input',
-          value: data ? data.back_port : 3306,
-          label: '备份库端口',
-          maxlength: 5,
-          placeholder: '请输入备份库端口',
-          rule: [{ required: true, message: '备份库端口不能为空', trigger: 'blur' }]
-        },{
-          name: 'back_user',
-          type: 'i-input',
-          value: data ? data.back_user : '',
-          label: '备份库用户',
-          maxlength: 10,
-          placeholder: '请输入备份库用户',
-          rule: [{ required: true, message: '备份库用户不能为空', trigger: 'blur' }]
-        },{
-          name: 'back_pwd',
-          type: 'i-input',
-          value: data ? data.back_pwd : '',
-          label: '备份库密码',
-          maxlength: 25,
-          placeholder: '请输入备份库密码'
-        }]
+        }
+        // },{
+        //   name: 'back_host',
+        //   type: 'i-input',
+        //   value: data ? data.back_host : '',
+        //   label: '备份库主机',
+        //   maxlength: 50,
+        //   placeholder: '请输入备份库主机地址',
+        //   rule: [{ required: true, message: '备份库主机不能为空', trigger: 'blur' }]
+        // },{
+        //   name: 'back_port',
+        //   type: 'i-input',
+        //   value: data ? data.back_port : 3306,
+        //   label: '备份库端口',
+        //   maxlength: 5,
+        //   placeholder: '请输入备份库端口',
+        //   rule: [{ required: true, message: '备份库端口不能为空', trigger: 'blur' }]
+        // },{
+        //   name: 'back_user',
+        //   type: 'i-input',
+        //   value: data ? data.back_user : '',
+        //   label: '备份库用户',
+        //   maxlength: 10,
+        //   placeholder: '请输入备份库用户',
+        //   rule: [{ required: true, message: '备份库用户不能为空', trigger: 'blur' }]
+        // },{
+        //   name: 'back_pwd',
+        //   type: 'i-input',
+        //   value: data ? data.back_pwd : '',
+        //   label: '备份库密码',
+        //   maxlength: 25,
+        //   placeholder: '请输入备份库密码'
+        // }
+        ]
       }else{
        this.formList = [
         {

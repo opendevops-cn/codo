@@ -35,25 +35,9 @@
           class="search-btn"
         >刷新地址</Button></slot>
     </div>
-    <Table
-      size="small"
-      height="718"
-      ref="selection"
-      border
-      :columns="columns"
-      :data="tableData"
-    ></Table>
-    <Modal
-      v-model="modalMap.modalVisible"
-      :title="modalMap.modalTitle"
-      :loading=true
-      :footer-hide=true
-    >
-      <form-group
-        v-if="!isCorrelation"
-        :list="formList"
-        @on-submit-success="handleSubmit"
-      ></form-group>
+    <Table  size="small" height="718" ref="selection" border :columns="columns" :data="tableData"></Table>
+    <Modal v-model="modalMap.modalVisible" :title="modalMap.modalTitle" :loading=true :footer-hide=true>
+      <form-group  v-if="!isCorrelation" :list="formList"  @on-submit-success="handleSubmit" ></form-group>
       <Select
         v-if="isCorrelation"
         class="search-input-long"
@@ -68,13 +52,7 @@
           :key="item.user_id"
         >{{ item.nickname }}</Option>
       </Select>
-      <Button
-        v-if="isCorrelation"
-        type="success"
-        style="margin-top: 10px;"
-        @click="handlerSubmitUser"
-        long
-      >确定关联</Button>
+      <Button v-if="isCorrelation" type="success" style="margin-top: 10px;" @click="handlerSubmitUser" long>确定关联</Button>
     </Modal>
   </Card>
 </template>
@@ -201,7 +179,7 @@ export default {
     },
     // 获取用户列表
     getUserList () {
-      getuserlist(1, 10000).then(res => {
+      getuserlist(1, 3000).then(res => {
         if (res.data.code === 0) {
           this.allUser = res.data.data
         } else {
@@ -237,6 +215,7 @@ export default {
       this.$Message.error('刷新同步gitlab信息，暂时不提供刷新')
     },
     editModal (index, meth, mtitle) {
+      this.isCorrelation = false
       this.modalMap.modalVisible = true
       this.modalMap.modalTitle = mtitle
       this.editModalData = meth
@@ -248,6 +227,7 @@ export default {
         {
           name: 'app_name',
           type: 'i-input',
+          maxlength: 50,
           value: meth === 'put' ? this.tableData[index].app_name : '',
           label: '仓库名称',
           placeholder: '请输入此仓库的名称',
@@ -256,6 +236,7 @@ export default {
         {
           name: 'repository',
           type: 'i-input',
+          maxlength: 280,
           value: meth === 'put' ? this.tableData[index].repository : '',
           label: '仓库地址',
           placeholder: '请输入代码仓库的地址。',
@@ -270,6 +251,7 @@ export default {
         {
           name: 'description',
           type: 'i-input',
+          maxlength: 50,
           value: meth === 'put' ? this.tableData[index].description : '',
           label: '备注信息',
           placeholder: '请输入备注信息，方便查阅'
