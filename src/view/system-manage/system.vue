@@ -22,7 +22,8 @@
           </Col>
           <Col span="10"  offset='1'>
             <Alert  v-if="theTabName === 'WEBSITE'">
-              <h5>API地址：暂为记录API地址方便后续调用</h5>
+              <h5>API地址：暂为记录API地址方便后续调用</h5><br>
+              <h5>默认邮箱：系统内默认发送邮件的地址</h5>
             </Alert>
             <Alert  v-if="theTabName === 'EMAIL'">
               <a href="http://docs.opendevops.cn/zh/latest/faq.html#id1" target="_blank">参考文档</a>
@@ -103,6 +104,7 @@ export default {
       formList: [],
       CONFIG_DATA: {
         WEBSITE_API_GW_URL: '', // API 地址
+        WEBSITE_DEFAULT_MAIL: '', //站内默认邮件接收人
         EMAILLOGIN_DOMAIN: '', // 邮箱登录
         EMAILLOGIN_SERVER: '', // 邮箱服务地址
         //
@@ -169,6 +171,14 @@ export default {
                 },
                 { type: 'url', message: '格式应为URL ', trigger: 'blur' }
               ]
+            },
+            {
+              name: 'WEBSITE_DEFAULT_MAIL',
+              type: 'i-input',
+              value: this.CONFIG_DATA.WEBSITE_DEFAULT_MAIL,
+              label: '默认邮箱',
+              maxlength: 50,
+              placeholder: '${WEBSITE_DEFAULT_MAIL} 系统内默认邮件地址'
             }
           ]
           break

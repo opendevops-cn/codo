@@ -13,7 +13,6 @@
           <Button v-if="selectTwo === 'server'" type="primary"  @click="handlerServer(null, 'post', '添加主机')" class="search-btn" >添加主机</Button>
           <Button  v-else-if="selectTwo === 'DB'" type="primary"  @click="handlerDB(null, 'post', '添加数据库')" class="search-btn" >添加数据库</Button>
           <Button v-else  type="primary"  @click="handlerTag(null, 'post', '新建标签')" class="search-btn" >新建标签</Button>
-          <Button type="info" class="search-btn"  @click="handlerCheck">检查更新</Button>
           <Button type="error" class="search-btn"  @click="handlerDelete">批量删除</Button>
         </div>
          <Table v-if="selectTwo === 'DB'" size="small" height="660" ref="selection" :columns="columns" :data="tableDataDB"  @on-selection-change="handleSelectChange"></Table>
@@ -632,7 +631,6 @@
           }
         },
         handlerDelete(){
-          console.log(this.tableSelectIdList.length)
           if (this.tableSelectIdList.length > 0) {
             if(this.selectTwo === 'tag'){
               if (confirm(`确定要批量删除选中的标签`)) {
@@ -793,8 +791,15 @@
         handleReset(name) {
           this.$refs[name].resetFields();
         },
-        handlerCheck(){
-          this.$Message.error(`待完善`)
+
+        handlerCheck(val){
+          const route = {
+            name: 'statisticalImage',
+            meta: {
+              title: `Web终端`
+            }
+          }
+          this.$router.push(route)
         },
         // 翻页
         changePage (value) {
