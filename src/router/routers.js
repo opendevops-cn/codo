@@ -459,6 +459,35 @@ export const routerMap = [
     ]
   },
   {
+    path: '/domain',
+    name: 'domain',
+    meta: {
+      icon: 'ios-cloudy',
+      title: '域名管理'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'domain_name_manage',
+        name: 'domain_name_manage',
+        meta: {
+          icon: 'ios-cloudy',
+          title: '域名解析'
+        },
+        component: () => import('@/view/domain-name/domain-name-manage.vue')
+      },
+      {
+        path: 'domain_name_monitor',
+        name: 'domain_name_monitor',
+        meta: {
+          icon: 'ios-cloudy',
+          title: '域名监控'
+        },
+        component: () => import('@/view/domain-name/domain-name-monitor.vue')
+      }
+    ]
+  },
+  {
     path: '/devopstools',
     name: 'devopstools',
     meta: {

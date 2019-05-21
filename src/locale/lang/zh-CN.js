@@ -100,5 +100,8 @@ export default {
   event_manager: '事件管理',
   fault_manager: '故障管理',
   password_mycrypy: '加密解密',
-  project_manager: '项目管理'
+  project_manager: '项目管理',
+  domain: '域名管理',
+  domain_name_manage: '域名解析',
+  domain_name_monitor: '域名监控'
 }
