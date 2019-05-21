@@ -1,57 +1,45 @@
 <template>
   <div>
     <Row :gutter="20">
-      <!-- <i-col :xs="12" :md="8" :lg="6" v-for="(infor, i) in inforCardData" :key="`infor-${i}`" style="height: 120px;padding-bottom: 10px;">
-        <infor-card shadow :color="infor.color" :icon="infor.icon" :icon-size="36">
-          <count-to :end="infor.count" count-class="count-style"/>
-          <p>{{ infor.title }}</p>
-        </infor-card>
-      </i-col> -->
-      <i-col :xs="12" :md="8" :lg="4" key="infor-1" style="height: 120px;padding-bottom: 10px;">
+      <i-col :xs="12" :md="8" :lg="4" key="infor-1" style="height: 90px;padding-bottom: 10px;">
         <infor-card shadow color="#E46CBB" icon="md-person-add" :icon-size="36">
-          <count-to :end="cardData.users" count-class="count-style"/>
-          <p>用户总数</p>
+          <h3><router-link :to="{name:'user'}" class="nav-link">用户管理</router-link></h3>
         </infor-card>
       </i-col>
-      <i-col :xs="12" :md="8" :lg="4" key="infor-2" style="height: 120px;padding-bottom: 10px;">
+      <i-col :xs="12" :md="8" :lg="4" key="infor-2" style="height: 90px;padding-bottom: 10px;">
         <infor-card shadow color="#2d8cf0" icon="md-cube" :icon-size="36">
-          <count-to :end="cardData.cmdb" count-class="count-style"/>
-          <p>资产总数</p>
+          <h3><router-link :to="{name: 'asset_server'}" class="nav-link">资产管理</router-link></h3>
         </infor-card>
       </i-col>
-      <i-col :xs="12" :md="8" :lg="4" key="infor-3" style="height: 120px;padding-bottom: 10px;">
-        <infor-card shadow color="#19be6b" icon="logo-usd" :icon-size="36">
-          <count-to :end="cardData.money" count-class="count-style"/>
-          <p>消费金额</p>
+      <i-col :xs="12" :md="8" :lg="4" key="infor-3" style="height: 90px;padding-bottom: 10px;">
+        <infor-card shadow color="#19be6b" icon="ios-hammer" :icon-size="36">
+          <h3><router-link :to="{name: 'confd_project'}" class="nav-link">配置中心</router-link></h3>
         </infor-card>
       </i-col>
-      <i-col :xs="12" :md="8" :lg="4" key="infor-4" style="height: 120px;padding-bottom: 10px;">
+      <i-col :xs="12" :md="8" :lg="4" key="infor-4" style="height: 90px;padding-bottom: 10px;">
         <infor-card shadow color="#9A66E4" icon="ios-alarm" :icon-size="36">
-          <count-to :end="cardData.cron" count-class="count-style"/>
-          <p>定时任务</p>
+          <h3><router-link :to="{name: 'cronjobs'}" class="nav-link">定时任务</router-link></h3>
         </infor-card>
       </i-col>
-      <i-col :xs="12" :md="8" :lg="4" key="infor-5" style="height: 120px;padding-bottom: 10px;">
+      <i-col :xs="12" :md="8" :lg="4" key="infor-5" style="height: 90px;padding-bottom: 10px;">
         <infor-card shadow color="#ff9900" icon="ios-alarm" :icon-size="36">
-          <count-to :end="cardData.call" count-class="count-style"/>
-          <p>事件提醒</p>
+          <h3><router-link :to="{name: 'paid_reminder'}" class="nav-link">提醒管理</router-link></h3>
         </infor-card>
       </i-col>
-      <i-col :xs="12" :md="8" :lg="4" key="infor-6" style="height: 120px;padding-bottom: 10px;">
+      <i-col :xs="12" :md="8" :lg="4" key="infor-6" style="height: 90px;padding-bottom: 10px;">
         <infor-card shadow color="#ed3f14" icon="md-warning" :icon-size="36">
-          <count-to :end="cardData.alarm" count-class="count-style"/>
-          <p>报警数量</p>
+          <h3><router-link :to="{name: 'prometheus_alert'}" class="nav-link">kubernetes告警</router-link></h3>
         </infor-card>
       </i-col>
     </Row>
 
     <Row :gutter="20" style="margin-top: 10px;">
-      <i-col :md="24" :lg="14" style="margin-bottom: 20px;">
+      <i-col :md="24" :lg="14" style="margin-bottom: 10px;">
         <Card shadow>
-          <chart-bar style="height: 300px;" :value="barTaskData" text="任务订单详情"/>
+          <chart-bar style="height: 340px;" :value="barTaskData" text="告警预留位"/>
         </Card>
       </i-col>
-      <i-col :md="24" :lg="10" style="margin-bottom: 20px;">
+      <i-col :md="24" :lg="10" style="margin-bottom: 10px;">
         <Card shadow>
           <TaskInfo :data="taskInfoData"></TaskInfo>
         </Card>
@@ -59,23 +47,18 @@
     </Row>
 
     <Row :gutter="20" style="margin-top: 10px;">
-      <i-col :md="24" :lg="14" style="margin-bottom: 20px;">
+      <i-col :md="24" :lg="14" style="margin-bottom:10px;">
         <Card shadow>
-          <LoginInfo :data="loginInfoData"></LoginInfo>
+          <chart-pie ref="childTask" style="height: 300px;" :value="pieTaskData" text="任务分类"></chart-pie>
         </Card>
       </i-col>
-      <i-col :md="24" :lg="10" style="margin-bottom: 20px;">
+      <i-col :md="24" :lg="10" style="margin-bottom: 10px;">
         <Card shadow>
           <chart-pie ref="childCmdb" style="height: 300px;" :value="pieCmdbData" text="主机分类"></chart-pie>
         </Card>
       </i-col>
     </Row>
 
-    <!-- <Row>
-      <Card shadow>
-        <example style="height: 310px;"/>
-      </Card>
-    </Row> -->
   </div>
 </template>
 
@@ -84,48 +67,38 @@ import InforCard from '_c/info-card'
 import CountTo from '_c/count-to'
 import { ChartPie, ChartBar } from '_c/charts'
 import Example from './example.vue'
-import { getTableData, getGroupList } from '@/api/cmdb/server.js'
-import { getLogData } from '@/api/cmdb/server_log.js'
-import { getTaskOrderlist } from '@/api/task.js'
+import { getTagList, getTaskOrderlist, getTaskStatementlist } from '@/api/dashboard/home.js'
 import TaskInfo from './taskinfo'
-import LoginInfo from './logininfo'
+// import { getTaskCheckHistorylist } from '@/api/task'
+
 export default {
   name: 'home',
   components: {
     InforCard,
-    CountTo,
     ChartPie,
     ChartBar,
     Example,
     TaskInfo,
-    LoginInfo
   },
   data () {
     return {
-      cardData: {
-        users: 0,
-        cmdb: 0,
-        money: 0,
-        alarm: 0,
-        call: 0,
-        cron: 0
-      },
-      // inforCardData: [],
+      // cardData: {
+      //   users: 0,
+      //   cmdb: 0,
+      //   project: 0,
+      //   alarm: 0,
+      //   remind: 0,
+      //   crontab: 0
+      // },
       pieCmdbData: [],
-      loginInfoData: [],
+      pieTaskData: [],
       taskInfoData: [
-        // {name: 'FT客户端发布', user: '杨铭威'},
-        // {name: 'FT服务端发布', user: '杨红飞'},
-        // {name: 'MZ SQL语句审核', user: '杨铭威'},
-        // {name: 'AWS资源申请', user: '沈硕'},
-        // {name: 'WD客户端发布', user: '杨铭威'},
-        // {name: 'WD服务端发布', user: '杨红飞'}
       ],
       barTaskData: {
         Mon: 9,
         Tue: 2,
-        Wed: 15,
-        Thu: 22,
+        Wed: 45,
+        Thu: 32,
         Fri: 5,
         Sat: 30,
         Sun: 7
@@ -133,19 +106,45 @@ export default {
     }
   },
   methods: {
-    getCmdbCount () {
-      // 获取CMDB资产数量
-      const params = {pageNum: 1, pageSize: 10000}
-      getTableData(params).then(res => {
-        this.cardData.cmdb = res.data.count
-      }).catch(error => {
-        console.log('get CMDB count Faild!')
+
+    //初始化 历史任务类型饼图数据
+    initPieTask () {
+      // this.pieTaskData.push({name: '服务器发布', value:20},{name: '资源申请', value:20},{name: 'MySQL审核', value:20},{name: '自定义任务', value:50},)
+      getTaskStatementlist().then(res => {
+        if (res.data.code === 0) {
+            const data = res.data.data
+            for (var item in data) {
+              this.pieTaskData.push({
+                value: data[item].task_len,
+                name: data[item].task_type
+              })
+            }
+        } else {
+          // this.$Message.error(`${res.data.msg}`)
+        }
       })
     },
+
+    // 初始化 CMDB Tag饼图数据
+    initPieCmdb () {
+      getTagList().then(res => {
+        if (res.data.code === 0) {
+            const data = res.data.data
+            for (var item in data) {
+              this.pieCmdbData.push({
+                value: data[item].server_len,
+                name: data[item].tag_name
+              })
+            }
+        } else {
+          // this.$Message.error(`${res.data.msg}`)
+        }
+      })
+    },
+
+    // 初始化 [待处理任务订单]
     initTaskInfo () {
-      // 初始化 [待处理任务订单]
       getTaskOrderlist().then(res => {
-        //console.log(res)
         const data = res.data.data
         for (var item in data) {
           this.taskInfoData.push({
@@ -157,48 +156,19 @@ export default {
         }
       })
     },
-    initLoginInfo () {
-      // 初始化 [登录记录]
-      const params = {pageNum: 1, pageSize: 5}
-      getLogData(params).then(res => {
-        // console.log(res.data.data)
-        this.loginInfoData = res.data.data
-      })
-    },
-    initPieCmdb () {
-      // 初始化 [主机分类] 饼状图
-      getGroupList().then(res => {
-        const data = res.data
-        for (var item in data) {
-          this.pieCmdbData.push({
-            value: data[item].server_set.length,
-            name: data[item].name
-          })
-        }
-      })
-    },
-    initCard () {
-      // 初始化第1排汇总
-      this.getCmdbCount()
-      // this.inforCardData = [
-      //     { title: '资产总数', icon: 'md-cube', count: this.cmdb_count, color: '#2d8cf0' },
-      //     { title: '消费金额', icon: 'logo-usd', count: 232, color: '#19be6b' },
-      //     { title: '报警数量', icon: 'md-warning', count: 142, color: '#ed3f14' },
-      //     { title: '事件提醒', icon: 'ios-alarm', count: 11, color: '#ff9900' },
-      //     // { title: '新增互动', icon: 'md-chatbubbles', count: 12, color: '#E46CBB' },
-      //     // { title: '新增页面', icon: 'md-map', count: 14, color: '#9A66E4' }
-      // ]
-    }
+
   },
   mounted () {
-    this.initCard()
     this.initPieCmdb()
-    this.initLoginInfo()
     this.initTaskInfo()
+    this.initPieTask()
   },
   watch: {
     pieCmdbData: function () {
       this.$refs.childCmdb.initPie()
+    },
+    pieTaskData: function () {
+      this.$refs.childTask.initPie()
     }
   }
 }

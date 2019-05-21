@@ -427,7 +427,6 @@ export default {
     getFaultManagerList (page, limit, key, value) {
         getFaultManagerList(page, limit, key, value).then(res => {
             if (res.data.code === 0) {
-            this.$Message.success(`${res.data.msg}`)
             this.pageTotal = res.data.count
             this.tableData = res.data.data
             } else {

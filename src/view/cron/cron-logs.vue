@@ -62,7 +62,6 @@ export default {
     getCronLogList (page, limit, key, value, dateValue) {
       getCronLoglist(page, limit, key, value, dateValue).then(res => {
         if (res.data.code === 0) {
-          this.$Message.success(`${res.data.msg}`)
           this.pageTotal = res.data.count
           this.tableData = res.data.data
         } else {

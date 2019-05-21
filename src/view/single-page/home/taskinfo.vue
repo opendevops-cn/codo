@@ -1,14 +1,17 @@
 <style scoped>
   .y-title{
     font-size: 18px;
+    color:#516b91;
+    font-weight:bold;
   }
 </style>
 
 <template>
   <div>
-    <span class="y-title">未完成任务订单</span>
-    <br><br>
-    <div style="margin-top:10px;margin-bottom:10px;height:232px">
+    <span class="y-title">进行中的任务</span>
+    <br>
+    <br>
+    <div style="margin-top:10px;margin-bottom:5px;height:276px">
       <Row v-for="(item,index) in data">
         <Col span="4">
           {{item.id}}

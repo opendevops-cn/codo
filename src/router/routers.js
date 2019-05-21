@@ -202,24 +202,99 @@ export const routerMap = [
       }
     ]
   },
-  {
-    path: '/terminal',
-    name: 'WebSSH',
-    meta: {
-      title: 'WebSSH',
-      hideInMenu: true
-    },
-    component: () => import('@/view/cmdb/webssh/WebSSH.vue')
-  },
-  {
-    path: '/record',
-    name: 'SshRecord',
-    meta: {
-      title: '操作回放',
-      hideInMenu: true
-    },
-    component: () => import('@/view/cmdb/webssh/Record.vue')
-  },
+  // {
+  //   path: '/terminal',
+  //   name: 'WebSSH',
+  //   meta: {
+  //     title: 'WebSSH',
+  //     hideInMenu: true
+  //   },
+  //   component: () => import('@/view/cmdb/webssh/WebSSH.vue')
+  // },
+  // {
+  //   path: '/record',
+  //   name: 'SshRecord',
+  //   meta: {
+  //     title: '操作回放',
+  //     hideInMenu: true
+  //   },
+  //   component: () => import('@/view/cmdb/webssh/Record.vue')
+  // },
+  // {
+  //   path: '/cmdb',
+  //   name: 'cmdb',
+  //   meta: {
+  //     icon: 'ios-cube',
+  //     title: '资产管理'
+  //   },
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: 'server',
+  //       name: 'server_list',
+  //       meta: {
+  //         icon: 'ios-cube',
+  //         title: '主机管理'
+  //       },
+  //       component: () => import('@/view/cmdb/server/List.vue')
+  //     },
+  //     {
+  //       path: 'db',
+  //       name: 'server_db',
+  //       meta: {
+  //         icon: 'ios-cube',
+  //         title: 'DB管理'
+  //       },
+  //       component: () => import('@/view/cmdb/db/List.vue')
+  //     },
+  //     {
+  //       path: 'server_log',
+  //       name: 'server_log',
+  //       meta: {
+  //         icon: 'md-build',
+  //         title: '日志审计'
+  //       },
+  //       component: () => import('@/view/cmdb/server_log/List.vue')
+  //     },
+  //     {
+  //       path: 'server_auth',
+  //       name: 'server_auth',
+  //       meta: {
+  //         icon: 'ios-brush',
+  //         title: '授权规则'
+  //       },
+  //       component: () => import('@/view/cmdb/server_auth/List.vue')
+  //     },
+  //     {
+  //       path: 'server_group',
+  //       name: 'server_group',
+  //       meta: {
+  //         icon: 'ios-browsers',
+  //         title: '主机组'
+  //       },
+  //       component: () => import('@/view/cmdb/server_group/List.vue')
+  //     },
+  //     {
+  //       path: 'tag',
+  //       name: 'tag',
+  //       meta: {
+  //         icon: 'ios-pricetag',
+  //         title: '标签管理'
+  //       },
+  //       component: () => import('@/view/cmdb/tag/List.vue')
+  //     },
+  //     {
+  //       path: 'adm_user',
+  //       name: 'adm_user',
+  //       meta: {
+  //         icon: 'ios-ribbon',
+  //         title: '管理用户'
+  //       },
+  //       component: () => import('@/view/cmdb/adm_user/List.vue')
+  //     }
+  //   ]
+  // },
+  //
   {
     path: '/cmdb',
     name: 'cmdb',
@@ -230,69 +305,79 @@ export const routerMap = [
     component: Main,
     children: [
       {
-        path: 'server',
-        name: 'server_list',
+        path: 'asset_server',
+        name: 'asset_server',
         meta: {
           icon: 'ios-cube',
           title: '主机管理'
         },
-        component: () => import('@/view/cmdb/server/List.vue')
+        component: () => import('@/view/cmdb2/server_mg.vue')
       },
       {
-        path: 'db',
-        name: 'server_db',
+        path: 'asset_db',
+        name: 'asset_db',
         meta: {
           icon: 'ios-cube',
           title: 'DB管理'
         },
-        component: () => import('@/view/cmdb/db/List.vue')
+        component: () => import('@/view/cmdb2/db_mg.vue')
       },
       {
-        path: 'server_log',
-        name: 'server_log',
+        path: 'log_audit',
+        name: 'log_audit',
         meta: {
           icon: 'md-build',
           title: '日志审计'
         },
-        component: () => import('@/view/cmdb/server_log/List.vue')
+        component: () => import('@/view/cmdb2/log_audit.vue')
       },
       {
-        path: 'server_auth',
-        name: 'server_auth',
-        meta: {
-          icon: 'ios-brush',
-          title: '授权规则'
-        },
-        component: () => import('@/view/cmdb/server_auth/List.vue')
-      },
-      {
-        path: 'server_group',
-        name: 'server_group',
-        meta: {
-          icon: 'ios-browsers',
-          title: '主机组'
-        },
-        component: () => import('@/view/cmdb/server_group/List.vue')
-      },
-      {
-        path: 'tag',
-        name: 'tag',
+        path: 'tag_mg',
+        name: 'tag_mg',
         meta: {
           icon: 'ios-pricetag',
           title: '标签管理'
         },
-        component: () => import('@/view/cmdb/tag/List.vue')
+        component: () => import('@/view/cmdb2/tag_mg.vue')
       },
       {
-        path: 'adm_user',
-        name: 'adm_user',
+        path: 'admin_user',
+        name: 'admin_user',
         meta: {
           icon: 'ios-ribbon',
           title: '管理用户'
         },
-        component: () => import('@/view/cmdb/adm_user/List.vue')
+        component: () => import('@/view/cmdb2/admin_user.vue')
+      },
+      {
+        path: 'system_user',
+        name: 'system_user',
+        meta: {
+          icon: 'ios-ribbon',
+          title: '系统用户'
+        },
+        component: () => import('@/view/cmdb2/system_user.vue')
+      },
+      {
+        path: 'asset_config',
+        name: 'asset_config',
+        meta: {
+          icon: 'ios-hammer',
+          title: '资产配置'
+        },
+        component: () => import('@/view/cmdb2/asset_config.vue')
       }
     ]
+  },
+  {
+    path: '/web_ssh',
+    name: 'web_ssh',
+    meta: {
+      icon: 'ios-stats',
+      title: 'Web终端',
+      hideInMenu: true
+    },
+    component: () => import('@/view/cmdb2/webssh/web-ssh.vue')
   },
   //
   {

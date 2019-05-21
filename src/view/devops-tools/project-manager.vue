@@ -96,7 +96,7 @@
           ></Input>
         </FormItem>
 
-        
+
         <FormItem
           label="接手人员"
           prop="project_processing"
@@ -116,7 +116,7 @@
         >
             <DatePicker
               v-model="formValidate.project_start_time"
-              type="datetime" 
+              type="datetime"
               format="yyyy-MM-dd HH:mm:ss"
               show-week-numbers
               editable
@@ -130,7 +130,7 @@
         >
             <DatePicker
               v-model="formValidate.project_end_time"
-              type="datetime" 
+              type="datetime"
               format="yyyy-MM-dd HH:mm:ss"
               show-week-numbers
               editable
@@ -174,7 +174,7 @@ export default {
         project_end_time: '',
       },
     //禁用之前时间
-    //   optionsDate: {   
+    //   optionsDate: {
     //     disabledDate (date) {
     //       return date && date.valueOf() < Date.now() - 86400000
     //     }
@@ -326,7 +326,6 @@ export default {
     getProjectManagerList (page, limit, key, value) {
         getProjectManagerList(page, limit, key, value).then(res => {
             if (res.data.code === 0) {
-            this.$Message.success(`${res.data.msg}`)
             this.pageTotal = res.data.count
             this.tableData = res.data.data
             } else {
@@ -452,14 +451,14 @@ export default {
         this.pageSize = value
         this.getProjectManagerList(1, this.pageSize, this.searchKey, this.searchValue)
     }
-         
+
 //   },
 //   watch: {
 //     searchValue(val) {
 //       this.getProjectManagerList(this.pageNum,this.pageSize,this.searchKey, val);
 //     }
   },
-  
+
   mounted() {
     this.getProjectManagerList();
     }

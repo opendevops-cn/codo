@@ -101,7 +101,7 @@
         >
             <DatePicker
               v-model="formValidate.event_start_time"
-              type="datetime" 
+              type="datetime"
               format="yyyy-MM-dd HH:mm:ss"
               show-week-numbers
               editable
@@ -329,7 +329,6 @@ export default {
     getEventManagerList (page, limit, key, value) {
         getEventManagerList(page, limit, key, value).then(res => {
             if (res.data.code === 0) {
-            this.$Message.success(`${res.data.msg}`)
             this.pageTotal = res.data.count
             this.tableData = res.data.data
             } else {
@@ -360,7 +359,7 @@ export default {
         this.modalMap.modalTitle = mtitle;
         this.editModalData = meth;
         if (paramsRow && paramsRow.id) {
-            // put 
+            // put
             this.formValidate = {
                 event_name: paramsRow.event_name,
                 event_status: paramsRow.event_status,
@@ -368,7 +367,7 @@ export default {
                 event_processing: paramsRow.event_processing,
                 event_start_time: paramsRow.event_start_time,
                 event_end_time: paramsRow.event_end_time,
-           } 
+           }
         } else {
             // post
             this.formValidate = {
@@ -387,7 +386,7 @@ export default {
                         setTimeout(() => {
                             operationEvent(this.formValidate, this.editModalData).then(res => {
                                 if (res.data.code === 0) {
-            
+
                                     this.$Message.success(`${res.data.msg}`)
                                     this.getEventManagerList(
                                     this.pageNum,
@@ -457,14 +456,14 @@ export default {
         this.pageSize = value
         this.getEventManagerList(1, this.pageSize, this.searchKey, this.searchValue)
     }
-         
+
 //   },
 //   watch: {
 //     searchValue(val) {
 //       this.getEventManagerList(this.pageNum,this.pageSize,this.searchKey, val);
 //     }
   },
-  
+
   mounted() {
     this.getEventManagerList();
     }
