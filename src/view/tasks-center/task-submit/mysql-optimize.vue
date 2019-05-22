@@ -33,7 +33,7 @@
             </RadioGroup>
           </FormItem>
           <FormItem label="SQL语句" prop="sql_data" >
-            <Input v-model="formValidate.sql_data" type="textarea"  :rows="18" :maxlength=6000
+            <Input v-model="formValidate.sql_data" type="textarea"  :rows="18" :maxlength=9999
                placeholder="请输入你的数据语句语句，长度不超过6000">
             </Input>
           </FormItem>
