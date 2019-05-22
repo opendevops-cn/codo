@@ -347,12 +347,13 @@ export default {
                     }
                   this.loading2 = false
                   })
-
+                  
             }, 3000);
           },
           onCancel: () => {
+            this.loading2 = false
             this.$Message.info('Clicked cancel');
-          }
+          }                       
         });
     },
 
@@ -367,7 +368,7 @@ export default {
     //       this.$Message.error(`${res.data.msg}`)
     //     }
     //     this.loading2 = false
-    //   })
+    //   })      
     // },
 
     editModal(paramsRow, meth, mtitle) {
@@ -400,7 +401,7 @@ export default {
               state: 'false',
               remarks: '',
             }
-
+            
           }
       },
     handleSubmit (value) {

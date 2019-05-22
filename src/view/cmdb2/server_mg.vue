@@ -16,7 +16,7 @@
         <Button type="error" class="search-btn"  @click="handlerDelete">批量删除</Button>
         <Detail :dialog="dialog2" :formData="formValidate" @e-close="closeModal"></Detail>
         <!-- <Button type="info" v-if="rules.asset_error_log" class="search-btn" @click="handlerCheckErrorLog">任务日志 -->
-
+        
         <!-- </Button>
         <Button v-if="rules.web_ssh_btn" class="search-btn">
           <router-link tag="a" target="_blank" :to="{name: 'web_ssh'}">Web终端</router-link>
@@ -25,7 +25,7 @@
         <!-- <Button type="info" class="search-btn"  @click="handlerRsyncKey">推送密钥</Button> -->
         <Button type="success" class="search-btn"  @click="handlerAssetUpdate">资产更新</Button>
         <Button type="info" class="search-btn" :loading="loading" @click="handleSyncTagTree">同步标签树</Button>
-
+        
     </div>
     <Table size="small" ref="selection" border :columns="columns":data="tableData"@on-selection-change="handleSelectChange"></Table>
       <div style="margin: 10px; overflow: hidden">
@@ -348,11 +348,11 @@ export default {
                 },
                 'false'
               ),
-              ])
+              ])  
             }
           }
         },
-
+ 
         {
           title: "操作",
           key: "handle",
@@ -450,7 +450,7 @@ export default {
       // console.log('key, vlaue', key,value)
       getServerDetailList(key, value).then(res => {
         if (res.data.code === 0) {
-          this.serverDetail = res.data.data[0]
+          this.serverDetail = res.data.data[0]  
         } else {
           this.serverDetail = {
             cpu: "",
@@ -520,7 +520,7 @@ export default {
             sn: ""
       }
       this.getServerDetailList('ip', paramsRow.ip)
-
+      
       setTimeout(() => {
         //const tag_list = paramsRow.tag_list.join(',')
         // if (tag_list) {tag_list.join(' ')}
@@ -704,12 +704,13 @@ export default {
             }, 2000);
           },
           onCancel: () => {
+            this.loading = false
             this.$Message.info('Clicked cancel');
-          }
+          }                       
         });
     },
-
-
+    
+    
     handlerDelete(){
       //console.log(this.tableSelectIdList.length)
       if (this.tableSelectIdList.length > 0) {
@@ -814,7 +815,7 @@ export default {
       this.getServerList(this.searchVal)
     }
   },
-
+  
   mounted() {
     this.getServerList()
     this.getTagList()
