@@ -2,6 +2,13 @@ import axios from '@/libs/api.request'
 import config from '@/config'
 
 
+//同步资产信息到Tag树
+export const syncServerToTagTree = () => {
+  return axios.request({
+    url: '/cmdb2/v1/cmdb/server/sync_tagtree/',
+    method: 'get',
+  })
+}
 
 
 //获取ErrorLog信息提示

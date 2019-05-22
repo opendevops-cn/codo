@@ -16,6 +16,7 @@
         <br />
         <span>5. 考虑到了每个云厂商的区域不同，整理了下各厂商的区域/可用区文档链接。 &nbsp&nbsp<a href="https://docs.aws.amazon.com/zh_cn/AWSEC2/latest/UserGuide/using-regions-availability-zones.html" target="_blank">AWS区域链接</a>&nbsp&nbsp  <a href="https://help.aliyun.com/document_detail/40654.html" target="_blank">阿里云区域链接</a>&nbsp&nbsp   <a href="https://cloud.tencent.com/document/product/213/6091" target="_blank">腾讯云区域链接</a> </span>
         <br />
+        <span>6. 拉取资产按钮：手动触发云厂商主机更新到主机列表，默认情况下6小时会自动更新一次，请不要频繁点击，可能会产生调用接口费用(AWS)</span>
     </Alert>
     <div class="search-con search-con-top">
       <Select v-model="searchKey" class="search-col">
@@ -24,6 +25,8 @@
       <Input @on-change="handleClear" clearable placeholder="搜索" class="search-input" v-model="searchValue"/>
       <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
       <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新增配置')" class="search-btn" >新增配置</Button></slot>
+      <slot name="new_btn1" ><Button type="success" :loading="loading2" @click="handleUpdateServer()" class="search-btn" >拉取资产</Button></slot>
+
     </div>
   <Table size="small" ref="selection" border :columns="columns" :data="tableData"></Table>
   <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
@@ -83,7 +86,7 @@
 
 <script>
 import FormGroup from '_c/form-group'
-import { getAssetConfigsList, operationAssetConfigs, testAuth } from '@/api/cmdb2/asset_config'
+import { getAssetConfigsList, operationAssetConfigs, testAuth, handleUpdateserver } from '@/api/cmdb2/asset_config'
 import { getAdminUserList } from "@/api/cmdb2/admin_user"
 export default {
   components: {
@@ -91,6 +94,8 @@ export default {
   },
   data () {
     return {
+      loading2: false,
+      loading: false,
       columns: [
         // {
         //   type: 'selection',
@@ -161,7 +166,8 @@ export default {
                 {
                   props: {
                     type: 'success',
-                    size: 'small'
+                    size: 'small',
+                    loading: this.loading
                   },
                  style: {
                     marginRight: '5px'
@@ -301,6 +307,7 @@ export default {
 
     // 测试用户填写的信息是否正确
     testAuth(params){
+      this.loading = true
       const data = {
         "account": params.row.account,
         "access_id": params.row.access_id,
@@ -313,14 +320,55 @@ export default {
             duration: 5 //停留时间
           });
         if (res.data.code ===0){
-
+          this.loading = false
           this.$Message.success(`${res.data.msg}`)
         } else{
+          this.loading = false
           this.$Message.error(`${res.data.msg}`)
         }
       })
 
     },
+
+    handleUpdateServer(){
+       this.loading2 = true
+       this.$Modal.confirm({
+          title: '提醒',
+          content: '<p>手动触发获取云厂商主机信息更新到CMDB主机列表</p><p>点击确认进行拉取，请耐心稍等一下资产会自动更新到主机列表，详细信息可看后端日志</p>',
+          loading: true,
+          onOk: () => {
+            setTimeout(() => {
+              this.$Modal.remove();
+                handleUpdateserver().then( res => {
+                  if (res.data.code === 0) {
+                      this.$Message.success(`${res.data.msg}`)
+                    } else {
+                      this.$Message.error(`${res.data.msg}`)
+                    }
+                  this.loading2 = false
+                  })
+
+            }, 3000);
+          },
+          onCancel: () => {
+            this.$Message.info('Clicked cancel');
+          }
+        });
+    },
+
+
+
+    // handleUpdateServer(){
+    //   this.loading2 = true
+    //   handleUpdateserver().then(res => {
+    //     if (res.data.code ===0){
+    //       this.$Message.success(`${res.data.msg}`)
+    //     } else{
+    //       this.$Message.error(`${res.data.msg}`)
+    //     }
+    //     this.loading2 = false
+    //   })
+    // },
 
     editModal(paramsRow, meth, mtitle) {
       this.modalMap.modalVisible = true;
@@ -352,7 +400,7 @@ export default {
               state: 'false',
               remarks: '',
             }
-            
+
           }
       },
     handleSubmit (value) {

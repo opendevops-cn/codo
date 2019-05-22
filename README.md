@@ -1,7 +1,7 @@
 ## Install
 ```bush
 // install dependencies
-npm install
+npm install --ignore-script
 ```
 ## Run
 ### Development

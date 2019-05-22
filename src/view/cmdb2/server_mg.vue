@@ -8,6 +8,7 @@
     </i-col>
     <i-col :md="24" :lg="19" style="margin-bottom: 10px;">
   <Card>
+        <Alert banner closable >同步Tag树：默认情况下部署CMDB时候settings里面配置了任务系统的数据库信息，主机资产会每天定时同步到Tag树，也可点击手动同步，无需选中主机，同步所有，注意请不要多次点击。</Alert>
     <div class="search-con search-con-top">
       <Input class="search-input" v-model="searchVal" style="padding:5px;" placeholder="输入关键字全局搜索"/>
       <slot name="new_btn">
@@ -15,7 +16,7 @@
         <Button type="error" class="search-btn"  @click="handlerDelete">批量删除</Button>
         <Detail :dialog="dialog2" :formData="formValidate" @e-close="closeModal"></Detail>
         <!-- <Button type="info" v-if="rules.asset_error_log" class="search-btn" @click="handlerCheckErrorLog">任务日志 -->
-        
+
         <!-- </Button>
         <Button v-if="rules.web_ssh_btn" class="search-btn">
           <router-link tag="a" target="_blank" :to="{name: 'web_ssh'}">Web终端</router-link>
@@ -23,7 +24,8 @@
 
         <!-- <Button type="info" class="search-btn"  @click="handlerRsyncKey">推送密钥</Button> -->
         <Button type="success" class="search-btn"  @click="handlerAssetUpdate">资产更新</Button>
-        
+        <Button type="info" class="search-btn" :loading="loading" @click="handleSyncTagTree">同步标签树</Button>
+
     </div>
     <Table size="small" ref="selection" border :columns="columns":data="tableData"@on-selection-change="handleSelectChange"></Table>
       <div style="margin: 10px; overflow: hidden">
@@ -141,7 +143,7 @@
   </Card>
     </i-col>
   </Row>
-    <Drawer v-model="logModal" :closable="false"  style="background-color: #f8f8f9" width="820" @on-close="closeModal">
+    <Drawer v-model="logModal" :closable="false"  style="background-color: #f8f8f9" width="820">
       <h2 style="color: #000000; marginLeft: 10px">错误日志：</h2>
       <div style="padding: 10px">
         <Row  v-for="log in logInfo">
@@ -156,7 +158,7 @@
 
 <script>
 import Detail from './server_detail'
-import { getServerList,getServerDetailList, operationServer, assetServerUpdate, getTagtree, getErrorLog} from '@/api/cmdb2/server.js'
+import { getServerList,getServerDetailList, operationServer, assetServerUpdate, getTagtree, getErrorLog, syncServerToTagTree} from '@/api/cmdb2/server.js'
 import { getAdminUserList } from "@/api/cmdb2/admin_user";
 import { getTagList } from '@/api/cmdb2/tag.js'
 import { mapState } from 'vuex'
@@ -166,6 +168,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       logModal: false,
       logInfo: [],
       tagTreeData:[],
@@ -345,11 +348,11 @@ export default {
                 },
                 'false'
               ),
-              ])  
+              ])
             }
           }
         },
- 
+
         {
           title: "操作",
           key: "handle",
@@ -447,7 +450,7 @@ export default {
       // console.log('key, vlaue', key,value)
       getServerDetailList(key, value).then(res => {
         if (res.data.code === 0) {
-          this.serverDetail = res.data.data[0]  
+          this.serverDetail = res.data.data[0]
         } else {
           this.serverDetail = {
             cpu: "",
@@ -517,7 +520,7 @@ export default {
             sn: ""
       }
       this.getServerDetailList('ip', paramsRow.ip)
-      
+
       setTimeout(() => {
         //const tag_list = paramsRow.tag_list.join(',')
         // if (tag_list) {tag_list.join(' ')}
@@ -636,46 +639,6 @@ export default {
     handleReset(name) {
       this.$refs[name].resetFields();
     },
-    // handlerRsyncKey(){
-    //   // console.log(this.tableSelectIdList.length)
-    //   if (this.tableSelectIdList.length > 6) {
-    //      this.$Message.error(`手动更新请不要超过5个，默认手动添加的机器都会自动更新`)
-    //      return
-    //   }
-    //   if (this.tableSelectIdList.length > 0) {
-    //     this.$Spin.show({
-    //         render: (h) => {
-    //           return h('div', [
-    //             h('Icon', {
-    //               'class': 'demo-spin-icon-load',
-    //               props: {
-    //                 type: 'ios-loading',
-    //                 size: 18
-    //               }
-    //             }),
-    //             h('div', '公钥推送中....')
-    //           ])
-    //         }
-    //       })
-    //       operationServerRsyncKey({ 'id_list':this. tableSelectIdList }, 'post').then(
-    //         res => {
-    //           this.$Spin.hide()
-    //             if (res.data.code === 0) {
-    //                 // this.$Message.success(`${res.data.msg}`)
-    //                 //console.log(res.data.data)
-    //                 this.$Message.success(`${res.data.msg}`)
-    //                 this.getServerList(this.searchVal)
-    //             }else {
-    //               this.$Message.error({
-    //                   content: res.data.data,
-    //                   duration: 10
-    //                 })
-    //                 }
-    //             })
-    //   }else {
-    //   this.$Message.info(`你总要选中点什么吧`)
-    //   }
-    // },
 
     handlerAssetUpdate(){
       // console.log(this.tableSelectIdList.length)
@@ -721,9 +684,32 @@ export default {
       }
     },
 
+    handleSyncTagTree(){
+      this.loading = true
+       this.$Modal.confirm({
+          title: '提醒',
+          content: '<p>向【作业配置】--【Tag树】进行同步资产任务</p>',
+          loading: true,
+          onOk: () => {
+            setTimeout(() => {
+              this.$Modal.remove();
+                syncServerToTagTree().then( res => {
+                  if (res.data.code === 0) {
+                      this.$Message.success(`${res.data.msg}`)
+                    } else {
+                      this.$Message.error(`${res.data.msg}`)
+                    }
+                  this.loading = false
+                  })
+            }, 2000);
+          },
+          onCancel: () => {
+            this.$Message.info('Clicked cancel');
+          }
+        });
+    },
 
-    
-    
+
     handlerDelete(){
       //console.log(this.tableSelectIdList.length)
       if (this.tableSelectIdList.length > 0) {
@@ -828,7 +814,7 @@ export default {
       this.getServerList(this.searchVal)
     }
   },
-  
+
   mounted() {
     this.getServerList()
     this.getTagList()

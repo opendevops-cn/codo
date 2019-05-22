@@ -1,12 +1,12 @@
 <template>
   <div>
   <Row :gutter="20">
-    <i-col :md="24" :lg="5" style="margin-bottom: 20px;">
+    <i-col :md="24" :lg="5" style="margin-bottom: 15px;">
       <Card>
         <Tree ref="tree" :data="tagTreeData"  @on-select-change="handlerTreeChange" getSelectedNodes></Tree>
       </Card>
     </i-col>
-    <i-col :md="24" :lg="19" style="margin-bottom: 20px;">
+    <i-col :md="24" :lg="19" style="margin-bottom: 15px;">
       <Card shadow>
         <div class="search-con">
           <Input class="search-input" v-model="searchVal" style="padding:6px;" placeholder="输入关键字搜索"/>
@@ -15,13 +15,13 @@
           <Button v-else  type="primary"  @click="handlerTag(null, 'post', '新建标签')" class="search-btn" >新建标签</Button>
           <Button type="error" class="search-btn"  @click="handlerDelete">批量删除</Button>
         </div>
-         <Table v-if="selectTwo === 'DB'" size="small" height="660" ref="selection" :columns="columns" :data="tableDataDB"  @on-selection-change="handleSelectChange"></Table>
-         <Table v-else-if="selectTwo === 'server'" size="small" height="660" ref="selection"  :columns="columns1"
+         <Table v-if="selectTwo === 'DB'" size="small"  ref="selection" :columns="columns" :data="tableDataDB"  @on-selection-change="handleSelectChange"></Table>
+         <Table v-else-if="selectTwo === 'server'" size="small"  ref="selection"  :columns="columns1"
          :data="tableDataServer" @on-selection-change="handleSelectChange"></Table>
-         <Table v-else size="small" height="660" :columns="columns2" :data="tableData" @on-selection-change="handleSelectChange"></Table>
+         <Table v-else size="small"  :columns="columns2" :data="tableData" @on-selection-change="handleSelectChange"></Table>
         <div style="margin: 10px; overflow: hidden">
           <div style="float: left;">
-              <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[18,35,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize">
+              <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[15,16,18,35,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize">
               </Page>
           </div>
         </div>
@@ -40,6 +40,9 @@
         </FormItem>
         <FormItem label="IP地址" prop="ip">
           <Input v-model="formValidateServer.ip" :maxlength=20 placeholder='请输入IP地址'></Input>
+        </FormItem>
+        <FormItem label="IDC" prop="idc">
+          <Input v-model="formValidateServer.idc" :maxlength=25 placeholder='请输入idc地址'></Input>
         </FormItem>
         <FormItem label="区域" prop="region">
           <Input v-model="formValidateServer.region" :maxlength=25 placeholder='请输入region地址'></Input>
@@ -161,7 +164,7 @@
         // 分页
         pageTotal: 0, // 数据总数
         pageNum: 1, // 当前页码
-        pageSize: 18, // 每页条数
+        pageSize: 15, // 每页条数
         selectTwo: 'tag',
         selectTag: null,
         tagTreeData:[],
@@ -215,6 +218,7 @@
           id: null,
           hostname: '',
           ip: '',
+          idc: '',
           region:'',
           detail:'介绍一下吧',
           tag_list: [],
@@ -339,6 +343,7 @@
           }
         },
         { title: 'IP', key: 'ip', align: 'center' },
+        { title: 'IDC', key: 'idc', align: 'center' },
         { title: '区域', key: 'region', align: 'center' },
         { title: '状态', key: 'state', width: 120, align: 'center', sortable: true},
         { title: '操作', key: 'handle', width: 120, align: 'center',
@@ -578,6 +583,7 @@
               id: paramsRow.id,
               hostname: paramsRow.hostname,
               ip: paramsRow.ip,
+              idc: paramsRow.idc,
               region: paramsRow.region,
               tag_list: paramsRow.tag_list,
             }
@@ -585,6 +591,7 @@
             this.formValidateServer = {
               id: null,
               hostname: '',
+              idc: '',
               ip: '',
               region:'',
               tag_list: [],
