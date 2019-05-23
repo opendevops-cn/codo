@@ -194,6 +194,7 @@ export default {
         {
           name: 'uri',
           type: 'i-input',
+          maxlength: 100,
           value: meth === 'put' ? this.tableData[index].uri : '',
           label: '请求路径',
           rule: [{ required: true, message: 'URI不能为空', trigger: 'blur' }]
