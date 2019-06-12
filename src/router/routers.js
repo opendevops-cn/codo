@@ -156,52 +156,52 @@ export const routerMap = [
     ]
   },
   //
-  {
-    path: '/k8s',
-    name: 'k8s',
-    meta: {
-      icon: 'ios-boat-outline',
-      title: 'K8S发布'
-    },
-    component: Main,
-    children: [
-      {
-        path: 'project/',
-        name: 'project',
-        meta: {
-          icon: 'ios-star',
-          title: '项目列表'
-        },
-        component: () => import('@/view/k8s/project/List.vue')
-      },
-      {
-        path: 'app/',
-        name: 'app',
-        meta: {
-          icon: 'ios-plane',
-          title: '应用列表'
-        },
-        component: () => import('@/view/k8s/app/List.vue')
-      },
-      {
-        path: 'publish/:id',
-        name: 'project_publish',
-        meta: {
-          hideInMenu: true
-        },
-        component: () => import('@/view/k8s/project/Publish.vue')
-      },
-      {
-        path: 'publish_list',
-        name: 'publish_list',
-        meta: {
-          icon: 'ios-stats',
-          title: '发布列表'
-        },
-        component: () => import('@/view/k8s/publish/List.vue')
-      }
-    ]
-  },
+  // {
+  //   path: '/k8s',
+  //   name: 'k8s',
+  //   meta: {
+  //     icon: 'ios-boat-outline',
+  //     title: 'K8S发布'
+  //   },
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: 'project/',
+  //       name: 'project',
+  //       meta: {
+  //         icon: 'ios-star',
+  //         title: '项目列表'
+  //       },
+  //       component: () => import('@/view/k8s/project/List.vue')
+  //     },
+  //     {
+  //       path: 'app/',
+  //       name: 'app',
+  //       meta: {
+  //         icon: 'ios-plane',
+  //         title: '应用列表'
+  //       },
+  //       component: () => import('@/view/k8s/app/List.vue')
+  //     },
+  //     {
+  //       path: 'publish/:id',
+  //       name: 'project_publish',
+  //       meta: {
+  //         hideInMenu: true
+  //       },
+  //       component: () => import('@/view/k8s/project/Publish.vue')
+  //     },
+  //     {
+  //       path: 'publish_list',
+  //       name: 'publish_list',
+  //       meta: {
+  //         icon: 'ios-stats',
+  //         title: '发布列表'
+  //       },
+  //       component: () => import('@/view/k8s/publish/List.vue')
+  //     }
+  //   ]
+  // },
   // {
   //   path: '/terminal',
   //   name: 'WebSSH',
