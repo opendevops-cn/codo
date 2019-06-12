@@ -1,10 +1,7 @@
 <template>
 <Card>
     <div class="search-con search-con-top">
-      <Select v-model="searchKey" class="search-col">
-        <Option v-for="item in columns" v-if="item.key !== 'handle' && item.key !== 'status' && item.key !== ''" :value="item.key" :key="`search-col-${item.key}`">{{ item.title }}</Option>
-      </Select>
-      <Input @on-change="handleClear" clearable placeholder="输入关键字搜索" class="search-input" v-model="searchValue"/>
+      <Input clearable placeholder="输入任务ID搜索" class="search-input" v-model="searchValue"/>
       <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
       <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新建任务')" class="search-btn" >新建</Button></slot>
     </div>
@@ -137,13 +134,12 @@ export default {
       formList: [],
       editModalData: '',
       //
-      searchKey: '',
       searchValue: ''
     }
   },
   methods: {
-    getCronJobsList (page, limit, key, value) {
-      getCronJobslist(page, limit, key, value).then(res => {
+    getCronJobsList (value) {
+      getCronJobslist(this.pageNum, this.pageSize, value).then(res => {
         if (res.data.code === 0) {
           this.pageTotal = res.data.count
           this.tableData = res.data.data
@@ -192,12 +188,7 @@ export default {
         operationCron(value.data, this.editModalData).then(res => {
           if (res.data.code === 0) {
             this.$Message.success(`${res.data.msg}`)
-            this.getCronJobsList(
-              this.pageNum,
-              this.pageSize,
-              this.searchKey,
-              this.searchValue
-            )
+            this.getCronJobsList(this.searchValue)
             this.modalMap.modalVisible = false
           } else {
             this.$Message.error(`${res.data.msg}`)
@@ -208,12 +199,7 @@ export default {
     // 删除
     delData (params) {
       if (confirm(`确定要删除 ${params.row.job_id}`)) {
-        operationCron(
-          {
-            job_id: params.row.job_id
-          },
-          'delete'
-        ).then(res => {
+        operationCron( { job_id: params.row.job_id}, 'delete' ).then(res => {
           if (res.data.code === 0) {
             this.$Message.success(`${res.data.msg}`)
             this.tableData.splice(params.index, 1)
@@ -241,31 +227,22 @@ export default {
     changePage (value) {
       this.pageNum = value
       this.getCronJobsList(
-        this.pageNum,
-        this.pageSize,
-        this.searchKey,
         this.searchValue
       )
     },
     // 每页条数
     handlePageSize (value) {
       this.pageSize = value
-      this.getCronJobsList(1, this.pageSize, this.searchKey, this.searchValue)
-    },
-    handleClear (e) {
-      if (e.target.value === '') this.tableData = this.value
+      this.getCronJobsList( this.searchValue )
     },
     handleSearch () {
       this.getCronJobsList(
-        this.pageNum,
-        this.pageSize,
-        this.searchKey,
         this.searchValue
       )
     }
   },
   mounted () {
-    this.getCronJobsList(this.pageNum, this.pageSize)
+    this.getCronJobsList()
   }
 }
 </script>
@@ -280,7 +257,7 @@ export default {
     }
     &-input {
       display: inline-block;
-      width: 200px;
+      width: 250px;
       margin-left: 2px;
     }
     &-btn {

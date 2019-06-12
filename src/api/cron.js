@@ -1,16 +1,13 @@
 import axios from '@/libs/api.request'
 
-export const getCronJobslist = (page, limit, key, value, date = ['', '']) => {
+export const getCronJobslist = (page, limit, value) => {
   return axios.request({
     url: '/cron//v1/cron/job/',
     method: 'get',
     params: {
       page,
       limit,
-      key,
-      value,
-      start_date: date[0],
-      end_date: date.length > 1 ? date[1] : ''
+      'job_id': value
     }
   })
 }
