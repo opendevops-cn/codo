@@ -41,14 +41,44 @@
           </div>
         </FormItem>
 
+        
         <FormItem label="云厂商" prop="account">
           <Select v-model="formValidate.account" placeholder="选择云厂商">
             <Option value="AWS" >AWS</Option>
             <Option value="阿里云" >阿里云</Option>
             <Option value="腾讯云" >腾讯云</Option>
+            <Option value="华为云" >华为云</Option>
           </Select>
         </FormItem>
 
+
+        <div v-if="formValidate.account === '华为云'">
+          <FormItem label="Cloud" prop="huawei_cloud">
+          <div  v-if="formValidate.id">
+            <Input v-model="formValidate.huawei_cloud" :maxlength="100" disabled placeholder='默认：myhuaweicloud.com # cdn use: cloud = "myhwclouds.com"'></Input>
+          </div>
+          <div v-else>
+            <Input v-model="formValidate.huawei_cloud" :maxlength="100" placeholder='默认：myhuaweicloud.com # cdn use: cloud = "myhwclouds.com"'></Input>
+          </div>
+        </FormItem>
+          <FormItem label="项目ID" prop="project_id">
+          <div  v-if="formValidate.id">
+            <Input v-model="formValidate.project_id" :maxlength="100" disabled placeholder='项目ID，其实就是华为云，我的凭证--项目ID，每个区域都有一个'></Input>
+          </div>
+          <div v-else>
+            <Input v-model="formValidate.project_id" :maxlength="100" placeholder='项目ID，其实就是华为云，我的凭证--项目ID，每个区域都有一个'></Input>
+          </div>
+        </FormItem>
+        </FormItem>
+          <FormItem label="实例ID" prop="huawei_instance_id">
+          <div  v-if="formValidate.id">
+            <Input v-model="formValidate.huawei_instance_id" :maxlength="100" disabled placeholder='华为云实例ID，用于测试'></Input>
+          </div>
+          <div v-else>
+            <Input v-model="formValidate.huawei_instance_id" :maxlength="100" placeholder='华为云实例ID，使用测试，如：c2a3e1f3-6674-43f7-881f-71fc0a934e89'></Input>
+          </div>
+        </FormItem>
+       </div>
         <FormItem label="区域" prop="region">
           <div  v-if="formValidate.id">
             <Input v-model="formValidate.region" :maxlength="20" disabled placeholder='region， 如:cn-hangzhou'></Input>
@@ -57,6 +87,7 @@
             <Input v-model="formValidate.region" :maxlength="20" placeholder='region， 如:cn-hangzhou'></Input>
           </div>
         </FormItem>
+
 
         <FormItem label="AccessID" prop="access_id">
           <Input v-model="formValidate.access_id" :maxlength="50"  placeholder='IAM SecretID/AccessID'></Input>
@@ -254,6 +285,27 @@ export default {
             trigger: "blur"
           }
         ],
+        project_id: [
+          {
+            required: true,
+            message: "华为云每个区域对应的都有一个项目ID",
+            trigger: "blur"
+          }
+        ],
+        huawei_cloud: [
+          {
+            required: true,
+            message: "华为云的Cloud地址，默认：myhuaweicloud.com",
+            trigger: "blur"
+          }
+        ],
+        huawei_instance_id: [
+          {
+            required: true,
+            message: "华为云的实例ID，用来测试，如：c2a3e1f3-6674-43f7-881f-71fc0a934e89",
+            trigger: "blur"
+          }
+        ]
       },
       formValidate: {
           id: null,
@@ -265,6 +317,8 @@ export default {
           default_admin_user:'',
           // state:'',
           remarks: '',
+          huawei_cloud:'myhuaweicloud.com',
+          project_id: '',
       },
       tableData: [],
       pageTotal: 0, // 数据总数
@@ -313,6 +367,9 @@ export default {
         "access_id": params.row.access_id,
         "access_key": params.row.access_key,
         "region": params.row.region,
+        "project_id": params.row.project_id,
+        "huawei_cloud": params.row.huawei_cloud,
+        "huawei_instance_id": params.row.huawei_instance_id
       }
       testAuth(data).then(res => {
         this.$Message.config({
@@ -388,6 +445,9 @@ export default {
               default_admin_user: paramsRow.default_admin_user,
               state: paramsRow.state,
               remarks: paramsRow.remarks,
+              project_id: paramsRow.project_id,
+              huawei_cloud: paramsRow.huawei_cloud,
+              huawei_instance_id: paramsRow.huawei_instance_id,
           }
       } else {
           // post
@@ -400,6 +460,9 @@ export default {
               default_admin_user: "",
               state: 'false',
               remarks: '',
+              project_id: '',
+              huawei_cloud: 'myhuaweicloud.com',
+              huawei_instance_id: '',
             }
             
           }
