@@ -6,15 +6,13 @@ WORKDIR /app
 
 RUN npm install -g cnpm --registry=https://registry.npm.taobao.org; cnpm install; npm run build
 
-FROM nginx
+FROM opencodo/nginx
 
 ENV TZ=Asia/Shanghai
 
-RUN set -x \
-    && apt-get update \
-    && apt-get install --no-install-recommends --no-install-suggests -y ca-certificates procps curl net-tools \
-    && rm -rf /var/lib/apt/lists/* 
+RUN mkdir -pv /var/www/coduui && rm /etc/nginx/conf.d/default.conf
 
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist /var/www/coduui
 
-HEALTHCHECK --interval=5s --timeout=3s CMD curl -fs http://localhost/ || exit 1
+COPY hack/nginx/ui.conf /etc/nginx/conf.d/ui.conf
+
