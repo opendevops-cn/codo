@@ -80,22 +80,22 @@
       <div style="margin-top:10px; margin-bottom:10px; marginLeft: 15px;">
         <Divider orientation="left">项目详情</Divider>
         <Row style="marginLeft: 5px;">
-          <Col span="4"><p> <b>项目ID:</b> </p></Col>
-          <Col span="18"><p>  {{projectInfo.project_id}}</p></Col>
+          <Col span="4"><p  v-if="projectInfo.project_id"> <b>项目ID:</b> </p></Col>
+          <Col span="20"><p v-if="projectInfo.project_id"> {{projectInfo.project_id}}</p></Col>
           <Col span="4"><p> <b>组名:</b> </p></Col>
-          <Col span="18"><p> {{projectInfo.group_name}}</p></Col>
+          <Col span="20"><p> {{projectInfo.group_name}}</p></Col>
           <Col span="4"><p> <b>项目:</b> </p></Col>
-          <Col span="18"><p> {{projectInfo.project_name}}</p></Col>
+          <Col span="20"><p> {{projectInfo.project_name}}</p></Col>
           <Col span="4"><p> <b>http:</b> </p></Col>
-          <Col span="18"><p> {{projectInfo.http_url_to_repo}}</p></Col>
+          <Col span="20"><p> {{projectInfo.http_url_to_repo}}</p></Col>
           <Col span="4"><p> <b>ssh:</b> </p></Col>
-          <Col span="18"><p> {{projectInfo.ssh_url_to_repo}}</p></Col>
+          <Col span="20"><p> {{projectInfo.ssh_url_to_repo}}</p></Col>
           <Col span="4"><p> <b>relative path:</b> </p></Col>
-          <Col span="18"><p> {{projectInfo.relative_path}}</p></Col>
+          <Col span="20"><p> {{projectInfo.relative_path}}</p></Col>
         </Row>
         <Divider orientation="left">用户信息</Divider>
           <span v-for="mail in projectInfo.user_info" :key="mail">
-            <tag color="success">{{mail}}</tag>
+            <tag v-if="mail" color="success">{{mail}}</tag>
           </span>
         <!-- <Select class="search-input-long" v-model="projectInfo.user_info" filterable multiple placeholder="默认通过邮箱来关联GIT的用户">
           <Option v-for="item in allUser" :value="item.email" :key="item.user_id" >{{ item.nickname}}</Option>
@@ -123,7 +123,7 @@
           <FormItem label="参数字典">
             <Alert type="success">
               <p>【解释】：任务命令中使用的参数，可选，但是必须是json格式的。例如： {"MAILTO":"191715030@qq.com","hosts_dict":{"1":"127.0.0.1","2":"192.168.1.2"}}
-                hosts_dict 指每组任务在那些主机上执行。默认 {"1":"127.0.0.1"}
+                hosts_dict 指每组任务在那些主机上执行。默认 {"hosts_dict": {"1": "127.0.0.1"}}
               </p>
             </Alert>
             <Input v-model="formGitRepoHook.hook_args" :maxlength=255 type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="字典格式的参数信息"></Input>
@@ -482,6 +482,7 @@
                   this.$Message.success(`${res.data.msg}`)
                   this.getGitTree()
                   this.getRepoList()
+                  this.modalMap.modalVisible = false
                 } else {
                   this.$Message.error(`${res.data.msg}`)
                 }
