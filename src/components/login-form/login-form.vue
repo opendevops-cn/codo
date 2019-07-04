@@ -45,7 +45,7 @@ export default {
       default: () => {
         return [
           { required: true, message: '密码不能为空', trigger: 'blur' },
-          {type: 'string', min: 8, message: '密码不能小于8位', trigger: 'blur'}
+          {type: 'string', min: 6, message: '密码不能小于6位', trigger: 'blur'}
         ]
       }
     },
@@ -62,8 +62,8 @@ export default {
   data () {
     return {
       form: {
-        username: 'demo',
-        password: '2ZbFYNv9WibWcR7GB6kcEY',
+        username: '',
+        password: '',
         dynamic:''
       }
     }

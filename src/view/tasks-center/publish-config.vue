@@ -34,7 +34,7 @@
       :columns="columns"
       :data="tableData"
     ></Table>
-    <Modal  v-model="modalMap.modalVisible" :title="modalMap.modalTitle" :loading=true :footer-hide=true >
+    <Modal  v-model="modalMap.modalVisible" :title="modalMap.modalTitle" :loading=true :footer-hide=true  width="800">
       <Alert show-icon>
         <p>1. 任务在构建主机执行，确保构建主机可从仓库拉取代码和访问目标主机。</p>
         <p>2. 考虑到安全性，任务会屏蔽 Secret secret 开头的参数，请通过API获取。</p>
@@ -324,7 +324,7 @@
             v-model="formValidate.config_file"
             type="textarea"
             :maxlength=500
-            :autosize="{minRows: 5,maxRows: 10}"
+            :autosize="{minRows: 3,maxRows: 10}"
             placeholder="参数名：CONFIG_FILE。格式： key,,path,,abs|rel(绝对路径|相对路径) /conf/shenshuo/dev/nginx/demo.conf,,/etc/nginx/conf.d,,abs /conf/shenshuo/dev/app/settings.py,,settings.py,,rel     这只是一种使用方法，如果不理解，请自行查看配置中心的文档，来实现"
           ></Input>
         </FormItem>
@@ -345,6 +345,7 @@
 
 <script>
 import { getTemplist } from "@/api/task";
+import { getGitrepo } from '@/api/git-repo'
 import { getPublishlist, getCoderepository, operationPublishlist, getTaglist,  getDockerrepository } from '@/api/task-other'
 export default {
   data() {
@@ -549,10 +550,10 @@ export default {
     },
     // 获取仓库地址
     getCodeRepository() {
-      getCoderepository().then(res => {
+      getGitrepo().then(res => {
         if (res.data.code === 0) {
-          res.data.data.forEach(element => {
-            this.repositoryList.push(element.repository);
+            res.data.data.forEach(element => {
+            this.repositoryList.push(element.ssh_url_to_repo);
           });
         } else {
           this.$Message.error(`${res.data.msg}`);

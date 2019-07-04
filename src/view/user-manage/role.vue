@@ -20,16 +20,17 @@
             <div slot="right" class="split-pane">
               <Row>
                 <Col span="24" offset="1">
-              <Transfer
-              :list-style="listStyle"
-              :titles="tranferTitles"
-              :data="source"
-              :target-keys="targetKeys"
-              filterable
-              :filter-method="filterMethod"
-              @on-change="handleChange"></Transfer>
-              </Col>
-            </Row>
+                  <Transfer
+                    :list-style="listStyle"
+                    :titles="tranferTitles"
+                    :data="source"
+                    :target-keys="targetKeys"
+                    filterable
+                    :filter-method="filterMethod"
+                    @on-change="handleChange">
+                  </Transfer>
+                  </Col>
+                </Row>
             </div>
         </Split>
     </div>
