@@ -149,7 +149,7 @@
 </template>
 <script>
   import {getGittree, getGitrepo,optGitrepo, getGituser, getGitConflist, optGitconf, Gitsync, getGitHooklog,testHook} from '@/api/git-repo'
-  // import { getuserlist } from '@/api/user'
+  import { getuserlist } from '@/api/user'
   import { getTemplist } from "@/api/task";
   export default {
     data () {
@@ -579,15 +579,15 @@
           this.getGitHookLog()
         },
         // 获取用户列表
-        // getUserList () {
-        //   getuserlist(1, 300).then(res => {
-        //     if (res.data.code === 0) {
-        //       this.allUser = res.data.data
-        //     } else {
-        //       this.$Message.error(`${res.data.msg}`)
-        //     }
-        //   })
-        // },
+        getUserList () {
+          getuserlist(1, 300).then(res => {
+            if (res.data.code === 0) {
+              this.allUser = res.data.data
+            } else {
+              this.$Message.error(`${res.data.msg}`)
+            }
+          })
+        },
         // 获取模板
         getTempList() {
           getTemplist().then(res => {
@@ -646,7 +646,7 @@
     mounted(){
       this.getGitTree()
       this.getRepoList()
-      // this.getUserList()
+      this.getUserList()
     }
   }
 </script>
