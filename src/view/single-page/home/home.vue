@@ -113,7 +113,9 @@ export default {
       getTaskStatementlist().then(res => {
         if (res.data.code === 0) {
             const data = res.data.data
-            for (var item in data) {
+            // 切割下列表，历史任务可能有很多，限制到24个
+            const slice_data = data.slice(0,36)
+            for (var item in slice_data) {
               this.pieTaskData.push({
                 value: data[item].task_len,
                 name: data[item].task_type
@@ -130,7 +132,9 @@ export default {
       getTagList().then(res => {
         if (res.data.code === 0) {
             const data = res.data.data
-            for (var item in data) {
+            // 切割下列表，历史任务可能有很多，限制到24个
+            const slice_data = data.slice(0,36)
+            for (var item in slice_data) {
               this.pieCmdbData.push({
                 value: data[item].server_len,
                 name: data[item].tag_name
