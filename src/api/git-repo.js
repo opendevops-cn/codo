@@ -38,10 +38,10 @@ export const getGituser = (git_url, group_name) => {
     })
 }
 
-export const testHook = (data) => {
+export const optGithooks = (data, meth) => {
     return axios.request({
         url: '/task/other/v1/git/hooks/',
-        method: 'post',
+        method: meth,
         data
     })
 }
@@ -53,7 +53,7 @@ export const getGitHooklog = () => {
     })
 }
 
-export const getGitConflist = (git_url, group_name) => {
+export const getGitConflist = () => {
     return axios.request({
         url: '/task/other/v1/git/conf/',
         method: 'get'

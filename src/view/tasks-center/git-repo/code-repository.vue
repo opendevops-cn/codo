@@ -27,7 +27,7 @@
               </Input>
             </FormItem>
             <FormItem prop="api_version">
-              <Input type="text" v-model="formRepo.api_version" placeholder="API版本"  style="width: 80px" :maxlength='10'  clearable>
+              <Input type="text" v-model="formRepo.api_version" placeholder="API版本"  style="width: 80px" :readonly=true :maxlength='10'>
               </Input>
             </FormItem>
             <FormItem prop="deploy_key">
@@ -122,7 +122,7 @@
           </FormItem>
           <FormItem label="参数字典">
             <Alert type="success">
-              <p>【解释】：任务命令中使用的参数，可选，但是必须是json格式的。例如： {"MAILTO":"191715030@qq.com","hosts_dict":{"1":"127.0.0.1","2":"192.168.1.2"}}
+              <p>【解释】：任务命令中使用的参数，必须json格式的。例如： {"hosts_dict": {"1":"127.0.0.1","2":"192.168.1.2", "MAILTO": "191715030@qq.com"}}
                 hosts_dict 指每组任务在那些主机上执行。默认 {"hosts_dict": {"1": "127.0.0.1"}}
               </p>
             </Alert>
@@ -148,7 +148,7 @@
   </div>
 </template>
 <script>
-  import {getGittree, getGitrepo,optGitrepo, getGituser, getGitConflist, optGitconf, Gitsync, getGitHooklog,testHook} from '@/api/git-repo'
+  import {getGittree, getGitrepo,optGitrepo, getGituser, getGitConflist, optGitconf, Gitsync, getGitHooklog, optGithooks} from '@/api/git-repo'
   import { getuserlist } from '@/api/user'
   import { getTemplist } from "@/api/task";
   export default {
@@ -275,7 +275,7 @@
             key: 'schedule',
             align: 'center',
           },
-          { title: '测试', key: '', align: 'center',
+          { title: '', key: '', align: 'center',
             render: (h, params) => {
               return h('div', [
                 h(
@@ -285,14 +285,30 @@
                       type: 'success',
                       size: 'small'
                     },
+                    style: {
+                      marginRight: '2px'
+                    },
                     on: {
                       click: () => {
                         this.handlerGitHookTest(params.row)
                       }
                     }
                   },
-                  '测试钩子'
-                )
+                  '测试'
+                ),
+                 h(
+                  'Button',
+                  {
+                  props: {
+                    type: 'error',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.handlerGitHookDelete(params.row)
+                    }
+                  }
+                },'删除')
               ])
             }
           }
@@ -548,9 +564,21 @@
         },
         handlerGitHookTest(paramsRow) {
           let testData = {"git_url": this.projectInfo.git_url, "tag_name":paramsRow.tag, 'relative_path': this.projectInfo.relative_path}
-          testHook(testData).then( res => {
+          optGithooks(testData, 'post').then( res => {
               if (res.data.code === 0) {
                 this.$Message.success(`${res.data.msg}`)
+              } else {
+                this.$Message.error(`${res.data.msg}`)
+              }
+          })
+        },
+        handlerGitHookDelete(paramsRow) {
+          optGithooks({"the_id": this.projectInfo.id, "tag_index": paramsRow.tag}, 'delete').then(
+            res => {
+              if (res.data.code === 0) {
+                this.$Message.success(`${res.data.msg}`)
+                this.projectDrawer = false
+                this.getRepoList()
               } else {
                 this.$Message.error(`${res.data.msg}`)
               }
