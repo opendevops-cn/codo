@@ -144,7 +144,8 @@ export default {
           this.pageTotal = res.data.count
           this.tableData = res.data.data
         } else {
-          this.$Message.error(`${res.data.msg}`)
+          this.$Message.error(`获取失败，再试一次。`)
+          // this.$Message.error(`${res.data.msg}`)
         }
       })
     },

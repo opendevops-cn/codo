@@ -33,15 +33,20 @@
       </i-col>
     </Row>
 
+
+
+
     <Row :gutter="20" style="margin-top: 10px;">
       <i-col :md="24" :lg="14" style="margin-bottom: 10px;">
         <Card shadow>
+          <!-- <IssuesInfo :data="IssuesInfoData"></IssuesInfo> -->
           <chart-bar style="height: 340px;" :value="barTaskData" text="告警预留位"/>
         </Card>
       </i-col>
+
       <i-col :md="24" :lg="10" style="margin-bottom: 10px;">
         <Card shadow>
-          <TaskInfo :data="taskInfoData"></TaskInfo>
+          <chart-pie ref="childCmdb" style="height: 339px;" :value="pieCmdbData" text="主机分类"></chart-pie>
         </Card>
       </i-col>
     </Row>
@@ -49,12 +54,22 @@
     <Row :gutter="20" style="margin-top: 10px;">
       <i-col :md="24" :lg="14" style="margin-bottom:10px;">
         <Card shadow>
-          <chart-pie ref="childTask" style="height: 300px;" :value="pieTaskData" text="任务分类"></chart-pie>
+          <chart-pie ref="childTask" style="height: 339px;" :value="pieTaskData" ></chart-pie>
         </Card>
       </i-col>
       <i-col :md="24" :lg="10" style="margin-bottom: 10px;">
         <Card shadow>
-          <chart-pie ref="childCmdb" style="height: 300px;" :value="pieCmdbData" text="主机分类"></chart-pie>
+          <TaskInfo :data="taskInfoData"></TaskInfo>
+        </Card>
+      </i-col>
+
+    </Row>
+
+      <Row :gutter="20" style="margin-top: 10px;">
+      <i-col :md="24" :lg="24" style="margin-bottom: 10px;">
+        <Card shadow>
+          <IssuesInfo :data="IssuesInfoData"></IssuesInfo>
+          <!-- <chart-bar style="height: 340px;" :value="barTaskData" text="告警预留位"/> -->
         </Card>
       </i-col>
     </Row>
@@ -68,7 +83,11 @@ import CountTo from '_c/count-to'
 import { ChartPie, ChartBar } from '_c/charts'
 import Example from './example.vue'
 import { getTagList, getTaskOrderlist, getTaskStatementlist } from '@/api/dashboard/home.js'
+import { getZabbixLastissues } from "@/api/devops-tools";
+
 import TaskInfo from './taskinfo'
+import IssuesInfo from './issuesinfo'
+
 // import { getTaskCheckHistorylist } from '@/api/task'
 
 export default {
@@ -79,6 +98,7 @@ export default {
     ChartBar,
     Example,
     TaskInfo,
+    IssuesInfo,
   },
   data () {
     return {
@@ -94,6 +114,14 @@ export default {
       pieTaskData: [],
       taskInfoData: [
       ],
+      // IssuesInfoData: [{
+      //   "host": "samonitor",
+      //   "issue": "Zabbix agent on us_samonitor is unreachable for 5 minutes",
+      //   "last_change": "2019-07-08 13:46:51",
+      //   "level": '3',
+      // }
+      // ],
+      IssuesInfoData: [],
       barTaskData: {
         Mon: 9,
         Tue: 2,
@@ -106,6 +134,16 @@ export default {
     }
   },
   methods: {
+    // 获取zabbix last issues
+    GetZabbixLastissues(){
+      getZabbixLastissues().then(res => {
+        if (res.data.code === 0) {
+          const data = res.data.data
+          // const slice_data = data.slice(0,10)
+          this.IssuesInfoData = data
+        }
+      })
+    },
 
     //初始化 历史任务类型饼图数据
     initPieTask () {
@@ -113,7 +151,7 @@ export default {
       getTaskStatementlist().then(res => {
         if (res.data.code === 0) {
             const data = res.data.data
-            // 切割下列表，历史任务可能有很多，限制到24个
+            // 切割下列表，历史任务可能有很多，限制
             const slice_data = data.slice(0,36)
             for (var item in slice_data) {
               this.pieTaskData.push({
@@ -132,7 +170,7 @@ export default {
       getTagList().then(res => {
         if (res.data.code === 0) {
             const data = res.data.data
-            // 切割下列表，历史任务可能有很多，限制到24个
+            // 切割下列表，历史任务可能有很多，做个限制
             const slice_data = data.slice(0,36)
             for (var item in slice_data) {
               this.pieCmdbData.push({
@@ -166,6 +204,7 @@ export default {
     this.initPieCmdb()
     this.initTaskInfo()
     this.initPieTask()
+    this.GetZabbixLastissues()
   },
   watch: {
     pieCmdbData: function () {

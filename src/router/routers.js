@@ -47,7 +47,7 @@ export const routerMap = [{
         name: 'taskCenter',
         meta: {
             icon: 'ios-cafe',
-            title: '任务发布'
+            title: '创建订单'
         },
         component: Main,
         children: [{
@@ -109,200 +109,90 @@ export const routerMap = [{
                 },
                 component: () =>
                     import ('@/view/tasks-center/task-submit/task-post.vue')
+            }
+        ]
+    },
+    {
+        path: '/assetPurchase',
+        name: 'assetPurchase',
+        meta: {
+            icon: 'logo-usd',
+            title: '资源申购'
+        },
+        component: Main,
+        children: [{
+                path: 'assetPurchaseAWS',
+                name: 'assetPurchaseAWS',
+                meta: {
+                    icon: 'md-cafe',
+                    title: '资源申购-AWS'
+                },
+                component: () =>
+                    import ('@/view/tasks-center/task-submit/asset-purchase-aws.vue')
             },
             {
-                path: 'assetPurchase',
-                name: 'assetPurchase',
+                path: 'assetPurchaseALY',
+                name: 'assetPurchaseALY',
                 meta: {
-                    icon: 'logo-yen',
-                    title: '资源申购',
-                    showAlways: true,
+                    icon: 'md-cafe',
+                    title: '资源申购-阿里云'
                 },
-                component: parentView,
-                children: [{
-                        path: 'assetPurchaseALY',
-                        name: 'assetPurchaseALY',
-                        meta: {
-                            icon: 'md-cafe',
-                            title: '资源申购-阿里云'
-                        },
-                        component: () =>
-                            import ('@/view/tasks-center/task-submit/asset-purchase-aly.vue')
-                    },
-                    {
-                        path: 'assetPurchaseAWS',
-                        name: 'assetPurchaseAWS',
-                        meta: {
-                            icon: 'md-cafe',
-                            title: '资源申购-亚马逊'
-                        },
-                        component: () =>
-                            import ('@/view/tasks-center/task-submit/asset-purchase-aws.vue')
-                    },
-                    {
-                        path: 'assetPurchaseQcloud',
-                        name: 'assetPurchaseQcloud',
-                        meta: {
-                            icon: 'md-cafe',
-                            title: '资源申购-腾讯云'
-                        },
-                        component: () =>
-                            import ('@/view/tasks-center/task-submit/asset-purchase-qcloud.vue')
-                    },
-                    {
-                        path: 'nodeAdd',
-                        name: 'nodeAdd',
-                        meta: {
-                            icon: 'md-cafe',
-                            title: 'Node添加'
-                        },
-                        component: () =>
-                            import ('@/view/tasks-center/task-submit/k8s-node-add.vue')
-                    },
-                ]
+                component: () =>
+                    import ('@/view/tasks-center/task-submit/asset-purchase-aly.vue')
+            },
+            {
+                path: 'assetPurchaseQcloud',
+                name: 'assetPurchaseQcloud',
+                meta: {
+                    icon: 'md-cafe',
+                    title: '资源申购-腾讯云'
+                },
+                component: () =>
+                    import ('@/view/tasks-center/task-submit/asset-purchase-qcloud.vue')
+            },
+            {
+                path: 'assetPurchaseConfig',
+                name: 'assetPurchaseConfig',
+                meta: {
+                    icon: 'md-cafe',
+                    title: '资源申请配置'
+                },
+                component: () =>
+                    import ('@/view/tasks-center/task-submit/asset-purchase-conf.vue')
             },
         ]
     },
-    //
-    // {
-    //   path: '/k8s',
-    //   name: 'k8s',
-    //   meta: {
-    //     icon: 'ios-boat-outline',
-    //     title: 'K8S发布'
-    //   },
-    //   component: Main,
-    //   children: [
-    //     {
-    //       path: 'project/',
-    //       name: 'project',
-    //       meta: {
-    //         icon: 'ios-star',
-    //         title: '项目列表'
-    //       },
-    //       component: () => import('@/view/k8s/project/List.vue')
-    //     },
-    //     {
-    //       path: 'app/',
-    //       name: 'app',
-    //       meta: {
-    //         icon: 'ios-plane',
-    //         title: '应用列表'
-    //       },
-    //       component: () => import('@/view/k8s/app/List.vue')
-    //     },
-    //     {
-    //       path: 'publish/:id',
-    //       name: 'project_publish',
-    //       meta: {
-    //         hideInMenu: true
-    //       },
-    //       component: () => import('@/view/k8s/project/Publish.vue')
-    //     },
-    //     {
-    //       path: 'publish_list',
-    //       name: 'publish_list',
-    //       meta: {
-    //         icon: 'ios-stats',
-    //         title: '发布列表'
-    //       },
-    //       component: () => import('@/view/k8s/publish/List.vue')
-    //     }
-    //   ]
-    // },
-    // {
-    //   path: '/terminal',
-    //   name: 'WebSSH',
-    //   meta: {
-    //     title: 'WebSSH',
-    //     hideInMenu: true
-    //   },
-    //   component: () => import('@/view/cmdb/webssh/WebSSH.vue')
-    // },
-    // {
-    //   path: '/record',
-    //   name: 'SshRecord',
-    //   meta: {
-    //     title: '操作回放',
-    //     hideInMenu: true
-    //   },
-    //   component: () => import('@/view/cmdb/webssh/Record.vue')
-    // },
-    // {
-    //   path: '/cmdb',
-    //   name: 'cmdb',
-    //   meta: {
-    //     icon: 'ios-cube',
-    //     title: '资产管理'
-    //   },
-    //   component: Main,
-    //   children: [
-    //     {
-    //       path: 'server',
-    //       name: 'server_list',
-    //       meta: {
-    //         icon: 'ios-cube',
-    //         title: '主机管理'
-    //       },
-    //       component: () => import('@/view/cmdb/server/List.vue')
-    //     },
-    //     {
-    //       path: 'db',
-    //       name: 'server_db',
-    //       meta: {
-    //         icon: 'ios-cube',
-    //         title: 'DB管理'
-    //       },
-    //       component: () => import('@/view/cmdb/db/List.vue')
-    //     },
-    //     {
-    //       path: 'server_log',
-    //       name: 'server_log',
-    //       meta: {
-    //         icon: 'md-build',
-    //         title: '日志审计'
-    //       },
-    //       component: () => import('@/view/cmdb/server_log/List.vue')
-    //     },
-    //     {
-    //       path: 'server_auth',
-    //       name: 'server_auth',
-    //       meta: {
-    //         icon: 'ios-brush',
-    //         title: '授权规则'
-    //       },
-    //       component: () => import('@/view/cmdb/server_auth/List.vue')
-    //     },
-    //     {
-    //       path: 'server_group',
-    //       name: 'server_group',
-    //       meta: {
-    //         icon: 'ios-browsers',
-    //         title: '主机组'
-    //       },
-    //       component: () => import('@/view/cmdb/server_group/List.vue')
-    //     },
-    //     {
-    //       path: 'tag',
-    //       name: 'tag',
-    //       meta: {
-    //         icon: 'ios-pricetag',
-    //         title: '标签管理'
-    //       },
-    //       component: () => import('@/view/cmdb/tag/List.vue')
-    //     },
-    //     {
-    //       path: 'adm_user',
-    //       name: 'adm_user',
-    //       meta: {
-    //         icon: 'ios-ribbon',
-    //         title: '管理用户'
-    //       },
-    //       component: () => import('@/view/cmdb/adm_user/List.vue')
-    //     }
-    //   ]
-    // },
-    //
+    // 项目发布
+    {
+        path: '/publish_project',
+        name: 'publish_project',
+        meta: {
+            icon: 'ios-boat-outline',
+            title: '项目发布'
+        },
+        component: Main,
+        children: [{
+                path: 'publish_list',
+                name: 'publish_list',
+                meta: {
+                    icon: 'ios-stats',
+                    title: '发布列表'
+                },
+                component: () =>
+                    import ('@/view/publish-store/publish-list.vue')
+            },
+            {
+                path: 'create_project',
+                name: 'create_project',
+                meta: {
+                    icon: 'ios-plane',
+                    title: '创建项目'
+                },
+                component: () =>
+                    import ('@/view/publish-store/project-create.vue')
+            }
+        ]
+    },
     {
         path: '/cmdb',
         name: 'cmdb',
@@ -361,16 +251,16 @@ export const routerMap = [{
                 component: () =>
                     import ('@/view/cmdb2/admin_user.vue')
             },
-            {
-                path: 'system_user',
-                name: 'system_user',
-                meta: {
-                    icon: 'ios-ribbon',
-                    title: '系统用户'
-                },
-                component: () =>
-                    import ('@/view/cmdb2/system_user.vue')
-            },
+            // {
+            //     path: 'system_user',
+            //     name: 'system_user',
+            //     meta: {
+            //         icon: 'ios-ribbon',
+            //         title: '系统用户'
+            //     },
+            //     component: () =>
+            //         import ('@/view/cmdb2/system_user.vue')
+            // },
             {
                 path: 'asset_config',
                 name: 'asset_config',
@@ -605,16 +495,17 @@ export const routerMap = [{
             title: '运维工具'
         },
         component: Main,
-        children: [{
-                path: 'prometheus_alert',
-                name: 'prometheus_alert',
-                meta: {
-                    icon: 'ios-alert',
-                    title: '告警管理'
-                },
-                component: () =>
-                    import ('@/view/devops-tools/prometheus-alert.vue')
-            },
+        children: [
+            // {
+            //     path: 'prometheus_alert',
+            //     name: 'prometheus_alert',
+            //     meta: {
+            //         icon: 'ios-alert',
+            //         title: '告警管理'
+            //     },
+            //     component: () =>
+            //         import ('@/view/devops-tools/prometheus-alert.vue')
+            // },
             {
                 path: 'paid_reminder',
                 name: 'paid_reminder',
@@ -665,6 +556,36 @@ export const routerMap = [{
                 component: () =>
                     import ('@/view/devops-tools/password-mycrypy.vue')
             }
+        ]
+    },
+    {
+        path: '/monitoringalarm',
+        name: 'monitoringalarm',
+        meta: {
+            icon: 'ios-notifications',
+            title: '监控告警'
+        },
+        component: Main,
+        children: [{
+                path: 'zabbix_manager',
+                name: 'zabbix_manager',
+                meta: {
+                    icon: 'logo-reddit',
+                    title: 'ZABBIX管理'
+                },
+                component: () =>
+                    import ('@/view/devops-tools/zabbix-mg.vue')
+            },
+            {
+                path: 'prometheus_alert',
+                name: 'prometheus_alert',
+                meta: {
+                    icon: 'ios-alert',
+                    title: 'prometheus告警'
+                },
+                component: () =>
+                    import ('@/view/devops-tools/prometheus-alert.vue')
+            },
         ]
     },
     {
