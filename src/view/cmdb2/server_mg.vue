@@ -75,7 +75,7 @@
                 placeholder="公网IP"
             ></Input>
         </FormItem>
-        <FormItem label="端口" prop="port">
+        <FormItem label="端口">
             <!-- <InputNumber :max="65535" :min="1" v-model="formValidate.port"></InputNumber> -->
             <Input v-model="formValidate.port" :maxlength="5" placeholder="端口"></Input>
         </FormItem>
@@ -182,7 +182,7 @@ export default {
         hostname: "",
         ip: "",
         public_ip:'',
-        port: '',
+        port: "22",
         region: "",
         admin_user: "",
         tag_list: [],
@@ -601,7 +601,7 @@ export default {
                 this.formValidate = {
                   hostname: '',
                   ip: "",
-                  port: "",
+                  port: "22",
                   admin_user: "",
                   idc: "",
                   region: "",

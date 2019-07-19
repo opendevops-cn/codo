@@ -90,14 +90,11 @@
         <Form v-if="addHookForm" ref="formZabbixHostsHook" :model="formZabbixHostsHook" :rules="ruleZabbixHostHook" :label-width="90">
           <FormItem label="告警标题" prop="alert_title">
             <Alert type="success">
-              <p>【解释】：ZABBIX WebHooks告警传来的告警标题，如：Zabbix agent on Zabbix server is unreachable for 5 minutes</p>
+              <p>【解释】：ZABBIX WebHooks告警传来的告警标题，如：Zabbix agent on Zabbix server is unreachable for 5 minutes。匹配标题触发钩子</p>
             </Alert>
             <Input v-model="formZabbixHostsHook.alert_title"></Input>
           </FormItem>
           <FormItem label="审批/自动">
-            <Alert type="success">
-              <p>【解释】：自动执行：不需要审批和定时，直接执行。审批执行则需要有模板权限的人来审批或者设置定时执行</p>
-            </Alert>
             <RadioGroup v-model="formZabbixHostsHook.schedule">
                 <Radio label="ready">自动执行</Radio>
                 <Radio label="new"> 审批执行</Radio>
@@ -113,15 +110,12 @@
             </Select>
           </FormItem>
 
-          <FormItem label="参数字典">
+          <FormItem label="执行主机">
             <Alert type="success">
-              <p>【解释】：任务命令中使用的参数，必须json格式的。例如： {"hosts_dict": {"1":"127.0.0.1","2":"192.168.1.2", "MAILTO": "191715030@qq.com"}}
-                hosts_dict 指每组任务在那些主机上执行。默认 {"hosts_dict": {"1": "127.0.0.1"}}
-              </p>
+              <p>【解释】：任务在那台主机上执行，默认为第一组，主机：127.0.0.1</p>
             </Alert>
-            <Input v-model="formZabbixHostsHook.hook_args" :maxlength=255 type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="字典格式的参数信息"></Input>
+            <Input v-model="formZabbixHostsHook.exec_host" :maxlength=50 type="text" placeholder="任务会在执行主机上执行"></Input>
           </FormItem>
-
           <FormItem>
             <Button type="primary" @click="addZabbixHostHookSubmit('formZabbixHostsHook')">保存</Button>
           </FormItem>
@@ -185,7 +179,7 @@
         },
          formZabbixHostsHook: {
           alert_title: '',
-          hook_args: '',
+          exec_host: '127.0.0.1',
           schedule: 'ready',
           temp_id: '',
         },
@@ -277,7 +271,7 @@
                         const ZabbixHooks = JSON.parse(this.hostInfo.zabbix_hooks)
                         this.formZabbixHostsHook = ZabbixHooks[params.row.alert_title]
                         this.formZabbixHostsHook['alert_title'] = params.row.alert_title
-                        this.formZabbixHostsHook['hook_args'] = JSON.stringify(this.formZabbixHostsHook['hook_args']) 
+                        // this.formZabbixHostsHook['exec_host'] = JSON.stringify(this.formZabbixHostsHook['exec_host']) 
                       }
                     }
                   },
@@ -765,7 +759,7 @@
             this.addHookForm = false
             this.formZabbixHostsHook = {
             alert_title: '',
-            hook_args: '',
+            exec_host: '127.0.0.1',
             schedule: 'ready',
             temp_id: '',
           }
