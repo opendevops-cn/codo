@@ -1,5 +1,5 @@
 <template>
-  <Card style="padding: 0px;background: #f8f8f9">
+  <Card style="height:100%; padding: 0px;background: #f8f8f9">
     <Row>
       <i-col span='4'>
         <Row>

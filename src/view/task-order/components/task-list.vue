@@ -1,75 +1,80 @@
 <template>
-<div style="height:100%; background: #f8f8f9">
+<div>
   <Card>
-  <Row :gutter="15" style="margin-top: 1px;">
-    <Col :md="24" :lg="7" style="padding: 10px; background: #f8f8f9">
-        <Table size="small" height="755" border :columns="columns" :data="tableData"></Table>
-    </Col>
-    <Col :md="24" :lg="17" style="margin-bottom: 0px;">
-    <Col style="padding: 10px; background: #f8f8f9">
+  <Row :gutter="15" class="task-con">
+    <Col v-if="task_type !== 'readonly1'" style="padding: 10px; background: #f8f8f9">
         <Card title="任务详情">
             <Row>
               <Col span="12">
-                 <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
-                  提交时间：<p color="warning" style="float:right" size ="small">{{checkData.create_time}}</p>
+                <div class="detail-col">
+                  提交时间：<p color="warning"  class="detail-col-1" size ="small">{{checkData.create_time}}</p>
                 </div>
               </Col>
               <Col span="12">
-                 <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
-                  执行时间：<p type="warning" style="marginRight: 2px; float:right" size ="small">{{checkData.start_time}}</p>
+                 <div class="detail-col">
+                  执行时间：<p type="warning" class="detail-col-1" size ="small">{{checkData.start_time}}</p>
                 </div>
               </Col>
               <Col span="12">
-                <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
-                  发起人：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.creator}}</p>
+                <div class="detail-col">
+                  发起人：<p type="warning" class="detail-col-1" size ="small">{{checkData.creator}}</p>
                 </div>
               </Col>
               <Col span="12">
-                <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
-                  审批人：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.executor}}</p>
+                <div class="detail-col">
+                  审批人：<p type="warning" class="detail-col-1" size ="small">{{checkData.executor}}</p>
                 </div>
               </Col>
               <Col span="24">
-                <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
-                  参与人员：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.associated_user}}</p>
+                <div class="detail-col">
+                  参与人员：<p type="warning" class="detail-col-1" size ="small">{{checkData.associated_user}}</p>
                 </div>
               </Col>
-            <Col v-if="list_id">
-              <CellGroup>
-                <Cell v-if="checkData.schedule === 'new'" title="审批执行：">
-                  <Button v-if="checkData.schedule === 'new' && checkData.approval_button" type="success" style="marginRight: 2px" size ="small" slot="extra" @click="handlerApproval">审批</Button>
-                </Cell>
-                <Cell title="审批干预：">
-                  <span  slot="extra" v-if="checkData.hand_list" v-for="item, index in checkData.hand_list">
-                    <Button type="info" style="marginRight: 10px" size ="small" slot="extra" @click="handlerHand(item)">{{item}}</Button>
-                  </span>
-                  <Button type="error" style="marginRight: 2px; marginLeft: 10px" size="small" slot="extra" @click="handlerStop()">终止全部</Button>
-                </Cell>
-              </CellGroup>
-            </Col>
-            <Col v-if="list_id" span="24" style="padding: 10px">
-              <Table v-if="dataArgs.length > 0" height="121" :columns="columnsArgs" :data="dataArgs"  :border="false" :show-header=false  size='small'></Table>
-              <Alert v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
-            </Col>
+              <div v-if="list_id && task_type === 'normal'">
+                <div v-if="checkData.schedule === 'new'" >
+                  <Col span="24">
+                    <div class="detail-col">
+                      审批执行：
+                      <Button v-if="checkData.schedule === 'new' && checkData.approval_button" type="success" size ="small" class="detail-col-1"
+                        @click.native="handlerApproval()">审批</Button>
+                    </div>
+                  </Col>
+                </div>
+                <Col span="24">
+                  <div class="detail-col">
+                    审批干预：
+                    <span  slot="extra" v-if="checkData.hand_list" v-for="item, index in checkData.hand_list">
+                      <Button type="info" style="marginRight: 10px" size ="small" @click.native="handlerHand(item)">{{item}}</Button>
+                    </span>
+                    <Button type="error" class="detail-col-1" size="small" @click.native="handlerStop()">终止全部</Button>
+                  </div>
+                </Col>
+              </div>
+              <Col v-if="list_id" span="24" style="padding: 10px">
+                <div v-if="task_type === 'normal'">
+                  <Table v-if="dataArgs.length > 0" height="121" :columns="columnsArgs" :data="dataArgs" :border="false" :show-header=false  size='small'></Table>
+                  <Alert v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
+                </div>
+                <div  v-if="task_type === 'readonly2'">
+                  <Table v-if="dataArgs.length > 0" :columns="columnsArgs" :data="dataArgs" :border="false" :show-header=false  size='small'></Table>
+                  <Alert v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
+                </div>
+              </Col>
           </Row>
         </Card>
       </Col>
       <Col style="padding: 10px; background: #f8f8f9">
        <Tabs v-model="runGroup" @on-click="handleTabs">
-          <TabPane v-for="(item, index) in tabs"
-            :key="`${_uid}_${index}`"
-            :label="item.label"
-            :icon="item.icon"
-            :name="item.name">
+          <TabPane v-for="(item, index) in tabs" :key="`${_uid}_${index}`" :label="item.label" :icon="item.icon" :name="item.name">
             <span style="marginRight: 2px;marginLeft: 2px;" v-for="h in checkData.this_host_list">
-            <tag fade v-if="checkData.hosts_status[h] === '0'" color="default"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
-            <tag fade v-if="checkData.hosts_status[h] === '1'" color="cyan"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
-            <tag fade v-if="checkData.hosts_status[h] === '2'" color="green"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
-            <tag fade v-if="checkData.hosts_status[h] === '3'" color="success"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
-            <tag fade v-if="checkData.hosts_status[h] === '4'" color="error" ><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
-            <tag fade v-if="checkData.hosts_status[h] === '5'" color="#FFA2D3"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
-            <tag fade v-if="checkData.hosts_status[h] === '6'" color="magenta"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
-            <tag fade v-if="checkData.hosts_status[h] === '7'" color="geekblue"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
+            <tag fade v-if="checkData.hosts_status[h] === '0'" color="default" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
+            <tag fade v-if="checkData.hosts_status[h] === '1'" color="cyan" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
+            <tag fade v-if="checkData.hosts_status[h] === '2'" color="green" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
+            <tag fade v-if="checkData.hosts_status[h] === '3'" color="success" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
+            <tag fade v-if="checkData.hosts_status[h] === '4'" color="error" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
+            <tag fade v-if="checkData.hosts_status[h] === '5'" color="#FFA2D3" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
+            <tag fade v-if="checkData.hosts_status[h] === '6'" color="magenta" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
+            <tag fade v-if="checkData.hosts_status[h] === '7'" color="geekblue" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
             </span>
             <Table style="margin-top: 10px; "border size="small":columns="columns1" :data="tableData1"></Table>
           </TabPane>
@@ -100,6 +105,7 @@
 </template>
 
 <script>
+// 只读详情/只读简单/读写正常
 import FormGroup from '_c/form-group'
 import Tables from '_c/tables'
 import VueWebsocket from 'vue-websocket'
@@ -117,11 +123,20 @@ export default {
     Tables,
     VueWebsocket
   },
+  props: {
+    list_id: {
+       type: [String, Number]
+    },
+    // 只读简单 readonly1，只读详情 readonly2，读写正常 normal
+    task_type: {
+       type: String,
+       default: 'readonly1'
+    }
+  },
   data () {
     return {
       runGroup: '1',
       runHost: '',
-      list_id: '',
       tabs: [],
       optionsDate: {
         disabledDate (date) {
@@ -129,80 +144,7 @@ export default {
         }
       },
       valueDate: '',
-      columns: [
-        {
-          title: 'ID',
-          key: 'list_id',
-          width: 80,
-          align: 'center',
-          sortable: true
-        },
-        {
-          title: '任务名称',
-          key: 'task_name',
-          align: 'center',
-          render: (h, params) => {
-            return h('div', [
-              h(
-                'a',
-                {
-                  on: {
-                    click: () => {
-                      this.getTaskOrderList()
-                      this.getTaskCheckList(params.row.list_id)
-                    }
-                  }
-                },
-                params.row.task_name + '--' + params.row.task_type
-              )
-            ])
-          }
-        },
-        {
-          title: '状态',
-          key: 'handle',
-          width: 100,
-          align: 'center',
-          render: (h, params) => {
-            let status = params.row.status
-            if (status === '0') {
-              return h('div', [
-                h('Tag', { props: { color: 'default' } }, '新建')
-              ])
-            } else if (status === '1') {
-              return h('div', [h('Tag', { props: { color: 'cyan' } }, '等待')])
-            } else if (status === '2') {
-              return h('div', [
-                h('Tag', { props: { color: 'green' } }, '运行中')
-              ])
-            } else if (status === '3') {
-              return h('div', [
-                h('Tag', { props: { color: 'success' } }, '完成')
-              ])
-            } else if (status === '4') {
-              return h('div', [
-                h('Tag', { props: { color: 'error' } }, '错误')
-              ])
-            } else if (status === '5') {
-              return h('div', [
-                h('Tag', { props: { color: '#FFA2D3' } }, '手动')
-              ])
-            } else if (status === '6') {
-              return h('div', [
-                h('Tag', { props: { color: 'magenta' } }, '中止')
-              ])
-            } else if (status === '7') {
-              return h('div', [
-                h('Tag', { props: { color: 'geekblue' } }, '定时')
-              ])
-            } else {
-              return h('div', [
-                h('Tag', { props: { color: 'error' } }, '失败')
-              ])
-            }
-          }
-        }
-      ],
+      //  this.getTaskCheckList(params.row.list_id)
       columns1: [
         {
           title: '优先级',
@@ -301,7 +243,7 @@ export default {
                 },
                 '日志'
               ),
-              params.row.task_status === '5' &&
+              params.row.task_status === '5' && this.task_type === 'normal' &&
                 h(
                   'Button',
                   {
@@ -325,7 +267,7 @@ export default {
                   },
                   '执行'
                 ),
-              params.row.task_status !== '5' &&
+              params.row.task_status !== '5' && this.task_type === 'normal' &&
                 h(
                   'Button',
                   {
@@ -349,6 +291,7 @@ export default {
                   },
                   '重做'
                 ),
+              this.task_type === 'normal' && 
               h(
                 'Button',
                 {
@@ -402,19 +345,6 @@ export default {
     }
   },
   methods: {
-    getTaskOrderList () {
-      getTaskOrderlist().then(res => {
-        if (res.data.code === 0) {
-          this.tableData = res.data.data
-          if (!this.list_id && res.data.list_id) {
-            this.list_id = res.data.list_id
-            this.getTaskCheckList(this.list_id)
-          }
-        } else {
-          this.$Message.error(`${res.data.msg}`)
-        }
-      })
-    },
     getTaskCheckList (value, getRunGroup, getRunHost) {
       getTaskChecklist(value, getRunGroup, getRunHost).then(res => {
         if (res.data.code === 0) {
@@ -605,19 +535,29 @@ export default {
       this.over()
     }
   },
+  watch:{
+    list_id: function(){
+      this.getTaskCheckList(this.list_id)
+    }
+  },
   mounted () {
-    this.getTaskOrderList()
+    this.getTaskCheckList(this.list_id)
   }
 }
 </script>
-
 <style lang="less" scoped>
-.search-con {
+.task-con {
   padding: 0px 0;
-  .search {
+  margin-top: 1px;
+  .detail {
     &-col {
-      display: inline-block;
-      width: 160px;
+      margin-top: 10px; 
+      margin-left: 16px; 
+      margin-right: 16px;
+      &-1 {
+        margin-right: 2px;
+        float:right
+      }
     }
     &-input {
       display: inline-block;

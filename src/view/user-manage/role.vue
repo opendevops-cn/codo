@@ -1,6 +1,6 @@
 <template>
-<div>
-  <Card>
+<div style="height:100%; background: #f8f8f9">
+  <Card style="height:100%">
     <div class="split">
         <Split v-model="offset">
           <div slot="left" class="split-pane">
@@ -505,7 +505,7 @@ export default {
 
 <style>
 .split {
-  height: 750px;
+  height: 760px;
   border: 1px solid #dcdee2;
 }
 .split-pane {

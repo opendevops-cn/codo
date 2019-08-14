@@ -1,6 +1,6 @@
 <template>
-  <div style="background:#eee">
-    <Card style="height:100%; ">
+  <div style="height:100%; background:#eee">
+    <Card style="height:100%;">
       <Row style="margin-top:10px;">
         <Col span="22" offset="1">
           <Alert show-icon>

@@ -24,7 +24,7 @@
       },
       editorHeight:{
         type: Number,
-        default: 700
+        default: 630
       },
     },
     data () {

@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <Card style="height:100%;">
     <p slot="title">系统参数配置</p>
     <Tabs @on-click="handleTabs">
       <TabPane

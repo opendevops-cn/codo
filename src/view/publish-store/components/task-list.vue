@@ -2,9 +2,6 @@
 <div style="height:100%; background: #f8f8f9">
   <Card>
   <Row :gutter="15" style="margin-top: 1px;">
-    <Col :md="24" :lg="7" style="padding: 10px; background: #f8f8f9">
-        <Table size="small" height="755" border :columns="columns" :data="tableData"></Table>
-    </Col>
     <Col :md="24" :lg="17" style="margin-bottom: 0px;">
     <Col style="padding: 10px; background: #f8f8f9">
         <Card title="任务详情">
@@ -19,21 +16,6 @@
                   执行时间：<p type="warning" style="marginRight: 2px; float:right" size ="small">{{checkData.start_time}}</p>
                 </div>
               </Col>
-              <Col span="12">
-                <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
-                  发起人：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.creator}}</p>
-                </div>
-              </Col>
-              <Col span="12">
-                <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
-                  审批人：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.executor}}</p>
-                </div>
-              </Col>
-              <Col span="24">
-                <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
-                  参与人员：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.associated_user}}</p>
-                </div>
-              </Col>
             <Col v-if="list_id">
               <CellGroup>
                 <Cell v-if="checkData.schedule === 'new'" title="审批执行：">
@@ -46,10 +28,6 @@
                   <Button type="error" style="marginRight: 2px; marginLeft: 10px" size="small" slot="extra" @click="handlerStop()">终止全部</Button>
                 </Cell>
               </CellGroup>
-            </Col>
-            <Col v-if="list_id" span="24" style="padding: 10px">
-              <Table v-if="dataArgs.length > 0" height="121" :columns="columnsArgs" :data="dataArgs"  :border="false" :show-header=false  size='small'></Table>
-              <Alert v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
             </Col>
           </Row>
         </Card>
@@ -117,11 +95,15 @@ export default {
     Tables,
     VueWebsocket
   },
+  props: {
+    list_id: {
+       type: [String, Number]
+    }
+  },
   data () {
     return {
       runGroup: '1',
       runHost: '',
-      list_id: '',
       tabs: [],
       optionsDate: {
         disabledDate (date) {
@@ -129,80 +111,7 @@ export default {
         }
       },
       valueDate: '',
-      columns: [
-        {
-          title: 'ID',
-          key: 'list_id',
-          width: 80,
-          align: 'center',
-          sortable: true
-        },
-        {
-          title: '任务名称',
-          key: 'task_name',
-          align: 'center',
-          render: (h, params) => {
-            return h('div', [
-              h(
-                'a',
-                {
-                  on: {
-                    click: () => {
-                      this.getTaskOrderList()
-                      this.getTaskCheckList(params.row.list_id)
-                    }
-                  }
-                },
-                params.row.task_name + '--' + params.row.task_type
-              )
-            ])
-          }
-        },
-        {
-          title: '状态',
-          key: 'handle',
-          width: 100,
-          align: 'center',
-          render: (h, params) => {
-            let status = params.row.status
-            if (status === '0') {
-              return h('div', [
-                h('Tag', { props: { color: 'default' } }, '新建')
-              ])
-            } else if (status === '1') {
-              return h('div', [h('Tag', { props: { color: 'cyan' } }, '等待')])
-            } else if (status === '2') {
-              return h('div', [
-                h('Tag', { props: { color: 'green' } }, '运行中')
-              ])
-            } else if (status === '3') {
-              return h('div', [
-                h('Tag', { props: { color: 'success' } }, '完成')
-              ])
-            } else if (status === '4') {
-              return h('div', [
-                h('Tag', { props: { color: 'error' } }, '错误')
-              ])
-            } else if (status === '5') {
-              return h('div', [
-                h('Tag', { props: { color: '#FFA2D3' } }, '手动')
-              ])
-            } else if (status === '6') {
-              return h('div', [
-                h('Tag', { props: { color: 'magenta' } }, '中止')
-              ])
-            } else if (status === '7') {
-              return h('div', [
-                h('Tag', { props: { color: 'geekblue' } }, '定时')
-              ])
-            } else {
-              return h('div', [
-                h('Tag', { props: { color: 'error' } }, '失败')
-              ])
-            }
-          }
-        }
-      ],
+      //  this.getTaskCheckList(params.row.list_id)
       columns1: [
         {
           title: '优先级',
@@ -603,6 +512,12 @@ export default {
     },
     closeModal () {
       this.over()
+    }
+  },
+  watch:{
+    list_id: function(){
+      this.getTaskCheckList(list_id)
+      this.getPublishDetail()
     }
   },
   mounted () {

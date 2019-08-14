@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height:100%; background: #f8f8f9">
     <Row>
       <Col span="24">
         <div class="search-con">
@@ -12,7 +12,7 @@
       </Col>
       <Col span="6">
         <Card>
-          <Tree :data="treeData" @on-select-change="treeSelect" style="height: 736px"></Tree>
+          <Tree :data="treeData" @on-select-change="treeSelect"></Tree>
         </Card>
       </Col>
 
@@ -551,7 +551,7 @@ export default {
     },
         // 获取用户列表
     getUserList () {
-      getuserlist(1, 10000).then(res => {
+      getuserlist(1, 301).then(res => {
         if (res.data.code === 0) {
           this.allUser = res.data.data
         } else {

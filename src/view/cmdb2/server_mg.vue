@@ -1,14 +1,14 @@
 <template>
 <div>
     <Row :gutter="10">
-    <i-col :md="24" :lg="5" style="margin-bottom: 20px;">
+    <i-col :md="24" :lg="5">
       <Card>
         <Tree ref="tree" :data="tagTreeData"  @on-select-change="handlerTreeChange" getSelectedNodes></Tree>
       </Card>
     </i-col>
-    <i-col :md="24" :lg="19" style="margin-bottom: 10px;">
+    <i-col :md="24" :lg="19">
   <Card>
-        <Alert banner closable >同步Tag树：默认情况下部署CMDB时候settings里面配置了任务系统的数据库信息，主机资产会每天定时同步到Tag树，也可点击手动同步，无需选中主机，同步所有，注意请不要多次点击。</Alert>
+    <Alert banner closable >同步Tag树：默认情况下部署CMDB时候settings里面配置了任务系统的数据库信息，主机资产会每天定时同步到Tag树，也可点击手动同步，无需选中主机，同步所有，注意请不要多次点击。</Alert>
     <div class="search-con search-con-top">
       <Input class="search-input" v-model="searchVal" style="padding:5px;" placeholder="输入关键字全局搜索"/>
       <slot name="new_btn">
@@ -828,7 +828,7 @@ export default {
 
 <style lang="less" scoped>
 .search-con {
-  padding: 10px 0;
+  padding: 3px 0;
   .search {
     &-col {
       display: inline-block;

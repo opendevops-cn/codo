@@ -1,5 +1,5 @@
 <template>
-  <div style="background:#eee">
+  <div style="height:100%; background:#eee">
     <Card style="height:100%;">
       <Row style="margin-top: 5px;">
         <Col span="13">

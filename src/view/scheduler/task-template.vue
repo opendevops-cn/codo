@@ -1,17 +1,17 @@
 <template>
 <div>
-  <Row :gutter="20" style="margin-top: 10px;">
-    <i-col :md="24" :lg="6" style="margin-bottom: 20px;">
-      <Card>
+  <Row :gutter="15">
+    <i-col :md="24" :lg="6">
+      <Card style="height:100%">
         <div class="search-con">
           <Input @on-change="handleClear" clearable placeholder="输入模板名称" class="search-input" v-model="searchValue"/>
           <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
           <Button type="primary"  @click="editModal('post', '新建模板')" class="search-btn" >创建</Button>
         </div>
-          <Table size="small" height="718" border :columns="columns" :data="tableData"></Table>
+          <Table size="small" height="710" border :columns="columns" :data="tableData"></Table>
       </Card>
     </i-col>
-    <i-col :md="24" :lg="18" style="margin-bottom: 20px;">
+    <i-col :md="24" :lg="18">
       <Card shadow>
         <Alert v-if="!editIng1" banner closable type="warning">
           <h3> 使用说明:</h3>

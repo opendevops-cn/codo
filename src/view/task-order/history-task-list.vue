@@ -1,11 +1,11 @@
 <template>
-<div style="background: #f8f8f9">
+<div style="height:100%; background: #f8f8f9">
   <Card>
   <Row :gutter="15" style="margin-top: 1px;">
-    <Col :md="24" :lg="7" style="margin-bottom: 10px; padding: 10px;background: #f8f8f9">
-        <Table size="small" height="770" border :columns="columns" :data="tableData"></Table>
+    <Col :md="24" :lg="7" style="padding: 10px;background: #f8f8f9">
+        <Table size="small" height="755" border :columns="columns" :data="tableData"></Table>
     </Col>
-    <Col :md="24" :lg="17" style="margin-bottom: 10px;">
+    <Col :md="24" :lg="17" style="margin-bottom: 0px;">
     <Col style="padding: 10px; background: #f8f8f9">
         <Card title="任务详情">
             <Row>
@@ -65,7 +65,7 @@
             <tag fade v-if="checkData.hosts_status[h] === '6'" color="magenta"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
             <tag fade v-if="checkData.hosts_status[h] === '7'" color="geekblue"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
             </span>
-            <Table style="margin-top: 10px; "border size="small":columns="columns1" :data="tableData1"></Table>
+            <Table style="margin-top: 10px;" border size="small":columns="columns1" :data="tableData1"></Table>
           </TabPane>
         </Tabs>
       </Col>

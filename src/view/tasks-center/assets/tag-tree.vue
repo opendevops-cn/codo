@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height:100%; background: #f8f8f9">
   <Row :gutter="20">
     <i-col :md="24" :lg="5" style="margin-bottom: 15px;">
       <Card>

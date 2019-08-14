@@ -1,13 +1,15 @@
 <template>
-  <Card>
-    <div class="search-con search-con-top">
-      <Button type="primary" @click="editModal('post', '添加代理')" class="search-btn">添加代理</Button>
-    </div>
-    <Table size="small" height="718" :columns="columns" :data="tableData"></Table>
-    <Modal v-model="modalMap.modalVisible" :title="modalMap.modalTitle" :loading=true :footer-hide=true>
-      <form-group :list="formList" @on-submit-success="handleSubmit"></form-group>
-    </Modal>
-  </Card>
+  <div style="height:100%; background: #f8f8f9">
+    <Card>
+      <div class="search-con search-con-top">
+        <Button type="primary" @click="editModal('post', '添加代理')" class="search-btn">添加代理</Button>
+      </div>
+      <Table size="small" height="718" :columns="columns" :data="tableData"></Table>
+      <Modal v-model="modalMap.modalVisible" :title="modalMap.modalTitle" :loading=true :footer-hide=true>
+        <form-group :list="formList" @on-submit-success="handleSubmit"></form-group>
+      </Modal>
+    </Card>
+  </div>
 </template>
 
 <script>
