@@ -1,0 +1,10 @@
+codo:
+  restart: unless-stopped
+  image: codo_image
+  volumes:
+    - /var/log/nginx/:/var/log/nginx/
+    - /my/nginx/:/etc/nginx/
+    - /sys/fs/cgroup:/sys/fs/cgroup
+  ports:
+    - "80:80"
+    - "443:443"
