@@ -163,49 +163,59 @@ export const routerMap = [{
         ]
     },
     // 项目发布
-    {
-        path: '/publish_project',
-        name: 'publish_project',
-        meta: {
-            icon: 'ios-boat-outline',
-            title: '项目发布'
-        },
-        component: Main,
-        children: [{
-                path: 'publish_list',
-                name: 'publish_list',
-                meta: {
-                    icon: 'ios-stats',
-                    title: '发布列表'
-                },
-                component: () =>
-                    import ('@/view/publish-store/publish-list.vue')
-            },
-            {
-                path: 'project_detail/:project_id',
-                name: 'project_detail',
-                meta: {
-                    hideInMenu: true,
-                    notCache: true,
-                    icon: 'ios-plane',
-                    title: '项目详情'
-                },
-                props: true,
-                component: () =>
-                    import ('@/view/publish-store/publish/detail.vue')
-            },
-            {
-                path: 'create_project',
-                name: 'create_project',
-                meta: {
-                    icon: 'ios-plane',
-                    title: '创建项目'
-                },
-                component: () =>
-                    import ('@/view/publish-store/project-create.vue')
-            }
-        ]
-    },
+    // {
+    //     path: '/publish_project',
+    //     name: 'publish_project',
+    //     meta: {
+    //         icon: 'ios-boat-outline',
+    //         title: '项目发布'
+    //     },
+    //     component: Main,
+    //     children: [{
+    //             path: 'publish_list',
+    //             name: 'publish_list',
+    //             meta: {
+    //                 icon: 'ios-stats',
+    //                 title: '发布列表'
+    //             },
+    //             component: () =>
+    //                 import ('@/view/publish-store/publish-list.vue')
+    //         },
+    //         {
+    //             path: 'project_detail/:project_id',
+    //             name: 'project_detail',
+    //             meta: {
+    //                 hideInMenu: true,
+    //                 notCache: true,
+    //                 icon: 'ios-plane',
+    //                 title: '项目详情'
+    //             },
+    //             props: true,
+    //             component: () =>
+    //                 import ('@/view/publish-store/publish/detail.vue')
+    //         },
+    //         {
+    //             path: 'create_project',
+    //             name: 'create_project',
+    //             meta: {
+    //                 icon: 'ios-plane',
+    //                 title: '创建项目'
+    //             },
+    //             component: () =>
+    //                 import ('@/view/publish-store/project-create.vue')
+    //         },
+    //         {
+    //             path: 'project_conf',
+    //             name: 'project_conf',
+    //             meta: {
+    //                 icon: 'ios-settings',
+    //                 title: '项目配置'
+    //             },
+    //             component: () =>
+    //                 import ('@/view/publish-store/project-conf.vue')
+    //         }
+    //     ]
+    // },
     {
         path: '/cmdb',
         name: 'cmdb',

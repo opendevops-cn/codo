@@ -12,7 +12,7 @@
            <br>
         </Col>
         <Col span="16" offset="1">
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="70">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="90">
           <FormItem label="目标标签" prop="tag" >
             <Select v-model="formValidate.tag" filterable  multiple placeholder="请选择关联的标签"  @on-change="handleSelect(formValidate.tag)">
               <Option v-for="item in allTagList" :value="item.tag_name" :key="item.id" >{{ item.tag_name }}</Option>

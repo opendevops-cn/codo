@@ -1,5 +1,5 @@
 <template>
-  <div style="height:100%; background:#eee">
+  <div style="height:100%">
     <Card>
       <Row style="margin-top:10px;">
         <Col span="22" offset="1">
@@ -13,13 +13,13 @@
            </Steps>
            <br>
         </Col>
-        <Col span="20" offset="1">
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="70">
+        <Col span="22" offset="1">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="85">
           <FormItem label="项目名称" prop="project_name" >
              <Input type="text" v-model="formValidate.project_name"  :maxlength=100 placeholder="请输入项目名称"></Input>
           </FormItem>
           <FormItem label="项目管理">
-            <div id="app">
+            <div>
               <treeselect v-model="formValidate.pm" :multiple="true" :disable-branch-nodes="true" :limit="3" search-nested :options="treeData"  placeholder="选择项目的PM，创建者自动加入"/>
             </div>
           </FormItem>
@@ -43,8 +43,8 @@
             </div>
           </FormItem>
            </Row>
-           <FormItem label="添加环境">
-            <Select v-model="formValidate.env_list" filterable multiple placeholder="发布到额外的环境" >
+           <FormItem label="选择流程" prop="env_list">
+            <Select v-model="formValidate.env_list" filterable placeholder="选择发布的流程" >
               <Option v-for="item in envList" :value="item" :key="item" >{{ item }}</Option>
             </Select>
           </FormItem>
@@ -64,8 +64,6 @@
           </FormItem>
         </Form>
         </Col>
-        <Col span="3" offset="1">
-        </Col>
       </Row>
     </Card>
   </div>
@@ -77,12 +75,11 @@ import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { getUsertree } from '@/api/user'
 import { projectPublish } from '@/api/task-other'
 export default {
-   components: { Treeselect },
+  components: { Treeselect },
   data() {
     return {
       //
-      envList: ['性能环境', '沙箱环境'],
-      // allUser: [],
+      envList: ['项目信息-项目开发-测试环境-预发布环境-任务审核-灰度环境-正式环境','项目信息-项目开发-测试环境-性能环境-预发布环境-沙箱环境-任务审核-灰度环境-正式环境'],
       treeData: [],
       btn_loading: false,
       optionsDate: {
@@ -98,13 +95,14 @@ export default {
         tester: [],
         dba: [],
         other_user:[],
-        env_list: [],
+        env_list: '项目信息-项目开发-测试环境-预发布环境-任务审核-灰度环境-正式环境',
         start_time: ""
         // env_list: ['测试环境', '集成测试', '性能环境', '预发环境', '正式环境'],
       },
       ruleValidate: {
         project_name: [ {required: true, message: "项目名不能为空", trigger: "blur"}],
-        start_time: [{ required: true, type: 'date', message: 'Please select the date', trigger: 'change'}],
+        start_time: [{ required: true, type: 'date', message: '请选择时间', trigger: 'change'}],
+        env_list: [{ required: true,  message: '请选择发布的流程，不能为空', trigger: 'blur'}],
       }
     };
   },

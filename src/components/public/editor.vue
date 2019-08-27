@@ -50,10 +50,10 @@
         editor.completers = [staticWordCompleter]
         editor.setOptions({
           enableBasicAutocompletion: true,
-          enableLiveAutocompletion: true
+          enableLiveAutocompletion: true,
         })
         editor.$blockScrolling = Infinity
-              editor.setFontSize(14)
+        editor.setFontSize(14)
         editor.setOption('enableEmmet', true)
         editor.getSession().setMode(`ace/mode/${this.mode_type}`)
         this.theme = this.read ? 'xcode' : 'terminal' 

@@ -14,15 +14,15 @@
 
       <div v-if="run_env === 'dev'">
         <ButtonGroup style="margin-bottom:15px;  margin-top:15px">
-          <Button type="error" @click="handlerSelectRepo()" >保存选择应用</Button>
-          <Button type="info" @click="handlerCheckCI()" >查看持续集成</Button>
+          <Button type="error"   @click="handlerSelectRepo()" >保存选择应用</Button>
+          <Button type="info"    @click="handlerCheckCI()" >查看持续集成</Button>
           <Button type="success" @click="handlerCheckSubmitTest()">准备发布测试</Button>
         </ButtonGroup>
 
         <Divider style="margin-bottom:20px; margin-top:10px"/>
       
           <Row style="margin-bottom:10px" v-if="projectInfo.developers_admin">
-            <div  v-if="selectCheckCI">
+            <div v-if="selectCheckCI">
               <div v-for="repo_info in repo_info_list">
               <Row style="margin-bottom:15px" :key="`${_uid}_${repo_info.id}`">
                 <Col span="12">
@@ -40,18 +40,19 @@
 
             <div v-else>
                 <Row style="margin-bottom:10px">
-                    <Col span="12" ><b>应用地址</b></Col>
-                    <Col span="7" offset="1"><b>发布标签</b></Col>
+                    <Col span="8" ><b>应用地址</b></Col>
+                    <Col span="5" offset="1"><b>发布标签</b></Col>
+                    <Col span="6" offset="1"><b>数据库更新</b></Col>
                     <Col span="1"  offset="1"><b>优先级</b></Col>
                 </Row>
 
                 <div v-for="repo_info in repo_info_list">
                   <Row style="margin-bottom:15px" :key="`${_uid}_${repo_info.id}`">
-                    <Col span="12">
+                    <Col span="8">
                         <Input type="text" v-model="repo_info.ssh_url_to_repo" readonly placeholder="应用"/>
                     </Col>
                     <Col span="1" style="text-align: center">-</Col>
-                    <Col  span="7">
+                    <Col  span="5">
                       <Input v-if="!repo_info.project_id"  v-model="repo_info.project_tag" type="text" :key="`${_uid}_${repo_info.id}`" clearable :maxlength="50" placeholder="输入提测标签"/>
                       <Select v-else v-model="repo_info.project_tag" :key="`${_uid}_${repo_info.id}`"
                         @click.native="getCodeRepoTags(repo_info.git_url, repo_info.project_id)" placeholder="选择提测的标签">
@@ -59,18 +60,21 @@
                     </Select>
                     </Col>
                     <Col span="1" style="text-align: center">-</Col>
-                    <Col span="2">
+                    <Col span="6" style="text-align: center"> 
+                      <Input type="text" v-model="repo_info.project_sql" :maxlength="80" placeholder="输入数据库语句的地址"/>
+                    </Col>
+                    <Col span="1" style="text-align: center">-</Col>
+                    <Col span="1" style="text-align: center">
                         <InputNumber :max="20" :min="1" v-model="repo_info.project_level" placeholder="优先级，数字越小优先级越高"></InputNumber>
                     </Col>
-                    <Col span="1" style="text-align: center">
+                    <!-- <Col span="1" style="text-align: center">
                       <Button style="float:right"  @click="handlerShowSql(repo_info.id)" :key="`${_uid}_${repo_info.id}`">
                        <Icon type="ios-create"/>SQL</Button>
-                    </Col>
-                    <br><br>
+                    </Col> -->
+                    <!-- <br><br>
                     <Col span="24" v-if="repo_info.sql_true">
-                      <!-- {{repo_info.project_sql}} -->
                       <editor v-model="repo_info.project_sql" @init="editorInit" :mode_type="mode_type" :read="editor.read" :key="`${_uid}_${repo_info.id}`" ></editor>
-                    </Col>
+                    </Col> -->
                   </Row>                
                 </div>
 

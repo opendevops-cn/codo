@@ -1,84 +1,71 @@
 <template>
-<div>
+<div style="height:100%; background: #f8f8f9">
   <Card>
-  <Row :gutter="15" class="task-con">
-    
-    <Col v-if="task_type !== 'readonly1' && task_type !== 'normal1'" style="padding: 10px; background: #f8f8f9">
+  <Row :gutter="15" style="margin-top: 1px;">
+    <Col :md="24" :lg="7" style="padding: 10px;background: #f8f8f9">
+        <Table size="small" height="755" border :columns="columns" :data="tableData"></Table>
+    </Col>
+    <Col :md="24" :lg="17" style="margin-bottom: 0px;">
+    <Col style="padding: 10px; background: #f8f8f9">
         <Card title="任务详情">
             <Row>
               <Col span="12">
-                <div class="detail-col">
-                  提交时间：<p color="warning"  class="detail-col-1" size ="small">{{checkData.create_time}}</p>
+                 <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
+                  提交时间：<p color="warning" style="float:right" size ="small">{{checkData.create_time}}</p>
                 </div>
               </Col>
               <Col span="12">
-                 <div class="detail-col">
-                  执行时间：<p type="warning" class="detail-col-1" size ="small">{{checkData.start_time}}</p>
+                 <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
+                  执行时间：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.start_time}}</p>
                 </div>
               </Col>
               <Col span="12">
-                <div class="detail-col">
-                  发起人：<p type="warning" class="detail-col-1" size ="small">{{checkData.creator}}</p>
-                </div>
+              <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
+                发起人：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.creator}}</p>
+              </div>
               </Col>
               <Col span="12">
-                <div class="detail-col">
-                  审批人：<p type="warning" class="detail-col-1" size ="small">{{checkData.executor}}</p>
-                </div>
+               <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
+                审批人：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.executor}}</p>
+              </div>
               </Col>
               <Col span="24">
-                <div class="detail-col">
-                  参与人员：<p type="warning" class="detail-col-1" size ="small">{{checkData.associated_user}}</p>
-                </div>
-              </Col>
-              <div v-if="list_id && task_type === 'normal'">
-                <div v-if="checkData.schedule === 'new'" >
-                  <Col span="24">
-                    <div class="detail-col">
-                      审批执行：
-                      <Button v-if="checkData.schedule === 'new' && checkData.approval_button" type="success" size ="small" class="detail-col-1"
-                        @click.native="handlerApproval()">审批</Button>
-                    </div>
-                  </Col>
-                </div>
-                <Col span="24">
-                  <div class="detail-col">
-                    审批干预：
-                    <span  slot="extra" v-if="checkData.hand_list" v-for="item, index in checkData.hand_list">
-                      <Button type="info" style="marginRight: 10px" size ="small" @click.native="handlerHand(item)">{{item}}</Button>
-                    </span>
-                    <Button type="error" class="detail-col-1" size="small" @click.native="handlerStop()">终止全部</Button>
-                  </div>
-                </Col>
+              <div style="margin-top: 10px; marginLeft: 16px; marginRight: 16px">
+                参与人员：<p type="warning" style="marginRight: 2px;float:right" size ="small">{{checkData.associated_user}}</p>
               </div>
-              <Col v-if="list_id" span="24" style="padding: 10px">
-                <div v-if="task_type === 'normal'">
-                  <Table v-if="dataArgs.length > 0" height="121" :columns="columnsArgs" :data="dataArgs" :border="false" :show-header=false  size='small'></Table>
-                  <Alert v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
-                </div>
-                <div  v-if="task_type === 'readonly2'">
-                  <Table v-if="dataArgs.length > 0" :columns="columnsArgs" :data="dataArgs" :border="false" :show-header=false  size='small'></Table>
-                  <Alert v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
-                </div>
               </Col>
+            <Col v-if="list_id">
+              <CellGroup>
+                <Cell v-if="checkData.schedule === 'new'" title="审批执行：">
+                  <Button v-if="checkData.schedule === 'new' && checkData.approval_button" type="success" style="marginRight: 2px" size ="small" slot="extra" @click="handlerApproval">审批</Button>
+                </Cell>
+              </CellGroup>
+            </Col>
+            <Col v-if="list_id" span="24" style="padding: 10px">
+              <Table v-if="dataArgs.length > 0" :columns="columnsArgs" :data="dataArgs"  :border="false" :show-header=false  size='small'></Table>
+              <Alert  v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
+            </Col>
           </Row>
         </Card>
       </Col>
-
       <Col style="padding: 10px; background: #f8f8f9">
        <Tabs v-model="runGroup" @on-click="handleTabs">
-          <TabPane v-for="(item, index) in tabs" :key="`${_uid}_${index}`" :label="item.label" :icon="item.icon" :name="item.name">
+          <TabPane v-for="(item, index) in tabs"
+            :key="`${_uid}_${index}`"
+            :label="item.label"
+            :icon="item.icon"
+            :name="item.name">
             <span style="marginRight: 2px;marginLeft: 2px;" v-for="h in checkData.this_host_list">
-            <tag fade v-if="checkData.hosts_status[h] === '0'" color="default" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
-            <tag fade v-if="checkData.hosts_status[h] === '1'" color="cyan" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
-            <tag fade v-if="checkData.hosts_status[h] === '2'" color="green" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
-            <tag fade v-if="checkData.hosts_status[h] === '3'" color="success" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
-            <tag fade v-if="checkData.hosts_status[h] === '4'" color="error" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
-            <tag fade v-if="checkData.hosts_status[h] === '5'" color="#FFA2D3" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
-            <tag fade v-if="checkData.hosts_status[h] === '6'" color="magenta" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
-            <tag fade v-if="checkData.hosts_status[h] === '7'" color="geekblue" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
+            <tag fade v-if="checkData.hosts_status[h] === '0'" color="default"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
+            <tag fade v-if="checkData.hosts_status[h] === '1'" color="cyan"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
+            <tag fade v-if="checkData.hosts_status[h] === '2'" color="green"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
+            <tag fade v-if="checkData.hosts_status[h] === '3'" color="success"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
+            <tag fade v-if="checkData.hosts_status[h] === '4'" color="error" ><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
+            <tag fade v-if="checkData.hosts_status[h] === '5'" color="#FFA2D3"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
+            <tag fade v-if="checkData.hosts_status[h] === '6'" color="magenta"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
+            <tag fade v-if="checkData.hosts_status[h] === '7'" color="geekblue"><p @click="handleGetInfo(runGroup,h)">{{h}}</p></tag>
             </span>
-            <Table style="margin-top: 10px; "border size="small":columns="columns1" :data="tableData1"></Table>
+            <Table style="margin-top: 10px;" border size="small":columns="columns1" :data="tableData1"></Table>
           </TabPane>
         </Tabs>
       </Col>
@@ -93,8 +80,17 @@
         <Button type="success" style="marginRight: 2px; marginLeft: 50px"  @click="handlerApprovalSubmit()">选择定时执行时间</Button>
       </div>
     </Modal>
+    <!-- <Modal v-model="logModal" :footer-hide=true :scrollable=true :mask-closable="false" width='750' title="任务日志" @on-cancel="closeModal">
+       <div style="background-color: #000000">
+        <Row  v-for="log in logInfo">
+          <Col span="23">
+            <p style="color: #FFFFFF">{{log}}</p>
+          </Col>
+        </Row>
+      </div>
+    </Modal> -->
     <Drawer v-model="logModal" :closable="false"  style="background-color: #f8f8f9" width="820" @on-close="closeModal">
-      <h2 style="color: #000000; marginLeft: 10px">任务日志：</h2>
+       <h2 style="color: #000000; marginLeft: 10px">任务日志：</h2>
       <div style="padding: 10px">
         <Row  v-for="log in logInfo">
           <Col span="24">
@@ -103,16 +99,15 @@
         </Row>
       </div>
     </Drawer>
-  </div>
+</div>
 </template>
 
 <script>
-// 只读详情/只读简单/读写正常
 import FormGroup from '_c/form-group'
 import Tables from '_c/tables'
 import VueWebsocket from 'vue-websocket'
 import {
-  getTaskOrderlist,
+  getTaskCheckHistorylist,
   getTaskChecklist,
   getDetailslist,
   operationOrderlist,
@@ -125,20 +120,11 @@ export default {
     Tables,
     VueWebsocket
   },
-  props: {
-    list_id: {
-       type: [String, Number]
-    },
-    // 只读简单 readonly1，只读详情 readonly2，读写正常 normal 读写简单 normal1
-    task_type: {
-       type: String,
-       default: 'readonly1'
-    }
-  },
   data () {
     return {
       runGroup: '1',
       runHost: '',
+      list_id: '',
       tabs: [],
       optionsDate: {
         disabledDate (date) {
@@ -146,7 +132,84 @@ export default {
         }
       },
       valueDate: '',
-      //  this.getTaskCheckList(params.row.list_id)
+      columns: [
+        {
+          title: 'ID',
+          key: 'list_id',
+          width: 80,
+          align: 'center',
+          sortable: true
+        },
+        {
+          title: '任务名称',
+          key: 'task_name',
+          align: 'center',
+          render: (h, params) => {
+            return h('div', [
+              h(
+                'a',
+                {
+                  on: {
+                    click: () => {
+                      this.getTaskOrderList()
+                      this.getTaskCheckList(params.row.list_id)
+                    }
+                  }
+                },
+                params.row.task_name + '--' + params.row.task_type
+              )
+            ])
+          }
+        },
+        {
+          title: '状态',
+          key: 'handle',
+          width: 100,
+          align: 'center',
+          render: (h, params) => {
+            let status = params.row.status
+            if (status === '0') {
+              return h('div', [
+                h('Tag', { props: { color: 'default' } }, '新建')
+              ])
+            } else if (status === '1') {
+              return h('div', [h('Tag', { props: { color: 'cyan' } }, '等待')])
+            } else if (status === '2') {
+              return h('div', [
+                h('Tag', { props: { color: 'green' } }, '运行中')
+              ])
+            } else if (status === '3') {
+              return h('div', [
+                h('Tag', { props: { color: 'success' } }, '完成')
+              ])
+            } else if (status === '4') {
+              return h('div', [
+                h('Tag', { props: { color: 'error' } }, '错误')
+              ])
+            } else if (params.row.schedule == 'OK') {
+              return h('div', [
+                h('Tag', { props: { color: 'success' } }, '完成')
+              ])
+            } else if (status === '5') {
+              return h('div', [
+                h('Tag', { props: { color: '#FFA2D3' } }, '手动')
+              ])
+            } else if (status === '6') {
+              return h('div', [
+                h('Tag', { props: { color: 'magenta' } }, '中止')
+              ])
+            } else if (status === '7') {
+              return h('div', [
+                h('Tag', { props: { color: 'geekblue' } }, '定时')
+              ])
+            } else {
+              return h('div', [
+                h('Tag', { props: { color: 'error' } }, '失败')
+              ])
+            }
+          }
+        }
+      ],
       columns1: [
         {
           title: '优先级',
@@ -218,7 +281,7 @@ export default {
         {
           title: '操作',
           key: 'handle',
-          width: 180,
+          width: 100,
           align: 'center',
           render: (h, params) => {
             return h('div', [
@@ -245,78 +308,6 @@ export default {
                 },
                 '日志'
               ),
-              params.row.task_status === '5' && (this.task_type === 'normal'||this.task_type === 'normal1')  &&
-                h(
-                  'Button',
-                  {
-                    props: {
-                      size: 'small'
-                    },
-                    style: {
-                      marginRight: '4px'
-                    },
-                    on: {
-                      click: () => {
-                        this.handlerHandOne(
-                          params.row.list_id,
-                          params.row.task_group,
-                          params.row.task_level,
-                          params.row.exec_ip,
-                          params.row.sched_id
-                        )
-                      }
-                    }
-                  },
-                  '执行'
-                ),
-              params.row.task_status !== '5' && (this.task_type === 'normal'||this.task_type === 'normal1') &&
-                h(
-                  'Button',
-                  {
-                    props: {
-                      type: 'warning',
-                      size: 'small'
-                    },
-                    style: {
-                      marginRight: '4px'
-                    },
-                    on: {
-                      click: () => {
-                        this.hangdleRestart(
-                          params.row.list_id,
-                          params.row.task_group,
-                          params.row.task_level,
-                          params.row.exec_ip
-                        )
-                      }
-                    }
-                  },
-                  '重做'
-                ),
-              (this.task_type === 'normal'||this.task_type === 'normal1')  && 
-              h(
-                'Button',
-                {
-                  props: {
-                    type: 'error',
-                    size: 'small'
-                  },
-                  style: {
-                    marginRight: '0px'
-                  },
-                  on: {
-                    click: () => {
-                      this.hangdleStopOne(
-                        params.row.list_id,
-                        params.row.task_group,
-                        params.row.task_level,
-                        params.row.exec_ip
-                      )
-                    }
-                  }
-                },
-                '终止'
-              )
             ])
           }
         }
@@ -348,11 +339,12 @@ export default {
   },
   methods: {
     getTaskOrderList () {
-      getTaskOrderlist().then(res => {
+      getTaskCheckHistorylist().then(res => {
         if (res.data.code === 0) {
           this.tableData = res.data.data
           if (!this.list_id && res.data.list_id) {
             this.list_id = res.data.list_id
+            this.getTaskCheckList(this.list_id)
           }
         } else {
           this.$Message.error(`${res.data.msg}`)
@@ -365,7 +357,7 @@ export default {
           let newTabs = []
           let resData = res.data.data
           this.checkData = resData
-          // this.list_id = resData.list_id
+          this.list_id = resData.list_id
           this.checkArgs = resData.new_args
           this.runGroup = resData.run_group
           this.tableData1 = resData.scheduler_list
@@ -402,16 +394,18 @@ export default {
       if (!this.valueDate) {
         this.$Message.error('执行时间不能为空')
       }
-      operationOrderlist({ list_id: this.list_id, start_time: this.valueDate }, 'patch'
-          ).then(res => {
-            if (res.data.code === 0) {
-              this.getTaskOrderList()
-              this.getTaskCheckList(this.list_id)
-              this.modalMap.modalVisible = false
-            } else {
-              this.$Message.error(`${res.data.msg}`)
-            }
-        })
+      operationOrderlist(
+        { list_id: this.list_id, start_time: this.valueDate },
+        'patch'
+      ).then(res => {
+        if (res.data.code === 0) {
+          this.getTaskOrderList()
+          this.getTaskCheckList(this.list_id)
+          this.modalMap.modalVisible = false
+        } else {
+          this.$Message.error(`${res.data.msg}`)
+        }
+      })
     },
     // 审批干预
     handlerHand (value) {
@@ -518,7 +512,6 @@ export default {
         this.logInfo = []
       }
       // let ws = new WebSocket("ws://172.16.0.223:8900/v2/task/ws_log/");
-      // console.log(logWS)
       let ws = new WebSocket(logWS)
       ws.onopen = () => {
         // Web Socket 已连接上，使用 send() 方法发送数据
@@ -547,30 +540,19 @@ export default {
       this.over()
     }
   },
-  watch:{
-    list_id: function(){
-      console.log(this.list_id)
-      this.getTaskCheckList(this.list_id)
-    }
-  },
   mounted () {
-    this.getTaskCheckList(this.list_id)
+    this.getTaskOrderList()
   }
 }
 </script>
+
 <style lang="less" scoped>
-.task-con {
+.search-con {
   padding: 0px 0;
-  margin-top: 1px;
-  .detail {
+  .search {
     &-col {
-      margin-top: 10px; 
-      margin-left: 16px; 
-      margin-right: 16px;
-      &-1 {
-        margin-right: 2px;
-        float:right
-      }
+      display: inline-block;
+      width: 160px;
     }
     &-input {
       display: inline-block;

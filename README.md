@@ -21,7 +21,7 @@ npm run build
 
 ### Docker 方式部署
 
-**首先下载最新的releases包解 静态文件的最终路径为 `/var/www/codo/`**
+**修改`CODO_VER`release为最新的版本，静态文件的最终路径为 `/var/www/codo/`**
 
 ```bash
 echo -e "\033[32m [INFO]: codo(项目前端) Start install. \033[0m"
@@ -38,8 +38,9 @@ else
 fi
 ```
 
-**放置`nginx`配置文件，如果想使用https请自行修改nginx的配置文件，也可以参考项目下的`nginx_ops.conf`文件**
-**如果需要修改前端的访问域名可以直接修改配置文件中的server_name，proxy_pass对应的地址为网关地址，一定要和网关地址端口进行对应**
+**放置`nginx`配置文件，如果想使用https请自行修改nginx的配置文件，也可以参考项目下的`nginx_ops.conf`文件。**
+
+**如果需要修改前端的访问域名可以直接修改配置文件中的server_name，proxy_pass对应的地址为网关地址，一定要和网关地址端口进行对应。**
 
 ```bash
 mkdir -p /my/nginx/conf.d/
