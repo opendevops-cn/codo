@@ -76,19 +76,30 @@ export const operationTemp = (data) => {
 }
 
 export const deleteTemp = (data) => {
+    return axios.request({
+        url: '/task/v2/task_layout/temp/',
+        method: 'delete',
+        data
+    })
+}
+
+// 获取模板详情
+export const getDetailslist = (value) => {
         return axios.request({
-            url: '/task/v2/task_layout/temp/',
-            method: 'delete',
-            data
+            url: '/task/v2/task_layout/details/',
+            method: 'get',
+            params: {
+                temp_id: value
+            }
         })
     }
-    // 获取模板详情
-export const getDetailslist = (value) => {
+    // 获取模板参数
+export const getTempargs = (temp_id) => {
     return axios.request({
-        url: '/task/v2/task_layout/details/',
+        url: '/task/v2/task_layout/temp/args/',
         method: 'get',
         params: {
-            temp_id: value
+            temp_id
         }
     })
 }

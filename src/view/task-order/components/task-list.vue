@@ -434,8 +434,7 @@ export default {
       if (confirm('这样会结束掉整个任务，你确定要这样操作吗？')) {
         operationOrderlist({ list_id: this.list_id }, 'put').then(res => {
           if (res.data.code === 0) {
-            this.list_id = ''
-            this.getTaskOrderList()
+            this.$emit('flushOrderList')
           } else {
             this.$Message.error(`${res.data.msg}`)
           }

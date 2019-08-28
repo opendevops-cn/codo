@@ -9,7 +9,7 @@
         </Col>
 
         <Col :md="24" :lg="17" style="margin-bottom: 0px;">
-          <div v-if="list_id" ><task-list :list_id="list_id" :task_type="task_type"></task-list></div>
+          <div v-if="list_id" ><task-list :list_id="list_id" :task_type="task_type" @flushOrderList="handlerFlush($event)"></task-list></div>
         </Col>
       </Row>
 
@@ -105,7 +105,7 @@ export default {
     }
   },
   methods: {
-    getTaskOrderList () {
+    getTaskOrderList() {
       getTaskOrderlist().then(res => {
         if (res.data.code === 0) {
           this.tableData = res.data.data
@@ -117,6 +117,10 @@ export default {
         }
       })
     },
+    handlerFlush() {
+      this.list_id = null
+      this.getTaskOrderList()
+    }
   },
   mounted () {
     this.getTaskOrderList()
