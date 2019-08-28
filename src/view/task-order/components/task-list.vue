@@ -549,7 +549,7 @@ export default {
   },
   watch:{
     list_id: function(){
-      console.log(this.list_id)
+      // console.log(this.list_id)
       this.getTaskCheckList(this.list_id)
     }
   },

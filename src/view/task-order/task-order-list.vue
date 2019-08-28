@@ -48,6 +48,7 @@ export default {
                   on: {
                     click: () => {
                       this.getTaskOrderList()
+                      this.list_id = params.row ? params.row.list_id : ''
                     }
                   }
                 },
