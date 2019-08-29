@@ -60,7 +60,7 @@ export default {
         {
           title: '状态',
           key: 'handle',
-          width: 100,
+          width: 85,
           align: 'center',
           render: (h, params) => {
             let status = params.row.status
@@ -72,7 +72,7 @@ export default {
               return h('div', [h('Tag', { props: { color: 'cyan' } }, '等待')])
             } else if (status === '2') {
               return h('div', [
-                h('Tag', { props: { color: 'green' } }, '运行中')
+                h('Tag', { props: { color: 'green' } }, '运行')
               ])
             } else if (status === '3') {
               return h('div', [

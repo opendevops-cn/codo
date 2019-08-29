@@ -9,7 +9,7 @@
           >
             <tables
               ref="tables"
-              :height="720"
+              :height="680"
               editable
               searchable
               search-place="top"
@@ -35,7 +35,7 @@
           >
             <tables
               ref="tables"
-              :height="720"
+              :height="680"
               editable
               searchable
               search-place="top"

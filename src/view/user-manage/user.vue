@@ -1,6 +1,6 @@
 <template>
-  <div style="height:100%; background: #f8f8f9">
-    <Card style="height:100%">
+  <div style="height:100%">
+    <Card>
       <tables ref="tables" editable searchable search-place="top" v-model="tableData" :columns="columns"
        @on-delete="handleDelete" @on-save-edit="handleInput"
        @on-search-table="handleSearchTable"
