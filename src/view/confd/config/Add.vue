@@ -10,9 +10,12 @@
           <RadioGroup v-model="formData.environment">
               <Radio label="dev"></Radio>
               <Radio label="qa"></Radio>
+              <Radio label="sit"></Radio>
               <Radio label="staging"></Radio>
-              <Radio label="sandbox"></Radio>
+              <Radio label="per"></Radio>
               <Radio label="pre"></Radio>
+              <Radio label="sandbox"></Radio>
+              <Radio label="gray"></Radio>
               <Radio label="release"></Radio>
               <Radio label="hidden"></Radio>
               <Radio label="public"></Radio>
@@ -65,7 +68,8 @@ export default {
         service: [{ required: true, message: '服务名称不能为空', trigger: 'blur' }],
         filename: [{ required: true, message: '文件名称不能为空', trigger: 'blur' }],
         environment: [{ required: true, message: '环境必须要勾选', trigger: 'blur' }],
-        content: [{ required: true, message: '内容不能为空', trigger: 'blur' }]
+        content: [{ required: true, message: '内容不能为空', trigger: 'blur' }, 
+                  { type: 'string', max: 60000, message: '不能超过60000个字节', trigger: 'blur' }]
       }
     }
   },

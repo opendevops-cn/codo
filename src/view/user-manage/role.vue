@@ -1,5 +1,5 @@
 <template>
-<div>
+<div style="height:100%">
   <Card>
     <div class="split">
         <Split v-model="offset">
@@ -443,52 +443,48 @@ export default {
         }
       })
     },
-    handleChange (newTargetKeys) {
+    handleChange (newTargetKeys, direction, moveKeys) {
       this.targetKeys = newTargetKeys
-      if (this.editTransfer === 'user') {
-        operationRoleUser(
-          { role_id: this.role_id, user_list: this.targetKeys },
-          'post'
-        ).then(res => {
-          if (res.data.code === 0) {
-            this.$Message.success(`${res.data.msg}`)
-          } else {
-            this.$Message.error(`${res.data.msg}`)
-          }
-        })
+      let methodType = "post"
+      if (direction === "left") {
+          methodType = "delete"
+      }
+      if (this.editTransfer === 'user') {  
+        operationRoleUser( { role_id: this.role_id, user_list: moveKeys }, methodType
+          ).then(res => {
+            if (res.data.code === 0) {
+              this.$Message.success(`${res.data.msg}`)
+            } else {
+              this.$Message.error(`${res.data.msg}`)
+            }
+          })
       } else if (this.editTransfer === 'component') {
-        operationRoleComponent(
-          { role_id: this.role_id, comp_list: this.targetKeys },
-          'post'
-        ).then(res => {
-          if (res.data.code === 0) {
-            this.$Message.success(`${res.data.msg}`)
-          } else {
-            this.$Message.error(`${res.data.msg}`)
-          }
-        })
+        operationRoleComponent( { role_id: this.role_id, comp_list: moveKeys }, methodType
+          ).then(res => {
+            if (res.data.code === 0) {
+              this.$Message.success(`${res.data.msg}`)
+            } else {
+              this.$Message.error(`${res.data.msg}`)
+            }
+          })
       } else if (this.editTransfer === 'menu') {
-        operationRoleMenu(
-          { role_id: this.role_id, menu_list: this.targetKeys },
-          'post'
+        operationRoleMenu({ role_id: this.role_id, menu_list: moveKeys}, methodType
         ).then(res => {
-          if (res.data.code === 0) {
-            this.$Message.success(`${res.data.msg}`)
-          } else {
-            this.$Message.error(`${res.data.msg}`)
-          }
-        })
+            if (res.data.code === 0) {
+              this.$Message.success(`${res.data.msg}`)
+            } else {
+              this.$Message.error(`${res.data.msg}`)
+            }
+          })
       } else if (this.editTransfer === 'func') {
-        operationRoleFunc(
-          { role_id: this.role_id, func_list: this.targetKeys },
-          'post'
-        ).then(res => {
-          if (res.data.code === 0) {
-            this.$Message.success(`${res.data.msg}`)
-          } else {
-            this.$Message.error(`${res.data.msg}`)
-          }
-        })
+        operationRoleFunc( { role_id: this.role_id, func_list: moveKeys }, methodType
+          ).then(res => {
+            if (res.data.code === 0) {
+              this.$Message.success(`${res.data.msg}`)
+            } else {
+              this.$Message.error(`${res.data.msg}`)
+            }
+          })
       } else {
         this.$Message.error('你在修改个锤子呀')
       }
@@ -505,7 +501,7 @@ export default {
 
 <style>
 .split {
-  height: 750px;
+  height: 760px;
   border: 1px solid #dcdee2;
 }
 .split-pane {

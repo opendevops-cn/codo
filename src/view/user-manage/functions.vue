@@ -1,23 +1,29 @@
 <template>
-<Card>
-    <div class="search-con search-con-top">
-      <Select v-model="searchKey" class="search-col">
-        <Option v-for="item in columns" v-if="item.key !== 'handle' && item.key !== 'status' && item.key !== ''" :value="item.key" :key="`search-col-${item.key}`">{{ item.title }}</Option>
-      </Select>
-      <Input @on-change="handleClear" clearable placeholder="输入关键字搜索" class="search-input" v-model="searchValue"/>
-      <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
-      <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新建权限')" class="search-btn" >新建</Button></slot>
-    </div>
-  <Table size="small" ref="selection" border :columns="columns" :data="tableData"></Table>
-  <div style="margin: 10px;overflow: hidden">
-    <div style="float: left;">
-      <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[10,15,25,35,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize"></Page>
-    </div>
+  <div style="height:100%">
+    <Card>
+
+      <div class="search-con search-con-top">
+        <Select v-model="searchKey" class="search-col">
+          <Option v-for="item in columns" v-if="item.key !== 'handle' && item.key !== 'status' && item.key !== ''" :value="item.key" :key="`search-col-${item.key}`">{{ item.title }}</Option>
+        </Select>
+        <Input @on-change="handleClear" clearable placeholder="输入关键字搜索" class="search-input" v-model="searchValue"/>
+        <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
+        <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新建权限')" class="search-btn" >新建</Button></slot>
+      </div>
+
+      <Table size="small" ref="selection" border :columns="columns" :data="tableData"></Table>
+      
+      <div style="margin: 10px;overflow: hidden">
+        <div style="float: left;">
+          <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[10,15,25,35,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize"></Page>
+        </div>
+      </div>
+
+      <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
+        <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
+      </Modal>
+    </Card>
   </div>
-  <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
-    <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
-  </Modal>
-</Card>
 </template>
 
 <script>

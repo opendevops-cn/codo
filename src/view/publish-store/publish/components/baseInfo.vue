@@ -1,120 +1,153 @@
 <template>
-    <div>
-      <div style="margin-top:10px;margin-bottom:10px">
-        <Row>
-          <Col span="3">
-            <p> <b>任务ID：</b> </p>
-          </Col>
-          <Col span="9">
-            <p> {{row.id}} </p>
-          </Col>
-
-
-          <Col span="3">
-            <p> <b>任务状态：</b>  </p>
-          </Col>
-          <Col span="9">
-            <p v-if="row.status == 0" > <Tag>待执行</Tag> </p>
-            <p v-else-if="row.status == 11 || row.status== 31" > <Tag color="blue">执行中</Tag> </p>
-            <p v-else-if="row.status == 12" > <Tag color="warning">待审核</Tag> </p>
-            <p v-else-if="row.status == 2" > <Tag color="warning">审核中</Tag> </p>
-            <p v-else-if="row.status == 32" > <Tag color="green">完成</Tag> </p>
-            <p v-else> <Tag color="red">失败</Tag> </p>
-          </Col>
-          
-        </Row>
-
-        <Row>
-          <!-- <Col span="3">
-            <p> <b>环境：</b> </p>
-          </Col>
-          <Col span="9">
-            <p v-if="row.env == 'dev'" > <Tag color="gray">开发</Tag> </p>
-            <p v-else-if="row.env == 'qa'" > <Tag color="gray">测试</Tag> </p>
-            <p v-else-if="row.env == 'staging'" > <Tag color="gray">预正式</Tag> </p>
-            <p v-else-if="row.env == 'release'" > <Tag color="primary">正式</Tag> </p>
-            <p v-else> <Tag color="red">未知</Tag> </p>
-          </Col> -->
-          <Col span="3">
-            <p> <b>项目名称：</b>  </p>
-          </Col>
-          <Col span="9">
-            <p> {{row.project}} </p>
-          </Col>
-          <Col span="3">
-            <p> <b>提交时间：</b> </p>
-          </Col>
-          <Col span="9">
-            <p> {{row.ctime}} </p>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col span="3">
-            <p> <b>发起人：</b> </p>
-          </Col>
-          <Col span="9">
-            <p> {{row.submit_user}} </p>
-          </Col>
-          <Col span="3">
-            <p> <b>批准时间</b>  </p>
-          </Col>
-          <Col span="9">
-            <p> {{row.review_time}} </p>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col span="3">
-            <p> <b>批准人：</b>  </p>
-          </Col>
-          <Col span="9">
-            <p> {{row.review_user}} </p>
-          </Col>
-          <Col span="3">
-            <p> <b>备注：</b> </p>
-          </Col>
-          <Col span="19">
-            <p> {{row.desc}} </p>
-          </Col>
-
-        </Row>
-
-
-        <!-- <Row>
-          <Col span="3">
-            <p> <b>马上访问:</b> </p>
-          </Col>
-          <Col span="19">
-            <p> <a target="_blank" :href="get_domain">{{get_domain}}</a> </p>
-          </Col>
-        </Row> -->
-      </div>
+  <div>
+    <Row style="margin-top:8px;margin-bottom:10px">
+      <Col span="3">
+        <p> <b>项目创建时间：</b> </p>
+      </Col>
+            <Col span="12">
+              <p> {{projectInfo.create_time}}</p>
+            </Col>
+            <Col span="3">
+              <p> <b>预计上线时间：</b> </p>
+            </Col>
+            <Col span="6">
+              <p> {{projectInfo.start_time}}</p>
+            </Col>
+          </Row>
+          <Row style="margin-bottom:10px">
+            <Col span="3">
+              <b>项目名称：</b>
+            </Col>
+            <Col span="18">
+              {{projectInfo.project_name}}
+            </Col>
+          </Row>
+          <Row style="margin-bottom:10px">
+            <Col span="3">
+              <b>项目描述：</b>
+            </Col>
+            <Col span="18">
+              {{projectInfo.description}} 
+            </Col>
+          </Row>
+          <Row style="margin-bottom:10px">
+            <Col span="3">
+              <b>项目管理：</b>
+            </Col>
+            <Col span="18">
+              <treeselect v-model="projectInfo.pm" :multiple="true" :disable-branch-nodes="true" 
+              :limit="5" search-nested :options="treeData"  placeholder="选择项目的PM，创建者自动加入"/>
+            </Col>
+            <Col v-if="projectInfo.pm_admin" span="3">
+              <Button type="text" :loading="user_btn_loading" style="float:right" icon="ios-create" @click="handlerChangeUser('pm', projectInfo.pm)">保存</Button>
+            </Col>
+          </Row>
+          <Row style="margin-bottom:10px">
+            <Col span="3">
+              <b>开发人员：</b>
+            </Col>
+            <Col span="18">
+                <treeselect v-model="projectInfo.developers" :multiple="true" :disable-branch-nodes="true" 
+                :limit="8" search-nested :options="treeData"  placeholder="关联开发人员"/>
+            </Col>
+            <Col span="3" v-if="projectInfo.pm_admin || projectInfo.developers_admin">
+              <Button type="text" :loading="user_btn_loading" style="float:right" icon="ios-create" @click="handlerChangeUser('developers', projectInfo.developers)">保存</Button>
+            </Col>
+          </Row>
+          <Row style="margin-bottom:10px">
+            <Col span="3">
+              <b>测试人员：</b>
+            </Col>
+            <Col span="18">
+                <treeselect v-model="projectInfo.tester":multiple="true" 
+                :disable-branch-nodes="true" 
+                :limit="5" search-nested :options="treeData"  placeholder="关联测试人员"/>
+            </Col>
+            <Col span="3" v-if="projectInfo.pm_admin || projectInfo.developers_admin || projectInfo.tester_admin">
+              <Button type="text" :loading="user_btn_loading" style="float:right" icon="ios-create" @click="handlerChangeUser('tester', projectInfo.tester)">保存</Button>
+            </Col>
+          </Row>
+          <Row style="margin-bottom:10px">
+            <Col span="3">
+              <b>DBA：</b>
+            </Col>
+            <Col span="18">
+                <treeselect v-model="projectInfo.dba" 
+                :multiple="true" :disable-branch-nodes="true" 
+                :limit="5" search-nested :options="treeData"  placeholder="关联数据库管理员处理数据库相关事宜"/>
+            </Col>
+            <Col span="3" v-if="projectInfo.pm_admin || projectInfo.developers_admin" v-model="projectInfo.dba" >
+              <Button type="text" :loading="user_btn_loading" style="float:right" icon="ios-create" @click="handlerChangeUser('dba', projectInfo.dba)">保存</Button>
+            </Col>
+          </Row>
+          <Row style="margin-bottom:10px">
+            <Col span="3">
+              <b>其他人员：</b>
+            </Col>
+            <Col span="18">
+                <treeselect  v-model="projectInfo.other_user" :multiple="true" :disable-branch-nodes="true" 
+                :limit="5" search-nested :options="treeData"  placeholder="其他流程通知人员"/>
+            </Col>
+            <Col span="3" v-if="projectInfo.pm_admin">
+              <Button type="text" :loading="user_btn_loading" style="float:right" icon="ios-create" @click="handlerChangeUser('other_user', projectInfo.other_user)">保存</Button>
+            </Col>
+          </Row>
+        </div>
     </div>
 </template>
 
 <script>
+import { operationProjectPublish } from '@/api/task-other'
+import { getUsertree } from '@/api/user'
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
-  props: ['row'],
-  computed: {
-    // getTime: function () {
-    //   return this.row.createtime.split('.')[0].replace('T',' ')
-    // }, 
-    // get_domain: function(){
-    //   const env = this.row.env
-    //   let url = null
-    //   if(env == 'dev'){
-    //     url = 'http://'+ 'dev-' + this.row.domain + ':30080'
-    //   }else if(env == 'qa'){
-    //     url = 'http://'+ 'qa-' + this.row.domain + ':30080'
-    //   }else if(env == 'staging'){
-    //     url = 'http://'+ 'st-' + this.row.domain + ':30080'
-    //   }else{
-    //     url = 'http://'+ this.row.domain + ':30080'
-    //   }
-    //   return url
-    // }
-  }
+  components: {Treeselect},
+  props: {
+    projectInfo: {
+       type: Object,
+       default: null
+    }
+  },
+   data () {
+    return {
+      user_btn_loading: false,
+      treeData: [],
+    }
+  },
+  methods:{
+    getUserTree() {
+      getUsertree().then(res => {
+        if (res.data.code === 0) {
+          this.treeData = res.data.data
+        } else {
+          this.$Message.error(`${res.data.msg}`)
+        }
+      })
+    },
+    handlerChangeUser(user_type, val){
+      this.user_btn_loading = true
+      setTimeout(() => {
+        operationProjectPublish({"project_id": this.projectInfo.id, "user_type":user_type, "user_value": val}, "patch")
+        .then(res => {
+          if (res.data.code === 0) {
+            this.$Message.success(`${res.data.msg}`);
+          } else {
+            this.$Message.error(`${res.data.msg}`);
+          }
+        });
+        this.user_btn_loading = false
+      }, 1000);
+    },
+  },
+  watch:{
+    projectInfo: function(){
+      console.log(this.project_id)
+    }
+  },
+  mounted(){
+    this.getUserTree()
+  },
 }
 </script>
 

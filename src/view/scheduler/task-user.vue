@@ -1,5 +1,5 @@
 <template>
-<Card>
+<Card style="height:100%">
   <Alert banner closable type="success">
     <h3>说明文档：</h3>
     <br/>
@@ -10,7 +10,7 @@
       <div class="search-con search-con-top">
       <Button type="primary"  @click="editModal('', 'post', '新建用户')" class="search-btn" >新建</Button>
     </div>
-  <Table size="small" height="720" ref="selection" border :columns="columns" :data="tableData"></Table>
+  <Table size="small" height="620" ref="selection" border :columns="columns" :data="tableData"></Table>
   <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
     <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
   </Modal>

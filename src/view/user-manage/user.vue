@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height:100%">
     <Card>
       <tables ref="tables" editable searchable search-place="top" v-model="tableData" :columns="columns"
        @on-delete="handleDelete" @on-save-edit="handleInput"

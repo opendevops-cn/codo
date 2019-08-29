@@ -1,6 +1,7 @@
 <style scoped>
     div {
-      margin-top: 20px;
+      margin-top: 5px;
+      margin-bottom: 10px;
     }
     span {
       color: #6c6c6c
@@ -10,6 +11,6 @@
 
 <template>
   <div>
-    <center><span> Copyright © 2019 Codo </span> </center>
+    <center>2017-2019 © CODO</center>
   </div>
 </template>

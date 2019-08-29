@@ -1,11 +1,11 @@
 <template>
-  <div style="height:100%; background:#eee">
-    <Card style="height:100%; ">
+  <div style="height:100%">
+    <Card>
       <Row style="margin-top:10px;">
         <Col span="14">
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="90">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120">
           <FormItem label="POST JSON" prop="post_data" >
-            <Input v-model="formValidate.post_data" type="textarea"  :rows="20" :maxlength=4000
+            <Input v-model="formValidate.post_data" type="textarea"  :rows="23" :maxlength=6000
                placeholder="请输入你的数据，参考上面的示例，你也可以二次开发对接自己的CMDB获取主机, 时间字段从下面获取，方便处理">
             </Input>
           </FormItem>

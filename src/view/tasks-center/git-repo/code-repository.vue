@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div style="height:100%; background: #f8f8f9">
   <Row :gutter="20">
-    <i-col :md="24" :lg="6" style="margin-bottom: 15px;">
-      <Card>
-        <Tree ref="tree" :data="tagTreeData"  @on-select-change="handlerTreeChange" getSelectedNodes  height='720'></Tree>
+    <i-col :md="24" :lg="6">
+      <Card style="height:100%">
+        <Tree ref="tree" :data="tagTreeData"  @on-select-change="handlerTreeChange" getSelectedNodes/>
       </Card>
     </i-col>
-    <i-col :md="24" :lg="18" style="margin-bottom: 15px;">
-      <Card shadow>
+    <i-col :md="24" :lg="18">
+      <Card shadow style="height:100%">
         <div class="search-con">
-          <Input class="search-input" v-model="searchVal" style="padding:6px;" placeholder="输入关键字搜索"/>
+          <Input class="search-input" clearable v-model="searchVal" style="padding:6px;" placeholder="输入关键字搜索"/>
           <Button type="primary"  @click="handlerSetConf()" class="search-btn" >GIT配置</Button>
           <Button type="primary"  @click="handlerAddGitRepo('post', '添加仓库')" class="search-btn" >单个添加</Button>
           <Button type="warning" :loading="updateLoading" @click="handlerRefresh()" class="search-btn">刷新地址</Button>
@@ -39,7 +39,7 @@
             </FormItem>
           </Form>
           <Table v-if="setRepo" size="small" :columns="columns" :data="confData"></Table>
-          <Table v-else size="small"  :columns="repoColumns" :data="tableData" @on-selection-change="handleSelectChange" height='720'></Table>
+          <Table v-else size="small"  :columns="repoColumns" :data="tableData" @on-selection-change="handleSelectChange" height='705'></Table>
       </Card>
     </i-col>
   </Row>
@@ -73,10 +73,10 @@
         </FormItem>
       </Form>
      </Modal>
-     <Drawer v-model="groupDrawer" :closable="false"  style="background-color: #f8f8f9" width="900">
+     <Drawer v-model="groupDrawer" :closable="false"  style="background-color: #f8f8f9" width="950">
       <h2 style="color: #000000; marginLeft: 10px">此处应是组信息和组用户信息：</h2>
     </Drawer>
-    <Drawer v-model="projectDrawer" :closable="false"  style="background-color: #f8f8f9" width="900" @on-close="handlerCloseProjectDrawer()">
+    <Drawer v-model="projectDrawer" :closable="false"  style="background-color: #f8f8f9" width="950" @on-close="handlerCloseProjectDrawer()">
       <div style="margin-top:10px; margin-bottom:10px; marginLeft: 15px;">
         <Divider orientation="left">项目详情</Divider>
         <Row style="marginLeft: 5px;">
@@ -142,18 +142,23 @@
         </Form>
       </div>
     </Drawer>
-    <Drawer v-model="logDrawer" :closable="false"  style="background-color: #f8f8f9" width="900">
+    <Drawer v-model="logDrawer" :closable="false"  style="background-color: #f8f8f9" width="950">
+      <div class="search-con">
+          <Input class="search-input" clearable v-model="searchHookLogVal" style="padding:6px;" placeholder="输入关键字搜索。"/>
+          <Button type="error" class="search-btn"  @click="handlerDeleteLog('30')">删除30天前的日志</Button>
+        </div>
       <Table size="small" :columns="logColumns" :data="hookLogData"></Table>
     </Drawer>
   </div>
 </template>
 <script>
-  import {getGittree, getGitrepo,optGitrepo, getGituser, getGitConflist, optGitconf, Gitsync, getGitHooklog, optGithooks} from '@/api/git-repo'
+  import {getGittree, getGitrepo,optGitrepo, getGituser, getGitConflist, optGitconf, Gitsync, getGitHooklog, optGitHooklog, optGithooks} from '@/api/git-repo'
   import { getuserlist } from '@/api/user'
   import { getTemplist } from "@/api/task";
   export default {
     data () {
       return {
+        searchHookLogVal:'',
         hooktableData: [],
         addHookForm: false,
         projectInfo : {},
@@ -233,6 +238,7 @@
           {
             title: '时间',
             key: 'create_time',
+            width: 150,
             align: 'center',
           },
           // {
@@ -595,7 +601,7 @@
         },
         //GIT日志
         getGitHookLog () {
-          getGitHooklog().then(res => {
+          getGitHooklog(this.searchHookLogVal).then(res => {
             if (res.data.code === 0) {
               this.hookLogData = res.data.data
             } else {
@@ -606,6 +612,16 @@
         handlerHookslog() {
           this.logDrawer = true
           this.getGitHookLog()
+        },
+        //optGitHooklog
+        handlerDeleteLog(value) {
+          optGitHooklog({"day_ago": value}).then(res => {
+            if (res.data.code === 0) {
+              this.$Message.success(`${res.data.msg}`)
+            } else {
+              this.$Message.error(`${res.data.msg}`)
+            }
+          });
         },
         // 获取用户列表
         getUserList () {
@@ -670,7 +686,14 @@
       searchVal (val) {
         this.searchVal = val
         this.getRepoList()
+      },
+      searchHookLogVal(val) {
+        if (val.length > 2) {
+          this.searchHookLogVal = val
+          this.getGitHookLog() 
+        }
       }
+
     },
     mounted(){
       this.getGitTree()
@@ -689,7 +712,7 @@
       }
       &-input {
         display: inline-block;
-        width: 280px;
+        width: 300px;
         margin-left: 1px;
       }
       &-input-long {

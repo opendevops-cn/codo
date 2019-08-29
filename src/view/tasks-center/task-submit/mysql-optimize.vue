@@ -1,7 +1,7 @@
 <template>
-  <div style="background:#eee">
-     <Card style="height:100%; ">
-      <Row style="margin-top:5px;">
+  <div style="height:100%">
+     <Card>
+      <Row>
         <Col span="24">
           <Alert show-icon>
             <h4 style="color: #ed4014">
@@ -12,7 +12,7 @@
            <br>
         </Col>
         <Col span="12">
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="70">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="90">
           <FormItem label="目标标签" prop="tag" >
             <Select v-model="formValidate.tag" filterable  placeholder="请选择关联的标签"  @on-change="handleSelect(formValidate.tag)">
               <Option v-for="item in allTagList" :value="item.tag_name" :key="item.id" >{{ item.tag_name }}</Option>
@@ -33,9 +33,10 @@
             </RadioGroup>
           </FormItem>
           <FormItem label="SQL语句" prop="sql_data" >
-            <Input v-model="formValidate.sql_data" type="textarea"  :rows="18" :maxlength=9999
-               placeholder="请输入你的数据语句语句，长度不超过9999">
-            </Input>
+            <editor v-model="formValidate.sql_data" @init="editorInit" :mode_type="mode_type" :read="editor.read"  :editorHeight=450 :key="`${_uid}`" ></editor>
+            <!-- <Input  v-model="formValidate.sql_data" type="textarea"  :rows="18" :maxlength=30000
+               placeholder="请输入你的数据语句语句，长度不超过30000">
+            </Input> -->
           </FormItem>
           <FormItem  label="操作">
             <div v-if="formValidate.the_type === 'soar'">
@@ -69,9 +70,19 @@
 <script>
 import { getAuthTaglist, getMySQLOpt, operationMySQLOpt} from '@/api/task-other'
 import { logWSUrl } from '@/api/task-other'
+import editor from '@/components/public/editor'
 export default {
+  components: {editor},
   data() {
     return {
+      //
+      mode_type: 'mysql',
+      editor:{
+        title: '编辑',
+        read: false,
+        color: "primary"
+      },
+      //
       log_key:"",
       logInfo: [],
       allTagList: [],
@@ -85,7 +96,9 @@ export default {
       },
       ruleValidate: {
         tag: [ {required: true, message: "The databases cannot be empty", trigger: "blur"}],
-        sql_data: [ {required: true, message: "The sql data cannot be empty", trigger: "blur"}],
+        sql_data: [ {required: true, message: "The sql data cannot be empty", trigger: "blur"},
+                    { type: 'string', max: 30000, message: '不能超过30000个字节', trigger: 'blur'}
+                  ],
         db_name: [ {required: true, message: "数据库名不能为空", trigger: "blur"}],
         the_type: [ {required: true, message: "优化类型不能为空", trigger: "blur"}]
       }
@@ -150,6 +163,12 @@ export default {
     handlerCheckLog (listID, taskGroup, taskLevel, execIP) {
       this.log_key = listID + '_' + taskGroup + '_' + taskLevel + '_' + execIP
       this.websocket(this.log_key )
+    },
+     //SQL
+    editorInit: function () {
+      require(`brace/mode/${this.mode_type}`)    //language
+      require('brace/theme/terminal')
+      require('brace/theme/xcode')
     },
     websocket (log_key) {
       if (ws) {

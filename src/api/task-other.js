@@ -289,3 +289,46 @@ export const operationPublishlist = (data, meth) => {
         data
     })
 }
+
+//// 项目发布
+export const projectPublish = (data) => {
+    return axios.request({
+        url: '/task/other/v1/publish/project/',
+        method: 'post',
+        data
+    })
+}
+
+// 项目操作
+export const operationProjectPublish = (data, meth) => {
+    return axios.request({
+        url: '/task/other/v1/publish/project/',
+        method: meth,
+        data
+    })
+}
+
+export const getPublishdetail = (project_id) => {
+    return axios.request({
+        url: '/task/other/v1/publish/project/',
+        method: 'get',
+        params: {
+            project_id
+        }
+    })
+}
+
+export const getProjectPublishlist = () => {
+    return axios.request({
+        url: '/task/other/v1/publish/list/',
+        method: 'get'
+    })
+}
+
+export const projectPublishlist = (data, meth) => {
+    return axios.request({
+        url: '/task/other/v1/publish/list/',
+        method: meth,
+        data
+    })
+}

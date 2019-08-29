@@ -1,5 +1,5 @@
 <template>
-<Card>
+<Card style="height:100%">
     <div class="search-con search-con-top">
       <Input clearable placeholder="输入任务ID搜索" class="search-input" v-model="searchValue"/>
       <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>

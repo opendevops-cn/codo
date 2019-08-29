@@ -30,6 +30,7 @@
           </Content>
         </Layout>
       </Content>
+      <copyRight></copyRight>
     </Layout>
   </Layout>
 </template>
@@ -46,6 +47,7 @@ import { getNewTagList, getNextRoute, routeEqual } from '@/libs/util'
 import minLogo from '@/assets/images/logo-min.jpg'
 import maxLogo from '@/assets/images/logo.png'
 import './main.less'
+import copyRight from './components/footer/copyright'
 export default {
   name: 'Main',
   components: {
@@ -55,7 +57,8 @@ export default {
     TagsNav,
     Fullscreen,
     ErrorStore,
-    User
+    User,
+    copyRight
   },
   data () {
     return {

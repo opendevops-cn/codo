@@ -182,6 +182,19 @@ export const routerMap = [{
     //                 import ('@/view/publish-store/publish-list.vue')
     //         },
     //         {
+    //             path: 'project_detail/:project_id',
+    //             name: 'project_detail',
+    //             meta: {
+    //                 hideInMenu: true,
+    //                 notCache: true,
+    //                 icon: 'ios-plane',
+    //                 title: '项目详情'
+    //             },
+    //             props: true,
+    //             component: () =>
+    //                 import ('@/view/publish-store/publish/detail.vue')
+    //         },
+    //         {
     //             path: 'create_project',
     //             name: 'create_project',
     //             meta: {
@@ -190,6 +203,16 @@ export const routerMap = [{
     //             },
     //             component: () =>
     //                 import ('@/view/publish-store/project-create.vue')
+    //         },
+    //         {
+    //             path: 'project_conf',
+    //             name: 'project_conf',
+    //             meta: {
+    //                 icon: 'ios-settings',
+    //                 title: '项目配置'
+    //             },
+    //             component: () =>
+    //                 import ('@/view/publish-store/project-conf.vue')
     //         }
     //     ]
     // },

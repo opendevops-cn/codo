@@ -1,9 +1,9 @@
 <template>
-  <div style="background:#eee">
-    <Card style="height:100%;">
-      <Row style="margin-top: 5px;">
-        <Col span="13">
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="85">
+  <div style="height:100%">
+    <Card>
+      <Row style="margin-top: 0px;">
+        <Col span="15">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="90">
           <FormItem label="目标标签" prop="tag" >
             <Select v-model="formValidate.tag" filterable  placeholder="请选择关联的标签"  @on-change="handleSelect(formValidate.tag)">
               <Option v-for="item in allTagList" :value="item.tag_name" :key="item.id" >{{ item.tag_name }}</Option>
@@ -15,9 +15,10 @@
             </span>
           </FormItem>
           <FormItem label="SQL语句" prop="sql_data" >
-            <Input v-model="formValidate.sql_data" type="textarea"  :rows="20" :maxlength=99999
-               placeholder="请输入你的数据语句语句，长度不超过99999">
-            </Input>
+            <editor v-model="formValidate.sql_data" @init="editorInit" :mode_type="mode_type" :read="editor.read"  :editorHeight=520 :key="`${_uid}`" ></editor>
+            <!-- <Input v-model="formValidate.sql_data" type="textarea"  :rows="20" :maxlength=63000 
+               placeholder="请输入你的数据语句语句，长度不超过63000">
+            </Input> -->
           </FormItem>
           <FormItem label="审批人员" prop="approver">
             <Select v-model="formValidate.approver" filterable placeholder="请选择审批的用户">
@@ -30,7 +31,7 @@
           </FormItem>
         </Form>
         </Col>
-        <Col span="8" offset="1">
+        <Col span="7" offset="1">
         <Alert show-icon>
           <h4 style="color: #ed4014">
             <p>1.当前页面使用标签关联相关数据库，选取标签下的mysql的写库</p>
@@ -48,9 +49,19 @@
 <script>
 import { getAuthTaglist, getDBlist, getMysqlAudit,operationMysqlAudit} from '@/api/task-other'
 import { getuserlist } from '@/api/user'
+import editor from '@/components/public/editor'
 export default {
+  components: {editor},
   data() {
     return {
+      //
+      mode_type: 'mysql',
+      editor:{
+        title: '编辑',
+        read: false,
+        color: "primary"
+      },
+      //
       allUser: [],
       allTagList: [],
       submitInfo: [],
@@ -62,7 +73,9 @@ export default {
       },
       ruleValidate: {
         tag: [ {required: true, message: "The databases cannot be empty", trigger: "blur"}],
-        sql_data: [ {required: true, message: "The sql data cannot be empty", trigger: "blur"}],
+        sql_data: [ {required: true, message: "The sql data cannot be empty", trigger: "blur"},
+                    { type: 'string', max: 63000, message: '不能超过63000个字节', trigger: 'blur'}
+                  ],
         approver: [ {required: true, message: "The approver cannot be empty", trigger: "blur"}]
       }
     };
@@ -100,6 +113,12 @@ export default {
     },
     handleClose(event, value) {
       this.$Message.error(`一家人要整整齐齐的`);
+    },
+     //SQL
+    editorInit: function () {
+      require(`brace/mode/${this.mode_type}`)    //language
+      require('brace/theme/terminal')
+      require('brace/theme/xcode')
     },
     handleSubmit(value) {
       this.btn_loading = true;

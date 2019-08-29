@@ -77,6 +77,7 @@ export default {
     //
     publish_project: '项目发布',
     create_project: '创建项目',
+    project_conf: '项目配置',
     publish_list: '发布列表',
     //
     // k8s: 'K8S发布',

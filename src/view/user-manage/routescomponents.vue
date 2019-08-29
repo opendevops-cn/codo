@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <Card>
+  <div style="height:100%">
+    <!-- <Card style="height:100%"> -->
       <div class="split">
         <Split v-model="offset">
           <div
@@ -9,7 +9,7 @@
           >
             <tables
               ref="tables"
-              :height="600"
+              :height="680"
               editable
               searchable
               search-place="top"
@@ -35,7 +35,7 @@
           >
             <tables
               ref="tables"
-              :height="600"
+              :height="680"
               editable
               searchable
               search-place="top"
@@ -57,7 +57,7 @@
           </div>
         </Split>
       </div>
-    </Card>
+    <!-- </Card> -->
     <Modal
       v-model="modalMap.modalVisible"
       :title="modalMap.modalTitle"
@@ -417,7 +417,7 @@ export default {
 
 <style>
 .split {
-  height: 750px;
+  height: 100%;
   border: 1px solid #dcdee2;
 }
 .split-pane {

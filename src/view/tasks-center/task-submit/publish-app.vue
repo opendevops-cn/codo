@@ -10,7 +10,7 @@
            请选择你要发布的应用，具体配置参考【作业配置】-【应用配置】。发布权限关联代码仓库权限【作业配置】-【代码仓库】。
          </Alert>
          <br>
-        <Form  ref="formValidate"  :model="formValidate" :rules="ruleValidate" :label-width="75">
+        <Form  ref="formValidate"  :model="formValidate" :rules="ruleValidate" :label-width="110">
           <FormItem label="选择应用" prop="publish_name">
             <Select
               v-model="formValidate.publish_name"

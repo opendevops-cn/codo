@@ -1,6 +1,6 @@
 <template>
-  <div style="background:#eee">
-    <Card style="height:100%; ">
+  <div style="height:100%">
+    <Card>
       <Row style="margin-top:10px;">
         <Col span="22" offset="1">
           <Alert show-icon>
@@ -11,8 +11,8 @@
           </Alert>
            <br>
         </Col>
-        <Col span="16" offset="1">
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="70">
+        <Col span="19" offset="1">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="150">
           <FormItem label="目标标签" prop="tag" >
             <Select v-model="formValidate.tag" filterable  multiple placeholder="请选择关联的标签"  @on-change="handleSelect(formValidate.tag)">
               <Option v-for="item in allTagList" :value="item.tag_name" :key="item.id" >{{ item.tag_name }}</Option>
@@ -29,11 +29,14 @@
             </span>
           </FormItem>
            <FormItem label="选择模板" prop="temp_id" >
-            <Select v-model="formValidate.temp_id" filterable  placeholder="请选择关联的标签" >
+            <Select v-model="formValidate.temp_id" filterable @on-change="handlerSelectTemp(formValidate.temp_id)" placeholder="请选择关联的模板" >
               <Option v-for="item in tempList" :value="item.temp_id" :key="item.temp_id" >{{ item.temp_name }}</Option>
             </Select>
           </FormItem>
-          <FormItem v-for="(item, index) in formValidate.args_items" v-if="item.status"
+          <FormItem v-for="(item, index) in formValidate.args_items" v-if="item.status" :key="index" :label="item.label">
+              <Input type="text" v-model="item.value" clearable :maxlength=120 :placeholder="`请输入参数${item.key}的值`"></Input>
+          </FormItem>
+          <!-- <FormItem v-for="(item, index) in formValidate.args_items" v-if="item.status"
                 :key="index"
                 :label="'参数 ' + item.index">
             <Row>
@@ -47,14 +50,14 @@
                     <Button @click="handleRemove(index)">删除</Button>
                 </Col>
             </Row>
-          </FormItem>
-          <FormItem>
+          </FormItem> -->
+          <!-- <FormItem>
           <Row>
             <Col span="24">
               <Button type="dashed" long  @click="handleAdd" icon="md-add">添加参数</Button>
             </Col>
           </Row>
-          </FormItem>
+          </FormItem> -->
           <FormItem label="执行时间" prop="start_time">
             <DatePicker  v-model="formValidate.start_time" type="datetime" :options="optionsDate"
               format="yyyy-MM-dd HH:mm:ss"
@@ -77,7 +80,7 @@
 
 <script>
 import { getAuthTaglist, getCustomtaskProxy, operationCustomtaskProxy} from '@/api/task-other'
-import { getTemplist } from "@/api/task";
+import { getTemplist, getTempargs } from "@/api/task";
 import { getuserlist } from '@/api/user'
 export default {
   data() {
@@ -97,12 +100,12 @@ export default {
         tag: [],
         temp_id: "",
         args_items: [
-          {
-              key: '',
-              value: '',
-              index: 1,
-              status: 1
-          }
+          // {
+          //     key: '',
+          //     value: '',
+          //     index: 1,
+          //     status: 1
+          // }
         ]
       },
       ruleValidate: {
@@ -150,6 +153,27 @@ export default {
       const index = this.submitInfo.indexOf(name);
       this.submitInfo.splice(index, 1);
     },
+    handlerSelectTemp(temp_id){
+      getTempargs(temp_id).then(res => {
+        if (res.data.code === 0) {
+          this.index = 0
+          this.formValidate.args_items= []
+          //
+          res.data.data.forEach(element => {
+            this.index++;
+            this.formValidate.args_items.push({
+              label: res.data.args_dict[element] ? res.data.args_dict[element] : element ,
+              key: element,
+              value: '',
+              index: this.index,
+              status: 1
+            });
+          });
+        } else {
+          this.$Message.error(`${res.data.msg}`);
+        }
+      });
+    },
     handleSubmit(value) {
       this.btn_loading = true;
       if (this.submitInfo.length === 0) {
@@ -185,22 +209,22 @@ export default {
     handleReset(value) {
       this.$refs[value].resetFields();
     },
-    handleAdd () {
-        this.index++;
-        if (this.index > 10) {
-          this.$Message.error('参数超过最大限制')
-          return
-        }
-        this.formValidate.args_items.push({
-            key: '',
-            value: '',
-            index: this.index,
-            status: 1
-        });
-    },
-    handleRemove (index) {
-        this.formValidate.args_items[index].status = 0;
-    }
+    // handleAdd () {
+    //     this.index++;
+    //     if (this.index > 10) {
+    //       this.$Message.error('参数超过最大限制')
+    //       return
+    //     }
+    //     this.formValidate.args_items.push({
+    //         key: '',
+    //         value: '',
+    //         index: this.index,
+    //         status: 1
+    //     });
+    // },
+    // handleRemove (index) {
+    //     this.formValidate.args_items[index].status = 0;
+    // }
   },
   mounted() {
     this.getAllTagList()
