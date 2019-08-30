@@ -684,7 +684,7 @@ export default {
   mounted() {
     this.getPublishList()
     this.setDefaultSearchKey()
-    this.getCodeRepoTree()
+    // this.getCodeRepoTree()
     this.getCodeRepository()
     this.getTempList()
     this.getDockerRepository()
