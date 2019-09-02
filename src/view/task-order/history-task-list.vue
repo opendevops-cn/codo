@@ -11,7 +11,7 @@
 
             <div style="margin: 10px; overflow: hidden">
               <div style="float: left;">
-                  <Page  size="small" :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[15,25,50,100] 
+                  <Page  size="small" :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[18,20,25,50,100] 
                     show-sizer @on-change="changePage" @on-page-size-change="handlePageSize"></Page>
               </div>
             </div>
@@ -39,7 +39,7 @@ export default {
       //zone 分页
       pageTotal: 0, // 数据总数
       pageNum: 1, // 当前页码
-      pageSize: 15, // 每页条数
+      pageSize: 18, // 每页条数
       //
       task_type: 'readonly2',
       list_id: '',
