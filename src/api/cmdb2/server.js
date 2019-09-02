@@ -2,6 +2,38 @@ import axios from '@/libs/api.request'
 import config from '@/config'
 
 
+//批量添加主机
+export const multiAddserver = (data) => {
+  return axios.request({
+    url: '/cmdb2//v1/cmdb/server/multi_add/',
+    method: 'post',
+    data
+  })
+}
+
+
+// 获取AWS Events信息
+export const getAwsEventslist = (key, value) => {
+  return axios.request({
+    url: '/cmdb2/v1/cmdb/aws_events/',
+    method: 'get',
+    params: {
+      key,
+      value
+    }
+  })
+}
+
+// 操作Aws Events
+export const operationAwsEvents = (data, meth) => {
+  return axios.request({
+    url: '/cmdb2/v1/cmdb/aws_events/',
+    method: meth,
+    data
+  })
+}
+
+
 //同步资产信息到Tag树
 export const syncServerToTagTree = () => {
   return axios.request({
