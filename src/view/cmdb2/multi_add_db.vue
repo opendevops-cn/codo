@@ -3,11 +3,12 @@
   <!-- <Card> -->
 <Modal width="600px;" v-model="dialog.show"  :title="dialog.title" :loading=true :footer-hide=true @on-cancel="handleCancel" :mask-closable=false> 
     <Form ref="formData3" :model="formData" :label-width="80">
-        <Alert type="success">格式: [hostname] [ip] [port] [管理用户] 多台换行分开, 管理用户必须是存在的</Alert>
-        <!-- <Alert type="success">格式2: [hostname] [ip] [port] [username] [password]</Alert> -->
+        <Alert type="success">格式: [类型/mysql/redis] [名称] [地址] [端口] [用户名] [密码]  一行代表一个DB,若没密码则写null</Alert>
+        <Alert type="info">示例1: redis redis_name 10.0.0.2 6379 root null </Alert>
+        <Alert type="info">示例2: mysql mysql_name 10.0.0.1 3306 root password </Alert>
             <!-- <Input v-model="formData.data" type="textarea" :autosize="{minRows: 5,maxRows: 200}" placeholder="ops-hostname 10.0.0.1 22 ec2-user"></Input>
              -->
-             <Input v-model="formData.data" type="textarea" :autosize="{minRows: 15,maxRows: 30}" :maxlength="5000" placeholder="ops-hostname 10.0.0.1 22 ec2-user"></Input>
+             <Input v-model="formData.data" type="textarea" :autosize="{minRows: 15,maxRows: 30}" :maxlength="5000" placeholder="mysql dbname 10.0.0.2 3306 root password"></Input>
             <br><br>
             <Button type="primary" @click="handleSubmit('formData3')">提交</Button>
             <!-- <Button @click="handleReset('formData3')" style="margin-left: 8px">重置</Button> -->
@@ -16,13 +17,13 @@
 
 </template>
 <script>
-    import { multiAddserver } from '@/api/cmdb2/server'
+    import { multiAdddb } from '@/api/cmdb2/db'
     export default {
         name: 'multiadd',
         data () {
             return {
                 ruleValidate: {
-                    hostname: [
+                    db_host: [
                         { required: true, message: '不能为空', trigger: 'blur' }
                     ]
                 }
@@ -32,7 +33,7 @@
             handleSubmit (name) {
                 if (this.formData.data !== null) {
                     const new_data = this.formData.data.split('\n')
-                    multiAddserver(new_data).then(res => {
+                    multiAdddb(new_data).then(res => {
                          if (res.data.code === 0){
                             this.$Message.success({
                                 content: 'Success!',

@@ -25,7 +25,9 @@
       <Input @on-change="handleClear" clearable placeholder="搜索" class="search-input" v-model="searchValue"/>
       <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
       <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新增配置')" class="search-btn" >新增配置</Button></slot>
-      <slot name="new_btn1" ><Button type="success" :loading="loading2" @click="handleUpdateServer()" class="search-btn" >拉取资产</Button></slot>
+      <slot name="new_btn1" ><Button type="success" :loading="loading2" @click="handleUpdateServer()" class="search-btn" >拉取Server</Button></slot>
+      <Button type="warning" :loading="loading2" @click="handleUpdateRDS()" class="search-btn" >拉取RDS</Button>
+      <Button type="info" :loading="loading2" @click="handleUpdateREDIS()" class="search-btn" >拉取Redis</Button>
 
     </div>
   <Table size="small" ref="selection" border :columns="columns" :data="tableData"></Table>
@@ -41,7 +43,6 @@
           </div>
         </FormItem>
 
-        
         <FormItem label="云厂商" prop="account">
           <Select v-model="formValidate.account" placeholder="选择云厂商">
             <Option value="AWS" >AWS</Option>
@@ -50,7 +51,6 @@
             <Option value="华为云" >华为云</Option>
           </Select>
         </FormItem>
-
 
         <div v-if="formValidate.account === '华为云'">
           <FormItem label="Cloud" prop="huawei_cloud">
@@ -88,14 +88,12 @@
           </div>
         </FormItem>
 
-
         <FormItem label="AccessID" prop="access_id">
           <Input v-model="formValidate.access_id" :maxlength="50"  placeholder='IAM SecretID/AccessID'></Input>
         </FormItem>
         <FormItem label="AccessKey" prop="access_key">
           <Input v-model="formValidate.access_key" :maxlength="50"  placeholder='IAM SecretKey/AccessKey'></Input>
         </FormItem>
-
 
         <FormItem label="默认管理用户" prop="default_admin_user">
             <Select v-model="formValidate.default_admin_user" placeholder="请选择一个管理用户" filterable>
@@ -117,8 +115,8 @@
 
 <script>
 import FormGroup from '_c/form-group'
-import { getAssetConfigsList, operationAssetConfigs, testAuth, handleUpdateserver } from '@/api/cmdb2/asset_config'
-import { getAdminUserList } from "@/api/cmdb2/admin_user"
+import { getAssetConfigsList, operationAssetConfigs, apiPermission, handleUpdateserver, handleUpdaterds, handleUpdateredis } from '@/api/cmdb2/asset_config'
+import { getAdminUserList } from '@/api/cmdb2/admin_user'
 export default {
   components: {
     FormGroup
@@ -156,15 +154,15 @@ export default {
           key: 'region',
           align: 'center'
         },
-        {
-          title: '默认管理用户',
-          key: 'default_admin_user',
-          align: 'center'
-        },
+        // {
+        //   title: '默认管理用户',
+        //   key: 'default_admin_user',
+        //   align: 'center'
+        // },
         {
           title: '状态',
           key: 'state',
-          width: 80,
+          width: 100,
           align: 'center',
           render: (h, params, vm) => {
             return h('div', [
@@ -186,9 +184,9 @@ export default {
           }
         },
         {
-          title: '操作',
+          title: '权限测试',
           key: 'handle',
-          width: 200,
+          width: 240,
           align: 'center',
           render: (h, params) => {
             return h('div', [
@@ -200,18 +198,65 @@ export default {
                     size: 'small',
                     loading: this.loading
                   },
-                 style: {
+                  style: {
                     marginRight: '5px'
                   },
                   on: {
                     click: () => {
-                      this.testAuth(params)
+                      this.ApiPermission(params, 'server')
                     }
                   }
                 },
-                '测试'
+                'Server'
               ),
-
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'warning',
+                    size: 'small',
+                    loading: this.loading
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.ApiPermission(params,'rds')
+                    }
+                  }
+                },
+                'RDS'
+              ),
+              h(
+                'Button',
+                {
+                  props: {
+                    type: 'info',
+                    size: 'small',
+                    loading: this.loading
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.ApiPermission(params, 'redis')
+                    }
+                  }
+                },
+                'Redis'
+              )
+            ])
+          }
+        },
+        {
+          title: '操作',
+          key: 'handle',
+          width: 200,
+          align: 'center',
+          render: (h, params) => {
+            return h('div', [
               h(
                 'Button',
                 {
@@ -253,72 +298,72 @@ export default {
         name: [
           {
             required: true,
-            message: "The name cannot be empty",
-            trigger: "blur"
+            message: 'The name cannot be empty',
+            trigger: 'blur'
           }
         ],
         account: [
           {
             required: true,
-            message: "选择云厂商",
-            trigger: "blur"
+            message: '选择云厂商',
+            trigger: 'blur'
           }
         ],
         region: [
           {
             required: true,
-            message: "云厂商的region",
-            trigger: "blur"
+            message: '云厂商的region',
+            trigger: 'blur'
           }
         ],
         access_id: [
           {
             required: true,
-            message: "IAM角色 AccessID,需要有权限访问云主机",
-            trigger: "blur"
+            message: 'IAM角色 AccessID,需要有权限访问云主机',
+            trigger: 'blur'
           }
         ],
         access_key: [
           {
             required: true,
-            message: "IAM角色 AccessKey,需要有权限访问云主机",
-            trigger: "blur"
+            message: 'IAM角色 AccessKey,需要有权限访问云主机',
+            trigger: 'blur'
           }
         ],
         project_id: [
           {
             required: true,
-            message: "华为云每个区域对应的都有一个项目ID",
-            trigger: "blur"
+            message: '华为云每个区域对应的都有一个项目ID',
+            trigger: 'blur'
           }
         ],
         huawei_cloud: [
           {
             required: true,
-            message: "华为云的Cloud地址，默认：myhuaweicloud.com",
-            trigger: "blur"
+            message: '华为云的Cloud地址，默认：myhuaweicloud.com',
+            trigger: 'blur'
           }
         ],
         huawei_instance_id: [
           {
             required: true,
-            message: "华为云的实例ID，用来测试，如：c2a3e1f3-6674-43f7-881f-71fc0a934e89",
-            trigger: "blur"
+            message: '华为云的实例ID，用来测试，如：c2a3e1f3-6674-43f7-881f-71fc0a934e89',
+            trigger: 'blur'
           }
         ]
       },
       formValidate: {
-          id: null,
-          name:'',
-          account:'',
-          region:'',
-          access_id: '',
-          access_key:'',
-          default_admin_user:'',
-          // state:'',
-          remarks: '',
-          huawei_cloud:'myhuaweicloud.com',
-          project_id: '',
+        id: null,
+        name: '',
+        account: '',
+        region: '',
+        access_id: '',
+        access_key: '',
+        default_admin_user: '',
+        // state:'',
+        remarks: '',
+        huawei_cloud: 'myhuaweicloud.com',
+        project_id: ''
       },
       tableData: [],
       pageTotal: 0, // 数据总数
@@ -349,72 +394,202 @@ export default {
     },
     // 获取管理用户列表
     getAdminUserList (page, limit, key, value) {
-        getAdminUserList(page, limit, key, value).then(res => {
-            if (res.data.code === 0) {
-            // this.$Message.success(`${res.data.msg}`)
-            this.admUserList = res.data.data
-            } else {
-            this.$Message.error(`${res.data.msg}`)
-            }
-        })
+      getAdminUserList(page, limit, key, value).then(res => {
+        if (res.data.code === 0) {
+          // this.$Message.success(`${res.data.msg}`)
+          this.admUserList = res.data.data
+        } else {
+          this.$Message.error(`${res.data.msg}`)
+        }
+      })
     },
 
     // 测试用户填写的信息是否正确
-    testAuth(params){
+    ApiPermission (params, api_type) {
       this.loading = true
       const data = {
-        "account": params.row.account,
-        "access_id": params.row.access_id,
-        "access_key": params.row.access_key,
-        "region": params.row.region,
-        "project_id": params.row.project_id,
-        "huawei_cloud": params.row.huawei_cloud,
-        "huawei_instance_id": params.row.huawei_instance_id
+        'api_type': api_type,
+        'account': params.row.account,
+        'access_id': params.row.access_id,
+        'access_key': params.row.access_key,
+        'region': params.row.region,
+        'project_id': params.row.project_id,
+        'huawei_cloud': params.row.huawei_cloud,
+        'huawei_instance_id': params.row.huawei_instance_id
       }
-      testAuth(data).then(res => {
+      apiPermission(data).then(res => {
         this.$Message.config({
-            top: 50,
-            duration: 5 //停留时间
-          });
-        if (res.data.code ===0){
+          top: 50,
+          duration: 5 // 停留时间
+        })
+        
+        if (res.data.code === 0) {
           this.loading = false
           this.$Message.success(`${res.data.msg}`)
-        } else{
+        } else {
           this.loading = false
           this.$Message.error(`${res.data.msg}`)
         }
       })
-
-    },
-
-    handleUpdateServer(){
-       this.loading2 = true
-       this.$Modal.confirm({
-          title: '提醒',
-          content: '<p>手动触发获取云厂商主机信息更新到CMDB主机列表</p><p>点击确认进行拉取，请耐心稍等一下资产会自动更新到主机列表，详细信息可看后端日志</p>',
-          loading: true,
-          onOk: () => {
-            setTimeout(() => {
-              this.$Modal.remove();
-                handleUpdateserver().then( res => {
-                  if (res.data.code === 0) {
-                      this.$Message.success(`${res.data.msg}`)
-                    } else {
-                      this.$Message.error(`${res.data.msg}`)
-                    }
-                  this.loading2 = false
-                  })
-                  
-            }, 3000);
-          },
-          onCancel: () => {
-            this.loading2 = false
-            this.$Message.info('Clicked cancel');
-          }                       
-        });
     },
 
 
+    // // 测试用户填写的信息是否正确(ECS)
+    // EcsAuth (params) {
+    //   this.loading = true
+    //   const data = {
+    //     'account': params.row.account,
+    //     'access_id': params.row.access_id,
+    //     'access_key': params.row.access_key,
+    //     'region': params.row.region,
+    //     'project_id': params.row.project_id,
+    //     'huawei_cloud': params.row.huawei_cloud,
+    //     'huawei_instance_id': params.row.huawei_instance_id
+    //   }
+    //   ecsAuth(data).then(res => {
+    //     this.$Message.config({
+    //       top: 50,
+    //       duration: 5 // 停留时间
+    //     })
+    //     if (res.data.code === 0) {
+    //       this.loading = false
+    //       this.$Message.success(`${res.data.msg}`)
+    //     } else {
+    //       this.loading = false
+    //       this.$Message.error(`${res.data.msg}`)
+    //     }
+    //   })
+    // },
+
+    // 测试用户填写的信息是否正确(RDS)
+    // RdsAuth (params, api_type) {
+    //   this.loading = true
+    //   console.log('type--->', type)
+    //   const data = {
+    //     'account': params.row.account,
+    //     'access_id': params.row.access_id,
+    //     'access_key': params.row.access_key,
+    //     'region': params.row.region,
+    //     'api_type': api_type
+    //   }
+    //   rdsAuth(data).then(res => {
+    //     this.$Message.config({
+    //       top: 50,
+    //       duration: 5 // 停留时间
+    //     })
+    //     if (res.data.code === 0) {
+    //       this.loading = false
+    //       this.$Message.success(`${res.data.msg}`)
+    //     } else {
+    //       this.loading = false
+    //       this.$Message.error(`${res.data.msg}`)
+    //     }
+    //   })
+    // },
+
+
+    // // 测试用户填写的信息是否正确(Redis)
+    // RedisAuth (params) {
+    //   this.loading = true
+    //   const data = {
+    //     'account': params.row.account,
+    //     'access_id': params.row.access_id,
+    //     'access_key': params.row.access_key,
+    //     'region': params.row.region
+    //   }
+    //   redisAuth(data).then(res => {
+    //     this.$Message.config({
+    //       top: 50,
+    //       duration: 5 // 停留时间
+    //     })
+    //     if (res.data.code === 0) {
+    //       this.loading = false
+    //       this.$Message.success(`${res.data.msg}`)
+    //     } else {
+    //       this.loading = false
+    //       this.$Message.error(`${res.data.msg}`)
+    //     }
+    //   })
+    // },
+
+    handleUpdateServer () {
+      this.loading2 = true
+      this.$Modal.confirm({
+        title: 'ECS录入',
+        content: '<p>获取开启状态中EC2服务器信息录入CMDB，详细信息可看后端日志</p>',
+        loading: true,
+        onOk: () => {
+          setTimeout(() => {
+            this.$Modal.remove()
+            handleUpdateserver().then(res => {
+              if (res.data.code === 0) {
+                this.$Message.success(`${res.data.msg}`)
+              } else {
+                this.$Message.error(`${res.data.msg}`)
+              }
+              this.loading2 = false
+            })
+          }, 3000)
+        },
+        onCancel: () => {
+          this.loading2 = false
+          this.$Message.info('Clicked cancel')
+        }
+      })
+    },
+
+
+    handleUpdateRDS () {
+      this.loading2 = true
+      this.$Modal.confirm({
+        title: 'RDS录入',
+        content: '<p><p>获取开启状态中RDS数据库信息录入CMDB，详细信息可看后端日志</p>',
+        loading: true,
+        onOk: () => {
+          setTimeout(() => {
+            this.$Modal.remove()
+            handleUpdaterds().then(res => {
+              if (res.data.code === 0) {
+                this.$Message.success(`${res.data.msg}`)
+              } else {
+                this.$Message.error(`${res.data.msg}`)
+              }
+              this.loading2 = false
+            })
+          }, 3000)
+        },
+        onCancel: () => {
+          this.loading2 = false
+          this.$Message.info('Clicked cancel')
+        }
+      })
+    },
+
+    handleUpdateREDIS () {
+      this.loading2 = true
+      this.$Modal.confirm({
+        title: 'Redis录入',
+        content: '<p><p>获取开启状态中Redis/缓存/数据库信息录入CMDB，详细信息可看后端日志</p>',
+        loading: true,
+        onOk: () => {
+          setTimeout(() => {
+            this.$Modal.remove()
+            handleUpdateredis().then(res => {
+              if (res.data.code === 0) {
+                this.$Message.success(`${res.data.msg}`)
+              } else {
+                this.$Message.error(`${res.data.msg}`)
+              }
+              this.loading2 = false
+            })
+          }, 3000)
+        },
+        onCancel: () => {
+          this.loading2 = false
+          this.$Message.info('Clicked cancel')
+        }
+      })
+    },
 
     // handleUpdateServer(){
     //   this.loading2 = true
@@ -425,73 +600,72 @@ export default {
     //       this.$Message.error(`${res.data.msg}`)
     //     }
     //     this.loading2 = false
-    //   })      
+    //   })
     // },
 
-    editModal(paramsRow, meth, mtitle) {
-      this.modalMap.modalVisible = true;
-      this.modalMap.modalTitle = mtitle;
-      this.editModalData = meth;
+    editModal (paramsRow, meth, mtitle) {
+      this.modalMap.modalVisible = true
+      this.modalMap.modalTitle = mtitle
+      this.editModalData = meth
       if (paramsRow && paramsRow.id) {
-          // put
-          this.getAdminUserList()
-          this.formValidate = {
-              id: paramsRow.id,
-              name: paramsRow.name,
-              account: paramsRow.account,
-              region: paramsRow.region,
-              access_id: paramsRow.access_id,
-              access_key: paramsRow.access_key,
-              default_admin_user: paramsRow.default_admin_user,
-              state: paramsRow.state,
-              remarks: paramsRow.remarks,
-              project_id: paramsRow.project_id,
-              huawei_cloud: paramsRow.huawei_cloud,
-              huawei_instance_id: paramsRow.huawei_instance_id,
-          }
+        // put
+        this.getAdminUserList()
+        this.formValidate = {
+          id: paramsRow.id,
+          name: paramsRow.name,
+          account: paramsRow.account,
+          region: paramsRow.region,
+          access_id: paramsRow.access_id,
+          access_key: paramsRow.access_key,
+          default_admin_user: paramsRow.default_admin_user,
+          state: paramsRow.state,
+          remarks: paramsRow.remarks,
+          project_id: paramsRow.project_id,
+          huawei_cloud: paramsRow.huawei_cloud,
+          huawei_instance_id: paramsRow.huawei_instance_id
+        }
       } else {
-          // post
-            this.formValidate = {
-              name: '',
-              account: "",
-              region: "",
-              access_id: "",
-              access_key: "",
-              default_admin_user: "",
-              state: 'false',
-              remarks: '',
-              project_id: '',
-              huawei_cloud: 'myhuaweicloud.com',
-              huawei_instance_id: '',
-            }
-            
-          }
-      },
+        // post
+        this.formValidate = {
+          name: '',
+          account: '',
+          region: '',
+          access_id: '',
+          access_key: '',
+          default_admin_user: '',
+          state: 'false',
+          remarks: '',
+          project_id: '',
+          huawei_cloud: 'myhuaweicloud.com',
+          huawei_instance_id: ''
+        }
+      }
+    },
     handleSubmit (value) {
-        this.$refs[value].validate((valid) => {
-                    if (valid) {
-                        setTimeout(() => {
-                            operationAssetConfigs(this.formValidate, this.editModalData).then(res => {
-                                if (res.data.code === 0) {
-                                    this.$Message.success(`${res.data.msg}`)
-                                    this.getAssetConfigsList(
-                                    // this.pageNum,
-                                    // this.pageSize,
-                                    // this.searchKey,
-                                    // this.searchValue
-                                    )
-                                    this.modalMap.modalVisible = false
-                                } else {
-                                    this.$Message.error(`${res.data.msg}`)
-                                }
-                            })
-                        }, 1000)
-                        // this.$Message.success('Success!');
-                    } else {
-                        this.$Message.error('缺少必要参数');
-                    }
-                })
-              },
+      this.$refs[value].validate((valid) => {
+        if (valid) {
+          setTimeout(() => {
+            operationAssetConfigs(this.formValidate, this.editModalData).then(res => {
+              if (res.data.code === 0) {
+                this.$Message.success(`${res.data.msg}`)
+                this.getAssetConfigsList(
+                  // this.pageNum,
+                  // this.pageSize,
+                  // this.searchKey,
+                  // this.searchValue
+                )
+                this.modalMap.modalVisible = false
+              } else {
+                this.$Message.error(`${res.data.msg}`)
+              }
+            })
+          }, 1000)
+          // this.$Message.success('Success!');
+        } else {
+          this.$Message.error('缺少必要参数')
+        }
+      })
+    },
     // 删除
     delData (params) {
       if (confirm(`确定要删除 ${params.row.name}`)) {
@@ -532,16 +706,16 @@ export default {
         this.searchValue
       )
     },
-    setDefaultSearchKey() {
+    setDefaultSearchKey () {
       this.searchKey =
-        this.columns[0].key && this.columns[0].key !== "handle"
+        this.columns[0].key && this.columns[0].key !== 'handle'
           ? this.columns[0].key
           : this.columns.length > 1
             ? this.columns[1].key
-            : "";
+            : ''
     },
-    handleReset(name) {
-      this.$refs[name].resetFields();
+    handleReset (name) {
+      this.$refs[name].resetFields()
     },
     // 每页条数
     // handlePageSize (value) {
