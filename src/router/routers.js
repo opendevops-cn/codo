@@ -245,15 +245,36 @@ export const routerMap = [{
                     import ('@/view/cmdb2/db_mg.vue')
             },
             {
-                path: 'log_audit',
-                name: 'log_audit',
+                path: 'asset_idc',
+                name: 'asset_idc',
                 meta: {
-                    icon: 'md-build',
-                    title: '日志审计'
+                    icon: 'ios-cube',
+                    title: 'IDC管理'
                 },
                 component: () =>
-                    import ('@/view/cmdb2/log_audit.vue')
+                    import ('@/view/cmdb2/asset_idc.vue')
             },
+            {
+                path: 'operational_audit',
+                name: 'operational_audit',
+                meta: {
+                    icon: 'md-build',
+                    title: '操作审计'
+                },
+                component: () =>
+                    import ('@/view/cmdb2/operational_audit.vue')
+            },
+            
+            // {
+            //     path: 'log_audit',
+            //     name: 'log_audit',
+            //     meta: {
+            //         icon: 'md-build',
+            //         title: '日志审计'
+            //     },
+            //     component: () =>
+            //         import ('@/view/cmdb2/log_audit.vue')
+            // },
             {
                 path: 'tag_mg',
                 name: 'tag_mg',
@@ -567,6 +588,16 @@ export const routerMap = [{
                 },
                 component: () =>
                     import ('@/view/devops-tools/password-mycrypy.vue')
+            },
+            {
+                path: 'aws_events',
+                name: 'aws_events',
+                meta: {
+                    icon: 'ios-alert',
+                    title: 'AwsEvents'
+                },
+                component: () =>
+                    import('@/view/cmdb2/aws_events.vue')
             }
         ]
     },
