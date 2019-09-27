@@ -91,6 +91,8 @@ export default {
     asset_server: '主机管理',
     log_audit: '日志审计',
     asset_db: 'DB管理',
+    asset_idc: 'IDC管理',
+    operational_audit: '操作审计',
     tag_mg: '标签管理',
     admin_user: '管理用户',
     system_user: '系统用户',
@@ -110,6 +112,7 @@ export default {
     fault_manager: '故障管理',
     password_mycrypy: '加密解密',
     project_manager: '项目管理',
+    aws_events: 'AwsEvents',
     //
     monitoringalarm: '监控报警',
     zabbix_manager: 'ZABBIX',

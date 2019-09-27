@@ -10,11 +10,16 @@
   <Card>
         <Alert banner closable >同步Tag树：默认情况下部署CMDB时候settings里面配置了任务系统的数据库信息，主机资产会每天定时同步到Tag树，也可点击手动同步，无需选中主机，同步所有，注意请不要多次点击。</Alert>
     <div class="search-con search-con-top">
-      <Input class="search-input" v-model="searchVal" style="padding:5px;" placeholder="输入关键字全局搜索"/>
+      <!-- <Input class="search-input" v-model="searchVal" style="padding:5px;" placeholder="输入关键字全局搜索"/> -->
+      <Input @on-change="handleClear" clearable placeholder="输入关键字全局搜索" class="search-input" v-model="searchValue"/>
+      <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
+      
       <slot name="new_btn">
         <Button type="primary" @click="editModal('', 'post', '添加主机')" class="search-btn">添加主机</Button></slot>
         <Button type="info" class="search-btn"  @click="handlemultiAdd">批量添加</Button>
+        <!-- <Button type="warning" class="search-btn"  @click="HandlelinkTag">关联标签</Button> -->
         <Button type="error" class="search-btn"  @click="handlerDelete">批量删除</Button>
+
         <Detail :dialog="dialog2" :formData="formValidate" @e-close="closeModal"></Detail>
         <MultiAdd :dialog="multi_dialog" :formData="formData_multi" @e-update="getServerList" @e-close="closeMultiModal"></MultiAdd>
         <!-- <Button type="info" v-if="rules.asset_error_log" class="search-btn" @click="handlerCheckErrorLog">任务日志 -->
@@ -25,14 +30,16 @@
 
         <!-- <Button type="info" class="search-btn"  @click="handlerRsyncKey">推送密钥</Button> -->
         <Button type="success" class="search-btn"  @click="handlerAssetUpdate">资产更新</Button>
-        <Button type="info" class="search-btn" :loading="loading" @click="handleSyncTagTree">同步标签树</Button>
+        <Button type="warning" class="search-btn" :loading="loading" @click="handleSyncTagTree">同步标签树</Button>
 
+        <Button type="primary" class="search-btn"  @click="exportData(2)"><Icon type="ios-download-outline"></Icon>导出数据</Button>
     </div>
     
+    <!-- <Table size="small" ref="selection" border :columns="columns":data="tableData"@on-selection-change="handleSelectChange"></Table> -->
     <Table size="small" ref="selection" border :columns="columns":data="tableData"@on-selection-change="handleSelectChange"></Table>
       <div style="margin: 10px; overflow: hidden">
         <div style="float: left;">
-            <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[15,35,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize">
+            <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[15,35,50,100,200,500,1000] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize">
             </Page>
         </div>
       </div>
@@ -80,7 +87,7 @@
         <FormItem label="端口">
             <Input v-model="formValidate.port" :maxlength="5" placeholder="端口"></Input>
         </FormItem>
-        <FormItem label="IDC" prop="idc">
+        <!-- <FormItem label="IDC" prop="idc">
           <Select v-model="formValidate.idc" placeholder="选择IDC机房">
             <Option value="AWS" >AWS</Option>
             <Option value="阿里云" >阿里云</Option>
@@ -88,6 +95,11 @@
             <Option value="华为云" >华为云</Option>
             <Option value="内网" >内网</Option>
             <Option value="其他" >其他</Option>
+          </Select>
+        </FormItem> -->
+        <FormItem label="IDC" prop="idc">
+          <Select class="search-input-long" v-model="formValidate.idc" filterable multiple placeholder="选择IDC机房">
+            <Option v-for="item in allIDCList" :value="item.name" :key="item.id" >{{ item.name }}</Option>
           </Select>
         </FormItem>
 
@@ -130,6 +142,16 @@
         </FormItem>
       </Form>
     </Modal>
+    <!-- <Modal v-model="modalMaplinkTag.modalVisible" :title="modalMaplinkTag.modalTitle" :loading=true :footer-hide=true :mask-closable=false>
+     <Form ref="formValidateLinkTag" :model="formValidateLinkTag" :label-width="80">
+        <CheckboxGroup v-model="formValidateLinkTag.link_tag_list">
+          <Checkbox v-for="item in allTagList" :key="item.id"   :label="item.id" >
+            <span style="font-size:12px">{{item.tag_name}}</span>
+          </Checkbox>
+        </CheckboxGroup>
+        <Button type="primary" @click="handleSubmitlinkTag('formValidateLinkTag')">提交</Button>
+     </Form>
+    </Modal> -->
   </Card>
     </i-col>
   </Row>
@@ -151,6 +173,7 @@ import Detail from './server_detail'
 import { getServerList, getServerDetailList, operationServer, assetServerUpdate, getTagtree, getErrorLog, syncServerToTagTree} from '@/api/cmdb2/server.js'
 import { getAdminUserList } from '@/api/cmdb2/admin_user'
 import { getTagList } from '@/api/cmdb2/tag.js'
+import { getIDClist } from '@/api/cmdb2/idc.js'
 import MultiAdd  from './multi_add_server'
 import { mapState } from 'vuex'
 export default {
@@ -160,6 +183,13 @@ export default {
   },
   data () {
     return {
+      formValidateLinkTag:{
+        link_tag_list:[],
+      },
+      modalMaplinkTag: {
+        modalVisible: false,
+        modalTitle: '选择你要关联的标签'
+      },
       formData_multi: {
         data: null
       },
@@ -192,6 +222,7 @@ export default {
       tableData: [],
       admUserList: [],
       allTagList: [],
+      allIDCList: [],
       tableSelectIdList: [],
       modalMap: {
         modalVisible: false,
@@ -262,15 +293,15 @@ export default {
           }
         },
         {
-          title: 'IP',
-          key: 'ip',
+          title: '内网IP',
+          key: 'private_ip',
           width: 180,
           align: 'center',
           sortable: true
         },
         {
-          title: '内网IP',
-          key: 'private_ip',
+          title: '公网IP',
+          key: 'ip',
           width: 180,
           align: 'center',
           sortable: true
@@ -289,13 +320,14 @@ export default {
           align: 'center',
           sortable: true
         },
-        {
-          title: "管理用户",
-          key: "admin_user",
-          width: 150,
-          align: "center",
-          sortable: true
-        },
+        // {
+        //   title: "管理用户",
+        //   key: "admin_user",
+        //   width: 150,
+        //   align: "center",
+        //   sortable: true
+        // },
+
         {
           title: '状态',
           key: 'handle',
@@ -340,10 +372,25 @@ export default {
         {
           title: '操作',
           key: 'handle',
-          width: 150,
+          width: 250,
           align: 'center',
           render: (h, params) => {
             return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'success',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                     window.open('/terminal/?id=' + params.row.id)
+                     //window.open('/confd/confd_project')
+                    }
+                  }
+                }, 'SSH'),
               h(
                 'Button',
                 {
@@ -384,6 +431,71 @@ export default {
     }
   },
   methods: {
+    // 导出数据、支持分页、过滤、搜索、排序后导出
+    exportData (type) {
+        if (type === 1) {
+            this.$refs.selection.exportCsv({
+                filename: 'codo_cmdb_original_data'
+            });
+        } else if (type === 2) {
+            this.$refs.selection.exportCsv({
+                filename: 'codo_cmdb_sorting_and_filtering_data',
+                original: false
+            });
+        } else if (type === 3) {
+            this.$refs.selection.exportCsv({
+                filename: 'codo_cmdb_custom_data',
+                columns: this.columns8.filter((col, index) => index < 4),
+                data: this.data7.filter((data, index) => index < 4)
+            });
+        }
+    },     
+
+    // // 反向关联标签，支持多对多批量
+    // handleSubmitlinkTag(value) {
+    //   const data = {
+    //     "tag_list": this.formValidateLinkTag.link_tag_list,
+    //     "server_list": this.tableSelectIdList,
+    //   }
+    //   console.log('new_data--->', data)
+    //   // console.log(this.formValidateLinkTag)
+    //   // console.log('allTagList',this.allTagList)
+    //   // this.$refs[value].validate((valid) => {
+    //   //   if (valid) {
+    //   //     setTimeout(() => {
+    //   //       operationTag(this.formValidate2, this.editModalData).then(
+    //   //         res => {
+    //   //           if (res.data.code === 0) {
+    //   //             this.$Message.success(`${res.data.msg}`);
+    //   //             this.getTagList('tag_name', this.searchVal);
+    //   //             // this.getTagTree()
+    //   //             this.modalMap2.modalVisible = false;
+    //   //           } else {
+    //   //             this.$Message.error(`${res.data.msg}`);
+    //   //           }
+    //   //         }
+    //   //       );
+    //   //     }, 1000);
+    //   //   } else {
+    //   //     this.$Message.error('表单校验错误');
+    //   //   }
+    //   // })
+    // },
+
+    //点击关联标签按钮
+    HandlelinkTag(){
+        console.log('长度',this.tableSelectIdList.length)
+        if (this.tableSelectIdList.length > 1000) {
+          this.$Message.error('一次性最多关联1000台')
+          return
+        }
+        if (this.tableSelectIdList.length > 0) {
+          this.modalMaplinkTag.modalVisible = true
+        }else {
+          this.$Message.info(`请选择你要关联的主机`)
+        }
+      },
+
     // 批量添加
     handlemultiAdd () {
       this.multi_dialog = {
@@ -475,6 +587,16 @@ export default {
           this.admUserList = res.data.data
         } else {
           this.$Message.error(`${res.data.msg}`)
+        }
+      })
+    },
+    // 获取IDC列表
+    getIDCList () {
+      getIDClist().then(res => {
+        if (res.data.code === 0) {
+          // this.$Message.success(`${res.data.msg}`)
+          this.allIDCList = res.data.data
+          // console.log(this.allTagList)
         }
       })
     },
@@ -748,7 +870,7 @@ export default {
       if (e.target.value === '') this.tableData = this.value
     },
     handleSearch () {
-      this.getServerList(this.pageNum, this.pageSize, this.searchKey, this.searchValue)
+      this.getServerList(this.searchValue)
     },
     // 点击节点
     handlerTreeChange (obj) {
@@ -806,10 +928,10 @@ export default {
     })
   },
   watch: {
-    searchVal (val) {
-      this.searchVal = val
-      this.getServerList(this.searchVal)
-    }
+    // searchVal (val) {
+    //   this.searchVal = val
+    //   this.getServerList(this.searchVal)
+    // }
   },
 
   mounted () {
@@ -817,6 +939,7 @@ export default {
     this.getTagList()
     this.getAdminUserList()
     this.getTagTree()
+    this.getIDCList()
   }
 }
 </script>
