@@ -1,6 +1,37 @@
 import axios from '@/libs/api.request'
 import config from '@/config'
 
+//
+export const getCommonjobs = (page, limit, key) => {
+    return axios.request({
+        url: '/task/other/v1/submission/common_jobs/',
+        method: 'get',
+        params: {
+            page,
+            limit,
+            key
+        }
+    })
+}
+
+export const operationCommonjobs = (data, meth) => {
+    return axios.request({
+        url: '/task/other/v1/submission/common_jobs/',
+        method: meth,
+        data
+    })
+}
+
+// 常用作业中，手动提交任务
+export const handSubmittask = (data, meth) => {
+        return axios.request({
+            url: '/task/other/v1/submission/hand_submit_task/',
+            method: meth,
+            data
+        })
+    }
+    //
+
 export const getTagtree = (key, value) => {
     return axios.request({
         url: '/task/other/v1/record/tree/',

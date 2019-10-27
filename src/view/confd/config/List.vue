@@ -117,7 +117,7 @@
 
 <script>
 import Vue from 'vue'
-import {Tag} from 'iview'
+import {Tag} from 'view-design'
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 import editor from '@/components/public/editor'

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Message } from 'iview'
+import { Message } from 'view-design'
 import Vue from 'vue'
 import Cookies from 'js-cookie'
 // import { router } from '@/router'

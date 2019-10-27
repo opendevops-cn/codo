@@ -80,16 +80,16 @@ export const routerMap = [{
                 component: () =>
                     import ('@/view/tasks-center/task-submit/mysql-optimize.vue')
             },
-            {
-                path: 'customTasks',
-                name: 'customTasks',
-                meta: {
-                    icon: 'md-beer',
-                    title: '自定义任务'
-                },
-                component: () =>
-                    import ('@/view/tasks-center/task-submit/task-custom.vue')
-            },
+            // {
+            //     path: 'customTasks',
+            //     name: 'customTasks',
+            //     meta: {
+            //         icon: 'md-beer',
+            //         title: '自定义任务'
+            //     },
+            //     component: () =>
+            //         import ('@/view/tasks-center/task-submit/task-custom.vue')
+            // },
             {
                 path: 'customTasksProxy',
                 name: 'customTasksProxy',
@@ -109,7 +109,37 @@ export const routerMap = [{
                 },
                 component: () =>
                     import ('@/view/tasks-center/task-submit/task-post.vue')
-            }
+            },
+            {
+                path: 'customTasks',
+                name: 'customTasks',
+                meta: {
+                    icon: 'md-beer',
+                    title: '新建作业'
+                },
+                component: () =>
+                    import ('@/view/tasks-center/task-submit/create_task.vue')
+            },
+            {
+                path: 'commonJobs',
+                name: 'commonJobs',
+                meta: {
+                    icon: 'ios-heart',
+                    title: '常用作业'
+                },
+                component: () =>
+                    import ('@/view/tasks-center/task-submit/common-jobs.vue')
+            },
+            // {
+            //     path: 'myCollect',
+            //     name: 'myCollect',
+            //     meta: {
+            //         icon: 'md-beer',
+            //         title: '我的收藏'
+            //     },
+            //     component: () =>
+            //         import ('@/view/tasks-center/task-submit/my_collect.vue')
+            // },
         ]
     },
     {
@@ -264,7 +294,7 @@ export const routerMap = [{
                 component: () =>
                     import ('@/view/cmdb2/operational_audit.vue')
             },
-            
+
             // {
             //     path: 'log_audit',
             //     name: 'log_audit',
@@ -597,7 +627,7 @@ export const routerMap = [{
                     title: 'AwsEvents'
                 },
                 component: () =>
-                    import('@/view/cmdb2/aws_events.vue')
+                    import ('@/view/cmdb2/aws_events.vue')
             }
         ]
     },

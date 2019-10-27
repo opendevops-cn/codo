@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { routes } from './routers'
 import store from '@/store'
-import iView from 'iview'
+// import iView from 'iview'
+import ViewUI from 'view-design';
 import { getToken, setTitle, setToken } from '@/libs/util'
 
 Vue.use(Router)
@@ -14,7 +15,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   to.meta.title && setTitle(to.meta.title)
-  iView.LoadingBar.start()
+  ViewUI.LoadingBar.start()
   const token = getToken()
   if (token) {
     if (!store.state.router.hasGetRules) {
@@ -42,7 +43,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(to => {
-  iView.LoadingBar.finish()
+  ViewUI.LoadingBar.finish()
   window.scrollTo(0, 0)
 })
 
