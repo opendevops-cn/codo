@@ -119,21 +119,21 @@
 import Vue from 'vue'
 import {Tag} from 'view-design'
 import VueClipboard from 'vue-clipboard2'
-Vue.use(VueClipboard)
 import editor from '@/components/public/editor'
 import Tables from '_c/tables'
 import Add from './Add'
 // import History from './History'
-import { getConfTree, getConf, putConf, patchConf,deleteConf, diffConf, getHistory,backHistory,setAuth, getAuth} from '@/api/confd/conf.js'
+import { getConfTree, getConf, putConf, patchConf, deleteConf, diffConf, getHistory, backHistory, setAuth, getAuth} from '@/api/confd/conf.js'
 import { getuserlist } from '@/api/user'
 import { highlight } from '@/libs/util.js'
+Vue.use(VueClipboard)
 export default {
   name: 'list',
   components: {
     editor,
     Tables,
     Tag,
-    Add,
+    Add
     // History
   },
   data () {
@@ -146,22 +146,22 @@ export default {
       is_history_one: false,
       is_editor: true,
       show_publish_btn: false,
-      editor:{
+      editor: {
         title: '编辑',
         read: true,
-        color: "primary"
+        color: 'primary'
       },
       params: {},
-      mode_type : 'python',
+      mode_type: 'python',
       // 项目代号
       project_code: '',
       config_id: null,
       file_data: '',
       history_data: [],
       history_id: null,
-      history_content : 'history_content....',
+      history_content: 'history_content....',
       is_published: true,
-      wordList:[],
+      wordList: [],
       display_name: '',
       config_path: '',
       treeData: [],
@@ -183,18 +183,18 @@ export default {
         show: false,
         title: '版本回滚'
       },
-      del_dialog:{
+      del_dialog: {
         show: false,
         title: '删除配置'
       },
-      config_api_dialog:{
+      config_api_dialog: {
         show: false,
         title: '获取API'
       },
       auth_env: null,
       auth_type: null,
-      authUser:[],
-      allUser:[],
+      authUser: [],
+      allUser: [],
       del_dialog: {
         show: false,
         title: ''
@@ -206,11 +206,11 @@ export default {
     }
   },
   methods: {
-    goCallBack(){
+    goCallBack () {
       this.back_dialog.show = true
     },
     // 版本回滚
-    backConfig(){
+    backConfig () {
       backHistory({history_id: this.history_id}).then(res => {
         const data = res.data
         if (data.code === 0) {
@@ -227,14 +227,14 @@ export default {
       })
     },
 
-    delConfig(){
+    delConfig () {
       this.del_dialog.show = true
     },
 
-    removeConfig(){
+    removeConfig () {
       if (!this.params) {
-         this.$Message.error(`你总要选中一个呀`)
-      }else{
+        this.$Message.error(`你总要选中一个呀`)
+      } else {
         const params = this.params
         delete params['content']
         deleteConf(params).then(res => {
@@ -251,7 +251,7 @@ export default {
     },
 
     // 历史版本
-    goHistory(){
+    goHistory () {
       this.is_editor = false
       this.is_history = true
       getHistory(this.params).then(res => {
@@ -270,21 +270,21 @@ export default {
         })
       })
     },
-    clickOneHistory(content,id){
+    clickOneHistory (content, id) {
       this.is_history = false
       this.is_history_one = true
       this.history_content = content
       this.history_id = id
     },
 
-    diffConfData(arg){
+    diffConfData (arg) {
       this.show_publish_btn = arg
       // 配置文件对比
       let params = {}
-      if(arg==='diffHistory'){
-        params = {history_id:this.history_id}
-      }else{
-        params = {config_id:this.config_id}
+      if (arg === 'diffHistory') {
+        params = {history_id: this.history_id}
+      } else {
+        params = {config_id: this.config_id}
       }
       diffConf(params).then(res => {
         // console.log(res)
@@ -305,57 +305,57 @@ export default {
         })
       })
     },
-    publishEditor(){
-        // 发布 = 保存+发布
-        this.diffConfData('publish')
+    publishEditor () {
+      // 发布 = 保存+发布
+      this.diffConfData('publish')
     },
-    addEditor(){
+    addEditor () {
       this.dialog = {
         show: true,
         title: '添加配置'
       }
     },
-    editBack(){
+    editBack () {
       this.editor = {
         title: '编辑',
         read: true,
-        color: "primary"
+        color: 'primary'
       }
       this.getConfData(this.params)
     },
-    editEditor(value){
-      if(this.config_id){
-        if(value){
+    editEditor (value) {
+      if (this.config_id) {
+        if (value) {
           this.editor = {
             title: '保存',
             read: false,
-            color: "warning"
+            color: 'warning'
           }
-        }else{
+        } else {
           this.editor = {
             title: '编辑',
             read: true,
-            color: "primary"
+            color: 'primary'
           }
           this.params['content'] = this.file_data
           // console.log(this.params)
           this.putConfData(this.params)
         }
-      }else{
+      } else {
         this.$Message.error({
-            content: '请选择文件',
-            duration: 3
+          content: '请选择文件',
+          duration: 3
         })
       }
     },
 
-    //设置要选则的编辑器语言
-    selectModeType(value){
+    // 设置要选则的编辑器语言
+    selectModeType (value) {
       this.mode_type = value
     },
 
     editorInit: function () {
-      require(`brace/mode/${this.mode_type}`)    //language
+      require(`brace/mode/${this.mode_type}`) // language
       require('brace/theme/terminal')
       require('brace/theme/xcode')
     },
@@ -375,7 +375,6 @@ export default {
         }
       }))
     },
-
 
     handleDelete (params) {
       console.log(params)
@@ -471,7 +470,7 @@ export default {
       this.getData(project_code)
     },
 
-    //获取项目Tree
+    // 获取项目Tree
     getData (project_code) {
       getConfTree(project_code).then(res => {
         const data = res.data
@@ -490,7 +489,7 @@ export default {
     },
 
     // 获取配置文件内容
-    getConfData(params){
+    getConfData (params) {
       delete params['content']
       getConf(params).then(res => {
         const data = res.data
@@ -512,7 +511,7 @@ export default {
     },
 
     // 修改配置文件内容
-    putConfData(params){
+    putConfData (params) {
       putConf(params).then(res => {
         // console.log(res)
         const data = res.data
@@ -531,8 +530,8 @@ export default {
     },
 
     // 发布到线上配置
-    patchConfData(){
-      patchConf({config_id:this.config_id}).then(res => {
+    patchConfData () {
+      patchConf({config_id: this.config_id}).then(res => {
         // console.log(res)
         const data = res.data
         if (data.code === 0) {
@@ -549,7 +548,7 @@ export default {
         })
       })
     },
-        // 获取用户列表
+    // 获取用户列表
     getUserList () {
       getuserlist(1, 301).then(res => {
         if (res.data.code === 0) {
@@ -559,15 +558,15 @@ export default {
         }
       })
     },
-    //授权
-    authSubmit(){
+    // 授权
+    authSubmit () {
       const data = {
         project_code: this.project_code,
         environment: this.auth_env,
         auth_user_list: this.authUser
       }
-      const action = this.auth_type === 'user' ? 'post': 'put'
-      setAuth(data,action).then(res => {
+      const action = this.auth_type === 'user' ? 'post' : 'put'
+      setAuth(data, action).then(res => {
         const data = res.data
         if (data.code === 0) {
           this.$Message.success(data.msg)
@@ -581,13 +580,12 @@ export default {
           duration: 10
         })
       })
-
     },
 
-    getAuthUser(){
-      //获取授权用户列表
+    getAuthUser () {
+      // 获取授权用户列表
       this.auth_type = 'user'
-      getAuth({project_code:this.project_code,environment:this.auth_env}).then(res => {
+      getAuth({project_code: this.project_code, environment: this.auth_env}).then(res => {
         const data = res.data
         this.authUser = data.data.user_list
         if (data.code === 0) {
@@ -603,14 +601,13 @@ export default {
       })
     },
 
-    getAuthAdmin(){
-      //获取授权管理员列表
+    getAuthAdmin () {
+      // 获取授权管理员列表
       this.auth_type = 'admin'
-      getAuth({project_code:this.project_code,environment:'all_env'}).then(res => {
+      getAuth({project_code: this.project_code, environment: 'all_env'}).then(res => {
         const data = res.data
-        //console.log(data)
+        // console.log(data)
         if (data.code === 0) {
-
           this.$Message.success(data.msg)
           this.authUser = data.data.admin_list
           this.auth_dialog = {
@@ -628,32 +625,32 @@ export default {
       })
     },
 
-    //配置文件点击是触发
-    treeSelect(obj){
-      if(obj.length !==0){
+    // 配置文件点击是触发
+    treeSelect (obj) {
+      if (obj.length !== 0) {
         const data = obj[0]
-        if(data.data_type === 'file'){
+        if (data.data_type === 'file') {
           this.config_id = data.id
           this.params = {
-            project_code : this.project_code,
-            environment : data.env,
-            service : data.service,
-            filename : data.title
+            project_code: this.project_code,
+            environment: data.env,
+            service: data.service,
+            filename: data.title
           }
           this.getConfData(this.params)
           this.is_editor = true
           this.is_history = false
           this.is_history_one = false
-        }else if(data.data_type === 'env'){
-          //授权用户权限
+        } else if (data.data_type === 'env') {
+          // 授权用户权限
           this.auth_dialog = {
             show: true,
             title: '授权用户【可对配置文件 编辑/保存】'
           },
           this.auth_env = data.title
           this.getAuthUser()
-        }else if(data.data_type === 'project'){
-          //授权管理员权限
+        } else if (data.data_type === 'project') {
+          // 授权管理员权限
           this.auth_env = data.title
           this.getAuthAdmin()
         }
@@ -672,29 +669,29 @@ export default {
       },
       this.dialog.show = false
     },
-    getApi() {
+    getApi () {
       this.config_api_dialog.show = true
     },
-    onCopy(){
-       this.$Message.success('复制成功')
+    onCopy () {
+      this.$Message.success('复制成功')
     },
-    onError(){
+    onError () {
       this.$Message.error('复制失败')
     }
   },
   watch: {
     project_code (val) {
       this.getData(this.project_code)
-    },
+    }
   },
-  computed:{
-    historyTitle(){
-      return function(a,b){
+  computed: {
+    historyTitle () {
+      return function (a, b) {
         return `${a} ${b}`
       }
     }
   },
-  updated: function() {
+  updated: function () {
     this.project_code = this.$route.query.project_code
   },
   mounted () {
@@ -762,6 +759,3 @@ export default {
       background: #5cb85c !important;
   }
 </style>
-
-
-

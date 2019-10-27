@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import { routes } from './routers'
 import store from '@/store'
 // import iView from 'iview'
-import ViewUI from 'view-design';
+import ViewUI from 'view-design'
 import { getToken, setTitle, setToken } from '@/libs/util'
 
 Vue.use(Router)

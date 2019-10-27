@@ -1,7 +1,7 @@
 <template>
   <Card>
     <div class="search-con search-con-top">
-        <Affix :offset-top="80"> 
+        <Affix :offset-top="80">
           <Input autofocus="autofocus" v-model="searchVal" style="padding:6px;" placeholder="请输入作业名称进行模糊搜素" />
         </Affix>
     </div>
@@ -83,7 +83,7 @@
             {{tempname}}
           </FormItem>
 
-          <FormItem label="选择标签：" prop="tag"> 
+          <FormItem label="选择标签：" prop="tag">
             <Select v-model="formValidate2.tag" filterable placeholder="请选择关联的标签" @on-change="">
                 <Option
                   v-for="item in allTagList"
@@ -128,23 +128,23 @@
 </template>
 
 <script>
-import { getAuthTaglist, getCustomtask, operationCustomtask, getCommonjobs, operationCommonjobs, handSubmittask } from "@/api/task-other";
-import { getTemplist, getTempargs, getDetailslist } from "@/api/task";
-import { getuserlist } from "@/api/user";
+import { getAuthTaglist, getCustomtask, operationCustomtask, getCommonjobs, operationCommonjobs, handSubmittask } from '@/api/task-other'
+import { getTemplist, getTempargs, getDetailslist } from '@/api/task'
+import { getuserlist } from '@/api/user'
 export default {
   components: {},
-  data() {
+  data () {
     return {
       columns: [
         {
-          title: "作业名称",
-          key: "task_name",
-          align: "left",
+          title: '作业名称',
+          key: 'task_name',
+          align: 'left',
           width: 400,
           sortable: true,
           render: (h, params) => {
             return h(
-              "a",
+              'a',
               {
                 on: {
                   click: () => {
@@ -153,123 +153,123 @@ export default {
                 }
               },
               params.row.task_name
-            );
+            )
           }
         },
         {
-          title: "执行主机",
-          key: "hosts_name",
-          align: "left"
+          title: '执行主机',
+          key: 'hosts_name',
+          align: 'left'
         },
         {
-          title: "模板ID",
-          key: "temp_id",
-          align: "center",
-          width: 100,
+          title: '模板ID',
+          key: 'temp_id',
+          align: 'center',
+          width: 100
         },
         {
-          title: "创建者",
-          key: "creator",
-          align: "center",
+          title: '创建者',
+          key: 'creator',
+          align: 'center',
           width: 150
         },
         {
-          title: "创建时间",
-          key: "create_time",
-          align: "center",
+          title: '创建时间',
+          key: 'create_time',
+          align: 'center',
           width: 180,
           sortable: true
         },
         {
-          title: "更新时间",
-          key: "update_time",
-          align: "center",
+          title: '更新时间',
+          key: 'update_time',
+          align: 'center',
           width: 180,
           sortable: true
         },
         {
-          title: "",
-          key: "handle",
+          title: '',
+          key: 'handle',
           width: 360,
-          align: "center",
+          align: 'center',
           render: (h, params) => {
-            return h("ButtonGroup", [
+            return h('ButtonGroup', [
               h(
-                "Button",
+                'Button',
                 {
                   props: {
                     // type: "success",
-                    size: "small"
+                    size: 'small'
                   },
                   on: {
                     click: () => {
-                      this.handleSubmitExecJob(params.row, "put", "执行作业");
+                      this.handleSubmitExecJob(params.row, 'put', '执行作业')
                     }
                   }
                 },
-                "立即执行"
+                '立即执行'
               ),
               h(
-                "Button",
+                'Button',
                 {
                   props: {
-                    size: "small"
+                    size: 'small'
                   },
                   on: {
                     click: () => {
-                      this.viewStep(params.row.temp_id);
+                      this.viewStep(params.row.temp_id)
                     }
                   }
                 },
-                "查看步骤"
+                '查看步骤'
               ),
               h(
-                "Button",
+                'Button',
                 {
                   props: {
-                    size: "small"
+                    size: 'small'
                   },
                   on: {
                     click: () => {
-                      this.editTheJob(params.row, "put", "编辑作业");
+                      this.editTheJob(params.row, 'put', '编辑作业')
                     }
                   }
                 },
-                "编辑"
+                '编辑'
               ),
               h(
-                "Button",
+                'Button',
                 {
                   props: {
-                    size: "small"
+                    size: 'small'
                   },
                   style: {
-                    marginRight: "10px"
+                    marginRight: '10px'
                   },
                   on: {
                     click: () => {
-                      this.relevanceUser(params.row);
+                      this.relevanceUser(params.row)
                     }
                   }
                 },
-                "授权"
+                '授权'
               ),
               h(
-                "Button",
+                'Button',
                 {
                   props: {
                     // type: "error",
-                    size: "small"
+                    size: 'small'
                   },
                   on: {
                     click: () => {
-                      this.delData(params);
+                      this.delData(params)
                     }
                   }
                 },
-                "删除"
+                '删除'
               )
-            ]);
+            ])
           }
         }
       ],
@@ -277,23 +277,23 @@ export default {
       //
       viewStepcolumns: [
         {
-          title: "优先级",
-          key: "level",
-          align: "center",
+          title: '优先级',
+          key: 'level',
+          align: 'center',
           width: 100,
           sortable: true
         },
         {
-          title: "脚本名称",
-          key: "command_name",
-          align: "left",
+          title: '脚本名称',
+          key: 'command_name',
+          align: 'left',
           width: 250,
           sortable: true
         },
         {
-          title: "脚本命令",
-          key: "command",
-          align: "left",
+          title: '脚本命令',
+          key: 'command',
+          align: 'left',
           sortable: true
         },
         {
@@ -313,120 +313,118 @@ export default {
               return h('div', [
                 h('Tag', { props: { color: 'geekblue' } }, '定时')
               ])
-            } 
+            }
           }
         }
       ],
-      temp_step_list:[],
+      temp_step_list: [],
       //
-       formValidate: {
-        task_name: "",
-        tag: "",
-        temp_id: "",
-        nickname: "",
-        hostnames: "",
+      formValidate: {
+        task_name: '',
+        tag: '',
+        temp_id: '',
+        nickname: '',
+        hostnames: '',
         args_items: []
       },
       formValidate2: {
-        task_name: "",
-        tag: "",
-        temp_id: "",
-        nickname: "",
-        hostnames: "",
+        task_name: '',
+        tag: '',
+        temp_id: '',
+        nickname: '',
+        hostnames: '',
         args_items: []
       },
       ruleValidate: {
         tag: [
           {
             required: true,
-            message: "The tag cannot be empty",
-            trigger: "blur"
+            message: 'The tag cannot be empty',
+            trigger: 'blur'
           }
         ],
         temp_id: [
           {
             required: true,
-            type: "number",
-            message: "必须选择一个执行模板",
-            trigger: "blur"
+            type: 'number',
+            message: '必须选择一个执行模板',
+            trigger: 'blur'
           }
         ],
         start_time: [
           {
             required: true,
-            type: "date",
-            message: "Please select the date",
-            trigger: "change"
+            type: 'date',
+            message: 'Please select the date',
+            trigger: 'change'
           }
         ]
       },
       // 用户授权 弹框
       modalMap: {
         modalVisible: false,
-        modalTitle: "创建",
+        modalTitle: '创建'
         // modalVisible1: false,
         // modalTitle1: "创建"
       },
-      selectTaskname: "",
+      selectTaskname: '',
       existUser: [],
       allUser: [],
       ///
-      editDrawer: false, //编辑弹框
+      editDrawer: false, // 编辑弹框
       viewDrawer: false,
       execDrawer: false,
       styles: {
-        height: "calc(100% - 55px)",
-        overflow: "auto",
-        paddingBottom: "53px",
-        position: "static"
+        height: 'calc(100% - 55px)',
+        overflow: 'auto',
+        paddingBottom: '53px',
+        position: 'static'
       },
       // 提交相关
       submitInfo: [],
       optionsDate: {
-        disabledDate(date) {
-          return date && date.valueOf() < Date.now() - 86400000;
+        disabledDate (date) {
+          return date && date.valueOf() < Date.now() - 86400000
         }
       },
       //
-      searchVal: "", //查询
+      searchVal: '', // 查询
       // 分页
       pageNum: 1, // 当前页码
       pageTotal: 0, // 数据总数
       pageSize: 15, // 每页条数
       //
-      allTagList: [], //所有标签
+      allTagList: [], // 所有标签
       tempinfo: null,
-      tempname:'',
+      tempname: '',
       btn_loading: false
-
 
     }
   },
   methods: {
     // 获取常用作业List
-    getCommonJobs() {
-      getCommonjobs(this.pageNum, this.pageSize,this.searchVal)
+    getCommonJobs () {
+      getCommonjobs(this.pageNum, this.pageSize, this.searchVal)
         .then(res => {
           if (res.data.code === 0) {
-            
-            this.pageTotal = res.data.count;
-            this.tableData = res.data.data;
+            this.pageTotal = res.data.count
+            this.tableData = res.data.data
           } else {
-            this.$Message.error(res.data.msg);
+            this.$Message.error(res.data.msg)
           }
         })
         .catch(error => {
           this.$Message.error({
             content: JSON.stringify(error.response.data),
             duration: 10
-          });
-        });
+          })
+        })
     },
-    
-    //提交任务
+
+    // 提交任务
     // 触发立即执行按钮，弹出二次确认信息
-    handleSubmitExecJob(paramsRow, meth, mtitle) {
-      this.execDrawer = true;
+    handleSubmitExecJob (paramsRow, meth, mtitle) {
+      this.execDrawer = true
       this.formValidate = {
         id: paramsRow.id,
         task_name: paramsRow.task_name,
@@ -436,60 +434,60 @@ export default {
         hostnames: paramsRow.hostnames,
         args_items: JSON.parse(paramsRow.args_items),
         detail: paramsRow.detail
-      };
+      }
       // 获取模板名称
-      let temp_id = paramsRow.temp_id;
-      this.getTempName(temp_id);
+      let temp_id = paramsRow.temp_id
+      this.getTempName(temp_id)
 
       // 获取此任务的目标主机
-      let tag = paramsRow.tag;
-      getCustomtask("tag", tag).then(res => {
+      let tag = paramsRow.tag
+      getCustomtask('tag', tag).then(res => {
         if (res.data.code === 0) {
-          this.submitInfo = res.data.data;
+          this.submitInfo = res.data.data
         } else {
-          this.$Message.error(`${res.data.msg}`);
+          this.$Message.error(`${res.data.msg}`)
         }
-      });
+      })
       // // 获取当前时间
       // formValidate.start_time = this.computedDateTime(new Date().toLocaleDateString())
     },
 
-    //Step02:触发执行任务
-    handleSubmitJob(value) {
-      this.btn_loading = true;
+    // Step02:触发执行任务
+    handleSubmitJob (value) {
+      this.btn_loading = true
       if (this.submitInfo.length === 0 || this.submitInfo.length > 100) {
         this.$Message.error(
-          "请选择一个标签，并确保标签下有主机，并且主机不能大于100"
-        );
-        this.btn_loading = false;
-        return;
+          '请选择一个标签，并确保标签下有主机，并且主机不能大于100'
+        )
+        this.btn_loading = false
+        return
       }
       this.$refs[value].validate(valid => {
         if (valid) {
           setTimeout(() => {
-            this.formValidate["hostnames"] = this.submitInfo;
-            operationCustomtask(this.formValidate, "post").then(res => {
+            this.formValidate['hostnames'] = this.submitInfo
+            operationCustomtask(this.formValidate, 'post').then(res => {
               if (res.data.code === 0) {
-                this.$Message.success(`${res.data.msg}`);
+                this.$Message.success(`${res.data.msg}`)
               } else {
-                this.$Message.error(`${res.data.msg}`);
+                this.$Message.error(`${res.data.msg}`)
               }
-            });
-            this.btn_loading = false;
-          }, 1000);
+            })
+            this.btn_loading = false
+          }, 1000)
         } else {
-          this.$Message.error("表单校验错误");
-          this.btn_loading = false;
+          this.$Message.error('表单校验错误')
+          this.btn_loading = false
         }
-      });
+      })
     },
 
-    //任务模板进行编辑
-    editTheJob(paramsRow, meth, mtitle) {
-      let temp_id = paramsRow.temp_id;
-      this.getTempName(temp_id);
+    // 任务模板进行编辑
+    editTheJob (paramsRow, meth, mtitle) {
+      let temp_id = paramsRow.temp_id
+      this.getTempName(temp_id)
 
-      this.editDrawer = true;  //弹框
+      this.editDrawer = true // 弹框
 
       this.formValidate2 = {
         id: paramsRow.id,
@@ -500,136 +498,136 @@ export default {
         hostnames: paramsRow.hostnames,
         args_items: JSON.parse(paramsRow.args_items),
         detail: paramsRow.detail
-      };
-    },
-
-    handleSubmitJobEdit(value){
-      // 这里就不验证了
-      this.btn_loading = true;
-       setTimeout(() => {
-          operationCommonjobs(this.formValidate2, "put").then(res => {
-            if (res.data.code === 0) {
-              this.$Message.success(`${res.data.msg}`);
-            } else {
-              this.$Message.error(`${res.data.msg}`);
-            }
-          });
-          this.btn_loading = false;
-      }, 1000);
-    },
-    //
-    handleClose(event, name) {
-      const index = this.submitInfo.indexOf(name);
-      this.submitInfo.splice(index, 1);
-    },
-    // 删除任务
-    delData(params) {
-      if (confirm(`确定要删除 ${params.row.task_name}`)) {
-        operationCommonjobs({ id: params.row.id }, "delete").then(res => {
-          if (res.data.code === 0) {
-            this.$Message.success(`${res.data.msg}`);
-            this.tableData.splice(params.index, 1);
-          } else {
-            this.$Message.error(`${res.data.msg}`);
-          }
-        });
       }
     },
-    //获取模板名称
-    getTempName(val) {
-      getTemplist("temp_id", val).then(res => {
+
+    handleSubmitJobEdit (value) {
+      // 这里就不验证了
+      this.btn_loading = true
+      setTimeout(() => {
+        operationCommonjobs(this.formValidate2, 'put').then(res => {
+          if (res.data.code === 0) {
+            this.$Message.success(`${res.data.msg}`)
+          } else {
+            this.$Message.error(`${res.data.msg}`)
+          }
+        })
+        this.btn_loading = false
+      }, 1000)
+    },
+    //
+    handleClose (event, name) {
+      const index = this.submitInfo.indexOf(name)
+      this.submitInfo.splice(index, 1)
+    },
+    // 删除任务
+    delData (params) {
+      if (confirm(`确定要删除 ${params.row.task_name}`)) {
+        operationCommonjobs({ id: params.row.id }, 'delete').then(res => {
+          if (res.data.code === 0) {
+            this.$Message.success(`${res.data.msg}`)
+            this.tableData.splice(params.index, 1)
+          } else {
+            this.$Message.error(`${res.data.msg}`)
+          }
+        })
+      }
+    },
+    // 获取模板名称
+    getTempName (val) {
+      getTemplist('temp_id', val).then(res => {
         if (res.data.code === 0) {
-          this.tempinfo = res.data.data;
-          this.tempname = res.data.data[0].temp_name;
+          this.tempinfo = res.data.data
+          this.tempname = res.data.data[0].temp_name
         } else {
-          this.$Message.error(`${res.data.msg}`);
+          this.$Message.error(`${res.data.msg}`)
         }
-      });
+      })
     },
     // 获取标签列表
-    getAllTagList() {
+    getAllTagList () {
       getAuthTaglist().then(res => {
         if (res.data.code === 0) {
-          this.allTagList = res.data.data;
+          this.allTagList = res.data.data
           console.log(this.allTagList)
         } else {
-          this.$Message.error(`${res.data.msg}`);
+          this.$Message.error(`${res.data.msg}`)
         }
-      });
+      })
     },
     // 查看步骤 抽屉
-    viewStep(temp_id) {
-      this.viewDrawer = true;
+    viewStep (temp_id) {
+      this.viewDrawer = true
       this.getDetailsList(temp_id)
     },
-    //获取模板步骤详情
-    getDetailsList(temp_id) {
+    // 获取模板步骤详情
+    getDetailsList (temp_id) {
       getDetailslist(temp_id).then(res => {
         if (res.data.code === 0) {
           this.temp_step_list = res.data.data.temp_list
-          console.log('temp_step_list',this.temp_step_list)
+          console.log('temp_step_list', this.temp_step_list)
         } else {
-          this.$Message.error(`${res.data.msg}`);
+          this.$Message.error(`${res.data.msg}`)
         }
-      });
+      })
     },
     // 获取用户列表
-    getUserList() {
+    getUserList () {
       getuserlist(1, 888).then(res => {
         if (res.data.code === 0) {
-          this.allUser = res.data.data;
+          this.allUser = res.data.data
         } else {
-          this.$Message.error(`${res.data.msg}`);
+          this.$Message.error(`${res.data.msg}`)
         }
-      });
+      })
     },
-    //授权用户
-    relevanceUser(paramsRow) {
-      this.modalMap.modalVisible = true;
-      this.modalMap.modalTitle = "授权分享";
-      this.getUserList();
-      this.selectTaskname = paramsRow.task_name;
-      this.existUser = paramsRow.authorized_user.split(",");
+    // 授权用户
+    relevanceUser (paramsRow) {
+      this.modalMap.modalVisible = true
+      this.modalMap.modalTitle = '授权分享'
+      this.getUserList()
+      this.selectTaskname = paramsRow.task_name
+      this.existUser = paramsRow.authorized_user.split(',')
     },
 
     // 提交, 更新授权用户
-    handlerSubmitUser() {
+    handlerSubmitUser () {
       operationCommonjobs(
         { authorized_user: this.existUser, task_name: this.selectTaskname },
-        "patch"
+        'patch'
       ).then(res => {
         if (res.data.code === 0) {
-          this.$Message.success(`${res.data.msg}`);
-          this.modalMap.modalVisible = false;
-          this.getCommonJobs();
+          this.$Message.success(`${res.data.msg}`)
+          this.modalMap.modalVisible = false
+          this.getCommonJobs()
         } else {
-          this.$Message.error(`${res.data.msg}`);
+          this.$Message.error(`${res.data.msg}`)
         }
-      });
+      })
     },
-     // 翻页
-    changePage(value) {
-      this.pageNum = value;
-      this.getCommonJobs();
+    // 翻页
+    changePage (value) {
+      this.pageNum = value
+      this.getCommonJobs()
     },
     // 切换每页多少数量
-    handlePageSize(value) {
-      this.pageSize = value;
-      this.pageNum = 1;
+    handlePageSize (value) {
+      this.pageSize = value
+      this.pageNum = 1
       console.log(value)
-      this.getCommonJobs();
-    },
+      this.getCommonJobs()
+    }
   },
-  mounted() {
-    this.getCommonJobs();
-    this.getAllTagList();
+  mounted () {
+    this.getCommonJobs()
+    this.getAllTagList()
     // this.getTempList();
     // this.getDetailsList(200)
   },
   watch: {
-    searchVal(val) {
+    searchVal (val) {
       this.searchKey = val
-      this.getCommonJobs(this.searchKey);
+      this.getCommonJobs(this.searchKey)
     }
   }
 }

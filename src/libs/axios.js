@@ -14,7 +14,7 @@ class HttpRequest {
       baseURL: this.baseUrl,
       headers: {
         // 添加xsrf验证
-        "X-Xsrftoken": Cookies.get('_xsrf')
+        'X-Xsrftoken': Cookies.get('_xsrf')
       }
     }
     return config

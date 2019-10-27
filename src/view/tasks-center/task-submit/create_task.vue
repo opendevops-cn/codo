@@ -116,11 +116,11 @@ import {
   getCustomtask,
   operationCustomtask,
   operationCommonjobs
-} from "@/api/task-other";
-import { getTemplist, getTempargs } from "@/api/task";
-import { getuserlist } from "@/api/user";
+} from '@/api/task-other'
+import { getTemplist, getTempargs } from '@/api/task'
+import { getuserlist } from '@/api/user'
 export default {
-  data() {
+  data () {
     return {
       index: 1,
       allTagList: [],
@@ -128,15 +128,15 @@ export default {
       tempList: [],
       btn_loading: false,
       optionsDate: {
-        disabledDate(date) {
-          return date && date.valueOf() < Date.now() - 86400000;
+        disabledDate (date) {
+          return date && date.valueOf() < Date.now() - 86400000
         }
       },
       formValidate: {
-        task_name: "",
-        tag: "",
-        temp_id: "",
-        detail: "",
+        task_name: '',
+        tag: '',
+        temp_id: '',
+        detail: '',
         args_items: [
           // {
           //     key: '',
@@ -147,138 +147,136 @@ export default {
         ]
       },
       ruleValidate: {
-        task_name: [{ required: true, message: "名称不能为空，且需唯一", trigger: "blur" }],
-        tag: [{ required: true, message: "标签不能为空", trigger: "blur" } ],
-        temp_id: [{ required: true, type: "number", message: "必须选择一个执行模板", trigger: "blur" }],
-        start_time: [ { required: true, type: "date", message: "Please select the date", trigger: "change"}]
+        task_name: [{ required: true, message: '名称不能为空，且需唯一', trigger: 'blur' }],
+        tag: [{ required: true, message: '标签不能为空', trigger: 'blur' } ],
+        temp_id: [{ required: true, type: 'number', message: '必须选择一个执行模板', trigger: 'blur' }],
+        start_time: [ { required: true, type: 'date', message: 'Please select the date', trigger: 'change'}]
       }
-    };
+    }
   },
   methods: {
-    handleSelect(value) {
-      getCustomtask("tag_name", value).then(res => {
+    handleSelect (value) {
+      getCustomtask('tag_name', value).then(res => {
         if (res.data.code === 0) {
-          this.submitInfo = res.data.data;
+          this.submitInfo = res.data.data
         } else {
-          this.$Message.error(`${res.data.msg}`);
+          this.$Message.error(`${res.data.msg}`)
         }
-      });
+      })
     },
     // 获取标签列表
-    getAllTagList() {
+    getAllTagList () {
       getAuthTaglist().then(res => {
         if (res.data.code === 0) {
-          this.allTagList = res.data.data;
+          this.allTagList = res.data.data
         } else {
-          this.$Message.error(`${res.data.msg}`);
+          this.$Message.error(`${res.data.msg}`)
         }
-      });
+      })
     },
-    getTempList() {
+    getTempList () {
       getTemplist().then(res => {
         if (res.data.code === 0) {
-          this.tempList = res.data.data;
+          this.tempList = res.data.data
           // this.sqlTempList = res.data.data.filter(
           //   res => res.temp_name.search("SQL审核") === 0
           // );
         } else {
-          this.$Message.error(`${res.data.msg}`);
+          this.$Message.error(`${res.data.msg}`)
         }
-      });
+      })
     },
 
-
-
-    handleClose(event, name) {
-      const index = this.submitInfo.indexOf(name);
-      this.submitInfo.splice(index, 1);
+    handleClose (event, name) {
+      const index = this.submitInfo.indexOf(name)
+      this.submitInfo.splice(index, 1)
     },
-    handlerSelectTemp(temp_id) {
+    handlerSelectTemp (temp_id) {
       // console.log('temp_id--->',temp_id)
       getTempargs(temp_id).then(res => {
         if (res.data.code === 0) {
-          this.index = 0;
-          this.formValidate.args_items = [];
+          this.index = 0
+          this.formValidate.args_items = []
           //
           // console.log('res.data.data',res.data.data)
           res.data.data.forEach(element => {
-            this.index++;
+            this.index++
             this.formValidate.args_items.push({
               label: res.data.args_dict[element]
                 ? res.data.args_dict[element]
                 : element,
               key: element,
-              value: "",
+              value: '',
               index: this.index,
               status: 1
-            });
-          });
+            })
+          })
         } else {
-          this.$Message.error(`${res.data.msg}`);
+          this.$Message.error(`${res.data.msg}`)
         }
-      });
+      })
     },
-    handleSubmit(value) {
-      this.btn_loading = true;
+    handleSubmit (value) {
+      this.btn_loading = true
       if (this.submitInfo.length === 0 || this.submitInfo.length > 100) {
         this.$Message.error(
-          "请选择一个标签，并确保标签下有主机，并且主机不能大于100"
-        );
-        this.btn_loading = false;
-        return;
+          '请选择一个标签，并确保标签下有主机，并且主机不能大于100'
+        )
+        this.btn_loading = false
+        return
       }
       this.$refs[value].validate(valid => {
         if (valid) {
           setTimeout(() => {
-            this.formValidate["hostnames"] = this.submitInfo;
-            operationCustomtask(this.formValidate, "post").then(res => {
+            this.formValidate['hostnames'] = this.submitInfo
+            operationCustomtask(this.formValidate, 'post').then(res => {
               if (res.data.code === 0) {
-                this.$Message.success(`${res.data.msg}`);
+                this.$Message.success(`${res.data.msg}`)
               } else {
-                this.$Message.error(`${res.data.msg}`);
+                this.$Message.error(`${res.data.msg}`)
               }
-            });
-            this.btn_loading = false;
-          }, 1000);
+            })
+            this.btn_loading = false
+          }, 1000)
         } else {
-          this.$Message.error("表单校验错误");
-          this.btn_loading = false;
+          this.$Message.error('表单校验错误')
+          this.btn_loading = false
         }
-      });
+      })
     },
 
     // save to common jobs
-    handleSaveCommonJobs(value) {
-      this.btn_loading = true;
+    handleSaveCommonJobs (value) {
+      this.btn_loading = true
       if (this.submitInfo.length === 0 || this.submitInfo.length > 100) {
         this.$Message.error(
-          "请选择一个标签，并确保标签下有主机，并且主机不能大于100"
-        );
-        this.btn_loading = false;
-        return;
+          '请选择一个标签，并确保标签下有主机，并且主机不能大于100'
+        )
+        this.btn_loading = false
+        return
       }
       this.$refs[value].validate(valid => {
         if (valid) {
           setTimeout(() => {
-            this.formValidate["hostnames"] = this.submitInfo;
-            operationCommonjobs(this.formValidate, "post").then(res => {
+            this.formValidate['hostnames'] = this.submitInfo
+            operationCommonjobs(this.formValidate, 'post').then(res => {
               if (res.data.code === 0) {
-                this.$Message.success(`${res.data.msg}`);
+                this.$Message.success(`${res.data.msg}`)
               } else {
-                this.$Message.error(`${res.data.msg}`);
+                this.$Message.error(`${res.data.msg}`)
               }
-            });
-            this.btn_loading = false;
-          }, 1000);
+            })
+            this.btn_loading = false
+          }, 1000)
         } else {
-          this.$Message.error("表单校验错误");
-          this.btn_loading = false;
+          this.$Message.error('表单校验错误')
+          this.btn_loading = false
         }
-      });
+      })
     },
 
-    handleReset(value) {
-      this.$refs[value].resetFields();
+    handleReset (value) {
+      this.$refs[value].resetFields()
     }
     // handleAdd () {
     //     this.index++;
@@ -297,11 +295,11 @@ export default {
     //     this.formValidate.args_items[index].status = 0;
     // }
   },
-  mounted() {
-    this.getAllTagList();
-    this.getTempList();
+  mounted () {
+    this.getAllTagList()
+    this.getTempList()
   }
-};
+}
 </script>
 
 <style scoped>

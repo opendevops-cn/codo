@@ -11,7 +11,7 @@ import config from '@/config'
 import importDirective from '@/directive'
 import installPlugin from '@/plugin'
 // import 'iview/dist/styles/iview.css'
-import 'view-design/dist/styles/iview.css';
+import 'view-design/dist/styles/iview.css'
 import './index.less'
 import '@/assets/icons/iconfont.css'
 import VueClipboard from 'vue-clipboard2'
