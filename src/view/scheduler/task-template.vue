@@ -174,7 +174,8 @@ export default {
               {
                 props: {
                   value: this.tableData2[params.index].exec_user,
-                  size: 'small'
+                  size: 'small',
+                  transfer: true
                 },
                 on: {
                   'on-change': event => {
@@ -205,7 +206,8 @@ export default {
               {
                 props: {
                   value: this.tableData2[params.index].trigger,
-                  size: 'small'
+                  size: 'small',
+                  transfer: true
                 },
                 style: 'width:60px',
                 on: {
