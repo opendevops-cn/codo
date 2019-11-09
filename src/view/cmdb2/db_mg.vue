@@ -31,11 +31,11 @@
                 </div>
             </div>
             <Modal v-model="modalMap1.modalVisible" :title="modalMap1.modalTitle" :loading=true :footer-hide=true
-                   :mask-closable=false>
+                   :mask-closable=false width="650">
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
                     <FormItem label="数据库名称" prop="db_code">
                         <div v-if="editModalData && editModalData ==='put'">
-                            <Input v-model="formValidate.db_code" :maxlength="100" disabled
+                            <Input v-model="formValidate.db_code" :maxlength="120" disabled
                                    placeholder='请输入数据库名称，可以当关键字'></Input>
                         </div>
                         <div v-else>
@@ -244,6 +244,7 @@ export default {
           title: 'DB名称',
           key: 'db_code',
           align: 'center',
+          minWidth: 100,
           render: (h, params) => {
             return h('div', [
               h(
@@ -262,7 +263,7 @@ export default {
         },
         {title: 'IDC', key: 'idc', width: 150, align: 'center', sortable: true},
         {title: '可用区', key: 'db_region', width: 150, align: 'center', sortable: true},
-        {title: 'DB地址', key: 'db_host', align: 'center', sortable: true},
+        {title: 'DB地址', key: 'db_host', align: 'center', sortable: true,minWidth: 120},
         {title: '端口', key: 'db_port', width: 120, align: 'center', sortable: true},
         {title: '用户', key: 'db_user', width: 120, align: 'center', sortable: true},
         // { title: '环境',  key: 'db_env', align: 'center', sortable: true },
@@ -289,10 +290,13 @@ export default {
               return h('div',[h('Tag', { props: { color: 'success' }}, '运行中')])
             } else if (state === 'Handle') {
               return h('div',[h('Tag', { props: { color: 'blue' }}, 'Handle')])
+            } else if (state === 'backing-up') {
+              return h('div',[h('Tag', { props: { color: 'blue' }}, '同步从库')])
+            } else if (state === 'storage-full') {
+              return h('div',[h('Tag', { props: { color: 'error' }}, '磁盘已满')])
             } else if (state === 'Normal'){
               return h('div',[h('Tag', { props: { color: 'success' }}, '运行中')])
             }
-
             else {
             return h('div', [
               h(
@@ -322,7 +326,7 @@ export default {
         {
           title: '操作',
           key: 'handle',
-          width: 120,
+          width: 130,
           align: 'center',
           render: (h, params) => {
             return h('div', [

@@ -25,6 +25,9 @@
         style=" margin-left: 2px; width: 200px"
       ></DatePicker>
       <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
+
+      <Button v-if="rules.webterminal_log_btn" type="info" class="search-btn"  @click="webTerminnalLog">录像回放</Button>
+      </Button>
     </div>
     <Table size="small" ref="selection" border :columns="columns" :data="tableData"></Table>
     <div style="margin: 10px;overflow: hidden">
@@ -46,6 +49,8 @@
 
 <script>
 import { getLoglist } from "@/api/cmdb2/audit";
+import { webterminnalLog } from "@/api/cmdb2/server.js";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -62,7 +67,7 @@ export default {
           key: "username",
           align: "center",
           sortable: true,
-          width: 200
+          minWidth: 100,
         },
         {
           title: "请求对象",
@@ -75,6 +80,7 @@ export default {
           title: "操作机器",
           key: "request_host",
           align: "center",
+          minWidth: 150,
           sortable: true
         },
         {
@@ -87,7 +93,7 @@ export default {
         {
           title: "变更内容",
           key: "",
-          width: 200,
+          width: 180,
           align: "center",
           sortable: true,
           render: (h, params) => {
@@ -108,6 +114,7 @@ export default {
           title: "操作时间",
           key: "ctime",
           align: "center",
+          minWidth: 120,
           sortable: true
           //   width: 120,
         }
@@ -134,6 +141,24 @@ export default {
           this.pageTotal = res.data.count;
           this.tableData = res.data.data;
         } else {
+          this.$Message.error(`${res.data.msg}`);
+        }
+      });
+    },
+    //请求Web Terminal log接口
+    webTerminnalLog() {
+      webterminnalLog().then(res => {
+        if (res.data.code === 0) {
+          // this.loading = false;
+          this.$Message.success(`${res.data.msg}`);
+          let web_terminallog_conncet =
+            res.data.data.web_terminal_url +
+            res.data.data.web_terminal_key +
+            "/";
+          // console.log('web_terminal_conncet-->',web_terminal_conncet)
+          window.open(web_terminallog_conncet);
+        } else {
+          // this.loading = false;
           this.$Message.error(`${res.data.msg}`);
         }
       });
@@ -174,6 +199,11 @@ export default {
         this.dateValue
       );
     }
+  },
+  computed: {
+    ...mapState({
+      rules: state => state.user.rules
+    })
   },
   watch: {
     value(val) {

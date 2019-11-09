@@ -42,7 +42,7 @@ export default {
         {
           title: '名称',
           key: 'name',
-          width: 180,
+          minWidth: 150,
           align: 'center',
           render: (h, params) => {
             return h('a', {
@@ -57,14 +57,15 @@ export default {
         },
         {
           title: '区域',
-          width: 180,
+          minWidth: 120,
           key: 'region',
           align: 'center'
         },
         {
           title: '实例ID',
           key: 'instance_id',
-          align: 'center'
+          align: 'center',
+          minWidth: 180,
         },
         // {
         //   title: '事件ID',
@@ -73,18 +74,19 @@ export default {
         // },
         {
           title: '事件状态',
-          width: 150,
+          minWidth: 100,
           key: 'event_status',
           align: 'center'
         },
         {
           title: '事件描述',
           key: 'event_desc',
-          align: 'center'
+          align: 'center',
+          minWidth: 100,
         },
         {
           title: '开始时间(UTC)',
-          width: 180,
+          minWidth: 180,
           key: 'event_start_time',
           align: 'center'
         },
