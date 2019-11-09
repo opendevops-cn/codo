@@ -8,7 +8,7 @@
       <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
       <Button type="primary"  @click="editModal('', 'post', '新建参数')" class="search-btn" >新建参数</Button>
     </div>
-  <Table size="small" height="720" ref="selection" border :columns="columns" :data="tableData"></Table>
+  <Table size="small" height="720" ref="selection" :columns="columns" :data="tableData"></Table>
   <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
     <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
   </Modal>
@@ -35,21 +35,25 @@ export default {
         {
           title: '参数名称',
           key: 'args_name',
-          align: 'center'
+          align: 'center',
+          minWidth: 120,
         },
         {
           title: '参数值',
           key: 'args_self',
-          align: 'center'
+          align: 'center',
+          minWidth: 120,
         },
         {
           title: '创建者',
-          key: 'creator'
+          key: 'creator',
+           minWidth: 100,
         },
         {
           title: '更新时间',
           key: 'update_time',
-          sortable: true
+          sortable: true,
+           minWidth: 160,
         },
         {
           title: '操作',

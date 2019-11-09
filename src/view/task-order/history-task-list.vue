@@ -7,7 +7,7 @@
         <Col :md="24" :lg="7" >
             <Input v-model="searchVal" placeholder='输入关键字快速查找' style="margin-bottom: 5px;" :maxlength='50'  clearable />
 
-            <Table size="small" border :columns="columns" :data="tableData"></Table>
+            <Table size="small"  :columns="columns" :data="tableData"></Table>
 
             <div style="margin: 10px; overflow: hidden">
               <div style="float: left;">

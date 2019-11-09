@@ -5,7 +5,7 @@
       <Row :gutter="15" style="margin-top: 1px;">
 
         <Col :md="24" :lg="7" >
-            <Table size="small" height="800" border :columns="columns" :data="tableData"></Table>
+            <Table size="small" height="800" :columns="columns" :data="tableData"></Table>
         </Col>
 
         <Col :md="24" :lg="17" style="margin-bottom: 0px;">

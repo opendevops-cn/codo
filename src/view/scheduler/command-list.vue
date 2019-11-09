@@ -8,7 +8,7 @@
       <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
       <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新建命令')" class="search-btn" >新建命令</Button></slot>
     </div>
-  <Table size="small" height="718" ref="selection" border :columns="columns" :data="tableData"></Table>
+  <Table size="small" height="718" ref="selection" :columns="columns" :data="tableData"></Table>
   <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
     <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
   </Modal>
@@ -29,7 +29,7 @@ export default {
           title: '名称',
           key: 'command_name',
           align: 'center',
-          width: 150,
+          minWidth: 120,
           sortable: true
         },
         {

@@ -8,7 +8,7 @@
           <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
           <Button type="primary"  @click="editModal('post', '新建模板')" class="search-btn" >创建</Button>
         </div>
-          <Table size="small" height="710" border :columns="columns" :data="tableData"></Table>
+          <Table size="small" height="710" :columns="columns" :data="tableData"></Table>
       </Card>
     </i-col>
     <i-col :md="24" :lg="18">
@@ -74,7 +74,7 @@ export default {
         {
           title: 'ID',
           key: 'temp_id',
-          width: 60,
+          width: 70,
           align: 'center',
           sortable: true
         },
