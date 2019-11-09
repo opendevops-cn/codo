@@ -35,12 +35,12 @@ export default {
         {
           title: '命令',
           key: 'command',
-          align: 'center'
+          minWidth: 100
         },
         {
           title: '参数',
           key: 'args',
-          align: 'center',
+          minWidth: 100,
           sortable: true
         },
         {
@@ -61,7 +61,7 @@ export default {
         {
           title: '操作',
           key: 'handle',
-          width: 125,
+          width: 150,
           align: 'center',
           render: (h, params) => {
             return h('div', [

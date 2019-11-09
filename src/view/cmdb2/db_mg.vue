@@ -32,7 +32,7 @@
             </div>
             <Modal v-model="modalMap1.modalVisible" :title="modalMap1.modalTitle" :loading=true :footer-hide=true
                    :mask-closable=false>
-                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="85">
+                <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
                     <FormItem label="数据库名称" prop="db_code">
                         <div v-if="editModalData && editModalData ==='put'">
                             <Input v-model="formValidate.db_code" :maxlength="100" disabled

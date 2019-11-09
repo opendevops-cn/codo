@@ -31,23 +31,24 @@ export default {
           title: '执行用户',
           key: 'alias_user',
           align: 'center',
-          width: 150
+          minWidth: 130,
         },
         {
           title: '系统用户',
           key: 'exec_user',
           align: 'center',
-          width: 150
+          minWidth: 120,
         },
         {
           title: 'SSH端口',
           key: 'ssh_port',
           align: 'center',
-          width: 120
+          minWidth: 100,
         },
         {
           title: '备注',
           key: 'remarks',
+          minWidth: 100,
           align: 'center'
         },
         {

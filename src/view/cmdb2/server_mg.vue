@@ -44,7 +44,7 @@
         </div>
       </div>
     <Modal v-model="modalMap.modalVisible" :title="modalMap.modalTitle" :loading=true :footer-hide=true :mask-closable=false>
-      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="85">
+      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
         <Alert closable>管理用户：用来登陆你的主机获取资产信息，请务必配置！</Alert>
         <div v-if="editModalData && editModalData == 'put'">
           <FormItem
@@ -278,7 +278,7 @@ export default {
         {
           title: '主机名',
           key: 'hostname',
-          // width: 240,
+          minwidth: 200,
           align: 'center',
           sortable: true,
           render: (h, params) => {
@@ -295,14 +295,14 @@ export default {
         {
           title: '内网IP',
           key: 'private_ip',
-          width: 180,
+          minwidth: 180,
           align: 'center',
           sortable: true
         },
         {
           title: '公网IP',
           key: 'ip',
-          width: 180,
+          minwidth: 180,
           align: 'center',
           sortable: true
         },

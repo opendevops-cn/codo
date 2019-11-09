@@ -391,7 +391,7 @@ export default {
   .search {
     &-col {
       display: inline-block;
-      width: 350px;
+      width: 400px;
     }
     &-input {
       display: inline-block;

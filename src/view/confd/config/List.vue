@@ -728,7 +728,7 @@ export default {
       }
       &-input {
         display: inline-block;
-        width: 60px;
+        width: 85px;
         margin-right: 3px;
       }
       &-inputright {
@@ -739,7 +739,7 @@ export default {
       }
       &-publish {
         display: inline-block;
-        width: 120px;
+        width: 150px;
         margin-left: 2px;
       }
       &-add {

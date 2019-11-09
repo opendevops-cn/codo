@@ -12,7 +12,7 @@
       >
         <Row>
           <Col span="12">
-          <form-group :list="formList" @on-submit-success="handleSubmit">
+          <form-group :list="formList" @on-submit-success="handleSubmit"  :label-width="130">
             <slot slot="left-btn">
               <Button v-if="theTabName === 'EMAIL'" type="success" style="margin-left: 8px"@click="handlerCheckTest(theTabName)">测试邮件</Button>
               <Button v-if="theTabName === 'SMS'" type="success" style="margin-left: 8px" @click="handlerCheckTest(theTabName)">测试短信</Button>
@@ -310,7 +310,7 @@ export default {
               maxlength: 30,
               value: this.CONFIG_DATA.SMS_ACCESS_KEY_ID,
               placeholder: '${SMS_ACCESS_KEY_ID}  ',
-              label: 'KEY_ID',
+              label: '密钥ID',
               rule: [
                 {
                   required: true,
@@ -326,7 +326,7 @@ export default {
               maxlength: 60,
               value: this.CONFIG_DATA.SMS_ACCESS_KEY_SECRET,
               placeholder: '${SMS_ACCESS_KEY_SECRET} 不能为空',
-              label: 'KEY_SECRET',
+              label: '密钥KEY',
               rule: [
                 {
                   required: true,
