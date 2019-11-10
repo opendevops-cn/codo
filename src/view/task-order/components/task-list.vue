@@ -538,6 +538,7 @@ export default {
       }
     },
     handlerCheckLog (listID, taskGroup, taskLevel, execIP) {
+      this.logInfo = []
       this.logModal = true
       let log_key = listID + '_' + taskGroup + '_' + taskLevel + '_' + execIP
       this.websocket(log_key)

@@ -5,7 +5,7 @@
       <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
       <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新建任务')" class="search-btn" >新建</Button></slot>
     </div>
-  <Table size="small" ref="selection" border :columns="columns" :data="tableData"></Table>
+  <Table size="small" ref="selection"  :columns="columns" :data="tableData"></Table>
   <div style="margin: 10px;overflow: hidden">
     <div style="float: left;">
       <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[10,15,25,35,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize"></Page>

@@ -8,7 +8,7 @@
       <DatePicker :value="dateValue" type="daterange" placement="bottom-end" @on-change="changeDate" placeholder="Select date" style=" margin-left: 2px; width: 200px"></DatePicker>
       <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
     </div>
-  <Table size="small" ref="selection" border :columns="columns" :data="tableData"></Table>
+  <Table size="small" ref="selection" :columns="columns" :data="tableData"></Table>
   <div style="margin: 10px;overflow: hidden">
     <div style="float: left;">
       <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[10,15,25,35,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize"></Page>
