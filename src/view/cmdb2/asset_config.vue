@@ -31,9 +31,9 @@
 
     </div>
   <Table size="small" ref="selection" border :columns="columns" :data="tableData"></Table>
-  <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
+  <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true width="650">
     <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
-    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="85">
+    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
         <FormItem label="名称" prop="name">
           <div  v-if="formValidate.id">
             <Input v-model="formValidate.name" :maxlength="20" disabled placeholder='请输入名称,不可重复'></Input>
@@ -49,6 +49,7 @@
             <Option value="阿里云" >阿里云</Option>
             <Option value="腾讯云" >腾讯云</Option>
             <Option value="华为云" >华为云</Option>
+            <Option value="UCloud" >UCloud</Option>
           </Select>
         </FormItem>
 
@@ -68,7 +69,7 @@
           <div v-else>
             <Input v-model="formValidate.project_id" :maxlength="100" placeholder='项目ID，其实就是华为云，我的凭证--项目ID，每个区域都有一个'></Input>
           </div>
-        </FormItem>
+          </FormItem>
         </FormItem>
           <FormItem label="实例ID" prop="huawei_instance_id">
           <div  v-if="formValidate.id">
@@ -79,20 +80,30 @@
           </div>
         </FormItem>
        </div>
+       <div v-if="formValidate.account === 'UCloud'">
+          <FormItem label="项目ID" prop="project_id">
+            <div  v-if="formValidate.id">
+              <Input v-model="formValidate.project_id" :maxlength="100" disabled placeholder='UCloud 项目ID'></Input>
+            </div>
+            <div v-else>
+              <Input v-model="formValidate.project_id" :maxlength="100" placeholder='UCloud 项目ID'></Input>
+            </div>
+          </FormItem>
+       </div>
         <FormItem label="区域" prop="region">
           <div  v-if="formValidate.id">
-            <Input v-model="formValidate.region" :maxlength="20" disabled placeholder='region， 如:cn-hangzhou'></Input>
+            <Input v-model="formValidate.region" :maxlength="50" disabled placeholder='region， 如:cn-hangzhou'></Input>
           </div>
           <div v-else>
-            <Input v-model="formValidate.region" :maxlength="20" placeholder='region， 如:cn-hangzhou'></Input>
+            <Input v-model="formValidate.region" :maxlength="50" placeholder='region， 如:cn-hangzhou'></Input>
           </div>
         </FormItem>
 
         <FormItem label="AccessID" prop="access_id">
-          <Input v-model="formValidate.access_id" :maxlength="50"  placeholder='IAM SecretID/AccessID'></Input>
+          <Input v-model="formValidate.access_id" :maxlength="200"  placeholder='IAM SecretID/AccessID'></Input>
         </FormItem>
         <FormItem label="AccessKey" prop="access_key">
-          <Input v-model="formValidate.access_key" :maxlength="50"  placeholder='IAM SecretKey/AccessKey'></Input>
+          <Input v-model="formValidate.access_key" :maxlength="200"  placeholder='IAM SecretKey/AccessKey'></Input>
         </FormItem>
 
         <FormItem label="默认管理用户" prop="default_admin_user">
@@ -142,17 +153,20 @@ export default {
         {
           title: '名称',
           key: 'name',
-          align: 'center'
+          align: 'center',
+          minWidth: 120,
         },
         {
           title: '云厂商',
           key: 'account',
-          align: 'center'
+          align: 'center',
+          minWidth: 100,
         },
         {
           title: '区域',
           key: 'region',
-          align: 'center'
+          align: 'center',
+          minWidth: 100,
         },
         // {
         //   title: '默认管理用户',
@@ -726,6 +740,7 @@ export default {
       if (e.target.value === '') this.tableData = this.value
     },
     handleSearch () {
+      console.log(this.searchKey,this.searchValue)
       this.getAssetConfigsList(
         this.searchKey,
         this.searchValue

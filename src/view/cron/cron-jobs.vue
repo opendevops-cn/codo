@@ -36,20 +36,23 @@ export default {
         {
           title: 'job id',
           key: 'job_id',
-          align: 'center',
+          minWidth: 80,
           sortable: true
         },
         {
           title: '可执行命令',
-          key: 'cmd'
+          key: 'cmd',
+          minWidth: 150,
         },
         {
           title: '定时器（秒 分 时 日 月 周）',
-          key: 'cron'
+          key: 'cron',
+          minWidth: 100,
         },
         {
           title: '下一次执行时间',
-          key: 'next_run_time'
+          key: 'next_run_time',
+          minWidth: 100,
         },
         {
           title: '状态',
@@ -82,7 +85,7 @@ export default {
         {
           title: '操作',
           key: 'handle',
-          width: 150,
+          width: 170,
           align: 'center',
           render: (h, params) => {
             return h('div', [

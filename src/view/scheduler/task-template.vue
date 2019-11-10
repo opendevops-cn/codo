@@ -8,7 +8,7 @@
           <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
           <Button type="primary"  @click="editModal('post', '新建模板')" class="search-btn" >创建</Button>
         </div>
-          <Table size="small" height="710" border :columns="columns" :data="tableData"></Table>
+          <Table size="small" height="710" :columns="columns" :data="tableData"></Table>
       </Card>
     </i-col>
     <i-col :md="24" :lg="18">
@@ -74,7 +74,7 @@ export default {
         {
           title: 'ID',
           key: 'temp_id',
-          width: 60,
+          width: 70,
           align: 'center',
           sortable: true
         },
@@ -82,6 +82,7 @@ export default {
           title: '模板名称',
           key: 'temp_name',
           align: 'center',
+          minWidth: 140,
           render: (h, params) => {
             return h('div', [
               h(
@@ -101,7 +102,7 @@ export default {
         {
           title: '操作',
           key: 'handle',
-          width: 120,
+          width: 140,
           align: 'center',
           render: (h, params) => {
             return h('div', [
@@ -113,7 +114,7 @@ export default {
                     size: 'small'
                   },
                   style: {
-                    marginRight: '2px'
+                    marginRight: '1px'
                   },
                   on: {
                     click: () => {
@@ -160,9 +161,9 @@ export default {
           sortable: true,
           editable: true
         },
-        { title: '任务名称', key: 'command_name', align: 'center' },
-        { title: '执行命令', key: 'command', align: 'center' },
-        { title: '参数', key: 'args', editable: true },
+        { title: '任务名称', key: 'command_name', minWidth: 150 },
+        { title: '执行命令', key: 'command', minWidth: 200 },
+        { title: '参数', key: 'args', minWidth: 120, editable: true },
         {
           title: '执行用户',
           key: 'exec_user',
@@ -174,7 +175,8 @@ export default {
               {
                 props: {
                   value: this.tableData2[params.index].exec_user,
-                  size: 'small'
+                  size: 'small',
+                  transfer: true
                 },
                 on: {
                   'on-change': event => {
@@ -205,7 +207,8 @@ export default {
               {
                 props: {
                   value: this.tableData2[params.index].trigger,
-                  size: 'small'
+                  size: 'small',
+                  transfer: true
                 },
                 style: 'width:60px',
                 on: {

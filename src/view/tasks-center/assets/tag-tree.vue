@@ -282,9 +282,9 @@
             ])
           }
         },
-        { title: '主机', key: 'server_len', align: 'center' },
-        { title: '数据库', key: 'db_len', align: 'center' },
-        { title: '操作', key: 'handle', width: 120, align: 'center',
+        { title: '主机', key: 'server_len', minWidth:100, align: 'center' },
+        { title: '数据库', key: 'db_len',  minWidth:100, align: 'center' },
+        { title: '操作', key: 'handle', width: 150, align: 'center',
           render: (h, params) => {
             return h('div', [
               h( 'Button',
@@ -327,7 +327,7 @@
         {
           title: '主机名称',
           key: 'hostname',
-          align: 'center',
+          minWidth: 220,
           render: (h, params) => {
             return h('div', [
               h('a',{
@@ -342,11 +342,11 @@
             ])
           }
         },
-        { title: 'IP', key: 'ip', align: 'center' },
-        { title: 'IDC', key: 'idc', align: 'center' },
-        { title: '区域', key: 'region', align: 'center' },
+        { title: 'IP', key: 'ip',  minWidth: 200, },
+        { title: 'IDC', key: 'idc', align: 'center', minWidth: 120},
+        { title: '区域', key: 'region', align: 'center', minWidth: 120},
         { title: '状态', key: 'state', width: 120, align: 'center', sortable: true},
-        { title: '操作', key: 'handle', width: 120, align: 'center',
+        { title: '操作', key: 'handle', width: 150, align: 'center',
           render: (h, params) => {
             return h('div', [
               h(
@@ -396,7 +396,7 @@
         {
           title: 'DB名称',
           key: 'db_code',
-          align: 'center',
+          minWidth: 180,
           render: (h, params) => {
             return h('div', [
               h(
@@ -413,12 +413,12 @@
             ])
           }
         },
-        { title: 'DB地址',  key: 'db_host', align: 'center', sortable: true },
-        { title: '环境',  key: 'db_env', align: 'center', sortable: true },
-        { title: '类型',  key: 'db_type', align: 'center', sortable: true},
-        { title: '代理', key: 'proxy_host', align: 'center', sortable: true},
+        { title: 'DB地址',  key: 'db_host',  minWidth: 300, sortable: true },
+        { title: '环境',  key: 'db_env',  minWidth:80, align: 'center', sortable: true },
+        { title: '类型',  key: 'db_type',  minWidth:80, align: 'center', sortable: true},
+        { title: '代理', key: 'proxy_host', minWidth:80, align: 'center', sortable: true},
         { title: '状态', key: 'state', width: 120, align: 'center', sortable: true},
-        { title: '操作', key: 'handle', width: 120, align: 'center',
+        { title: '操作', key: 'handle', width: 150, align: 'center',
           render: (h, params) => {
             return h('div', [
               h(

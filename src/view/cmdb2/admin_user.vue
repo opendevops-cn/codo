@@ -108,6 +108,7 @@ export default {
           title: "系统用户",
           key: "system_user",
           align: "center",
+          minWidth: 100,
         //   render: (h, params) => {
         //     return h('a', {
         //       on: {
@@ -127,12 +128,14 @@ export default {
           title: "描述",
           key: "remarks",
           align: "center",
+          minWidth: 120,
         //   width: 120,
         },
                 {
           title: "更新时间",
           key: "update_time",
           align: "center",
+          minWidth: 120,
         //   width: 120,
         },
         {

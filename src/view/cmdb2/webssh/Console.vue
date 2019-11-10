@@ -2,7 +2,7 @@
     <div class="console" id="terminal"></div>
 </template>
 <script>
-import { checkAuthServer } from '@/api/cmdb/server_auth'
+// import { checkAuthServer } from '@/api/cmdb/server_auth'
 import Terminal from './Xterm'
 import { webSocketUrl } from '@/api/cmdb/server'
 export default {
@@ -39,18 +39,18 @@ export default {
       this.term._initialized = true
       console.log('mounted is going on')
     },
-    checkAuth(server_id){
-      checkAuthServer(server_id).then(res => {
-        // console.log(res)
-        if(res.data.status === true){
-          this.openSocket(server_id)
-        }else{
-          this.term.write('Current user does not have permission to login, please contact the administrator')
-        }
-      }).catch(error =>{
-        this.term.write('There is an error in authorization. Please check the authentication interface.')
-      });
-    }
+    // checkAuth(server_id){
+    //   checkAuthServer(server_id).then(res => {
+    //     // console.log(res)
+    //     if(res.data.status === true){
+    //       this.openSocket(server_id)
+    //     }else{
+    //       this.term.write('Current user does not have permission to login, please contact the administrator')
+    //     }
+    //   }).catch(error =>{
+    //     this.term.write('There is an error in authorization. Please check the authentication interface.')
+    //   });
+    // }
   },
   mounted () {
     let pid = this.$route.query.id

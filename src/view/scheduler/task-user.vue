@@ -10,7 +10,7 @@
       <div class="search-con search-con-top">
       <Button type="primary"  @click="editModal('', 'post', '新建用户')" class="search-btn" >新建</Button>
     </div>
-  <Table size="small" height="620" ref="selection" border :columns="columns" :data="tableData"></Table>
+  <Table size="small" height="620" ref="selection" :columns="columns" :data="tableData"></Table>
   <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
     <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
   </Modal>
@@ -31,23 +31,24 @@ export default {
           title: '执行用户',
           key: 'alias_user',
           align: 'center',
-          width: 150
+          minWidth: 130,
         },
         {
           title: '系统用户',
           key: 'exec_user',
           align: 'center',
-          width: 150
+          minWidth: 120,
         },
         {
           title: 'SSH端口',
           key: 'ssh_port',
           align: 'center',
-          width: 120
+          minWidth: 100,
         },
         {
           title: '备注',
           key: 'remarks',
+          minWidth: 100,
           align: 'center'
         },
         {

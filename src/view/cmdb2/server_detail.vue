@@ -6,9 +6,12 @@
             <div style="margin-top:10px;margin-bottom:10px">
                 <Row>
                     <Col span="4"><p> <b>资产ID：</b> </p></Col>
-                    <Col span="8"><p> {{formData.id}} </p></Col>
+                    <Col span="20"><p> {{formData.id}} </p></Col>
+                </Row>
+
+                <Row>
                     <Col span="4"><p> <b>实例ID：</b> </p></Col>
-                    <Col span="8"><p> {{formData.instance_id}}</p></Col>
+                    <Col span="20"><p> {{formData.instance_id}}</p></Col>
                 </Row>
                 <Row>
                     <Col span="4"><p> <b>实例状态：</b> </p></Col>
@@ -18,9 +21,12 @@
                 </Row>
                 <Row>
                     <Col span="4"><p> <b>IP地址：</b> </p></Col>
-                    <Col span="8"><p> <Tag color="blue">{{formData.ip}}</tag> </p></Col>
+                    <Col span="20"><p> <Tag color="blue">{{formData.ip}}</tag> </p></Col>
+
+                </Row>
+                <Row>
                     <Col span="4"><p> <b>主机名：</b> </p></Col>
-                    <Col span="8"><p> <Tag color="blue">{{formData.hostname}}</tag> </p></Col>
+                    <Col span="20"><p> <Tag color="blue">{{formData.hostname}}</tag> </p></Col>
                 </Row>
                 <Row>
                     <Col span="4"><p> <b>IDC：</b>  </p></Col>

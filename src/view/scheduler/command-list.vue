@@ -8,7 +8,7 @@
       <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
       <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新建命令')" class="search-btn" >新建命令</Button></slot>
     </div>
-  <Table size="small" height="718" ref="selection" border :columns="columns" :data="tableData"></Table>
+  <Table size="small" height="718" ref="selection" :columns="columns" :data="tableData"></Table>
   <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
     <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
   </Modal>
@@ -29,18 +29,18 @@ export default {
           title: '名称',
           key: 'command_name',
           align: 'center',
-          width: 150,
+          minWidth: 120,
           sortable: true
         },
         {
           title: '命令',
           key: 'command',
-          align: 'center'
+          minWidth: 100
         },
         {
           title: '参数',
           key: 'args',
-          align: 'center',
+          minWidth: 100,
           sortable: true
         },
         {
@@ -61,7 +61,7 @@ export default {
         {
           title: '操作',
           key: 'handle',
-          width: 125,
+          width: 150,
           align: 'center',
           render: (h, params) => {
             return h('div', [

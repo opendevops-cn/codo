@@ -11,7 +11,7 @@
         <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新建权限')" class="search-btn" >新建</Button></slot>
       </div>
 
-      <Table size="small" ref="selection" border :columns="columns" :data="tableData"></Table>
+      <Table size="small" ref="selection" :columns="columns" :data="tableData"></Table>
       
       <div style="margin: 10px;overflow: hidden">
         <div style="float: left;">

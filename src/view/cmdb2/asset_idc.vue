@@ -51,7 +51,7 @@ export default {
           title: "IDC名称",
           key: "name",
           align: "center",
-          width: 200,
+          minWidth: 150,
           render: (h, params) => {
             return h(
               "a",
@@ -70,24 +70,28 @@ export default {
         {
           title: "联系人",
           key: "contact",
-          align: "center"
+          align: "center",
+          minWidth: 100,
         },
         {
           title: "Email",
           key: "email",
-          align: "center"
+          align: "center",
+          minWidth: 150,
           //   width: 120,
         },
         {
           title: "Phone",
           key: "phone",
-          align: "center"
+          align: "center",
+          minWidth: 100,
           //   width: 120,
         },
         {
           title: "备注",
           key: "remarks",
-          align: "center"
+          align: "center",
+          minWidth: 100,
           //   width: 120,
         },
         {

@@ -7,20 +7,9 @@
             <Input v-model="display_name" disabled></Input>
         </FormItem>
         <FormItem label="环境" prop="environment">
-          <RadioGroup v-model="formData.environment">
-              <Radio label="dev"></Radio>
-              <Radio label="qa"></Radio>
-              <Radio label="sit"></Radio>
-              <Radio label="staging"></Radio>
-              <Radio label="per"></Radio>
-              <Radio label="pre"></Radio>
-              <Radio label="sandbox"></Radio>
-              <Radio label="gray"></Radio>
-              <Radio label="release"></Radio>
-              <Radio label="hidden"></Radio>
-              <Radio label="public"></Radio>
-              <Radio label="deployment"></Radio>
-          </RadioGroup>
+          <Select v-model="formData.environment" filterable allow-create @on-create="handleCreate" placeholder="请选择环境，也可以自定义环境名称，不过尽量避免使用中文。">
+           <Option v-for="item in envList" :value="item" >{{ item }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="服务名" prop="service">
             <Input v-model="formData.service" placeholder="如: nginx"></Input>
@@ -64,6 +53,7 @@ export default {
         service: null,
         filename: null
       },
+      envList: ['dev', 'qa', 'staging', 'pre', 'sandbox', 'gray', 'release', 'hidden', 'public', 'deployment', 'android', 'apple', 'wechat'],
       ruleValidate: {
         service: [{ required: true, message: '服务名称不能为空', trigger: 'blur' }],
         filename: [{ required: true, message: '文件名称不能为空', trigger: 'blur' }],
@@ -114,6 +104,9 @@ export default {
     handleReset (name) {
       this.$refs[name].resetFields()
       this.formData.content = null
+    },
+    handleCreate(val) {
+      this.envList.push(val);
     }
   }
 
