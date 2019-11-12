@@ -1,19 +1,19 @@
 <template>
-<Card style="height:100%">
-    <div class="search-con search-con-top">
-      <Select v-model="searchKey" class="search-col">
-        <Option v-for="item in columns" v-if="item.key !== 'handle' && item.key !== 'status' && item.key !== ''" :value="item.key" :key="`search-col-${item.key}`">{{ item.title }}</Option>
-      </Select>
-      <Input @on-change="handleClear" clearable placeholder="输入关键字搜索" class="search-input" v-model="searchValue"/>
-      <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
-      <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新建命令')" class="search-btn" >新建命令</Button></slot>
-    </div>
-  <Table size="small" height="718" ref="selection" border :columns="columns" :data="tableData"></Table>
-  <!-- <Table size="small" height="718" ref="selection"  :columns="columns" :data="tableData"></Table> -->
-  <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
-    <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
-  </Modal>
-</Card>
+  <Card style="height:100%">
+      <div class="search-con search-con-top">
+        <Select v-model="searchKey" class="search-col">
+          <Option v-for="item in columns" v-if="item.key !== 'handle' && item.key !== 'status' && item.key !== ''" :value="item.key" :key="`search-col-${item.key}`">{{ item.title }}</Option>
+        </Select>
+        <Input @on-change="handleClear" clearable placeholder="输入关键字搜索" class="search-input" v-model="searchValue"/>
+        <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
+        <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新建命令')" class="search-btn" >新建命令</Button></slot>
+      </div>
+    <Table size="small" height="718" ref="selection" border :columns="columns" :data="tableData"></Table>
+    <!-- <Table size="small" height="718" ref="selection"  :columns="columns" :data="tableData"></Table> -->
+    <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true  width="660">
+      <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
+    </Modal>
+  </Card>
 </template>
 
 <script>
