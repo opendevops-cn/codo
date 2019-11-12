@@ -8,7 +8,8 @@
       <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
       <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新建命令')" class="search-btn" >新建命令</Button></slot>
     </div>
-  <Table size="small" height="718" ref="selection" :columns="columns" :data="tableData"></Table>
+  <Table size="small" height="718" ref="selection" border :columns="columns" :data="tableData"></Table>
+  <!-- <Table size="small" height="718" ref="selection"  :columns="columns" :data="tableData"></Table> -->
   <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
     <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
   </Modal>
@@ -28,78 +29,109 @@ export default {
         {
           title: '名称',
           key: 'command_name',
-          align: 'center',
+          align: 'left',
           minWidth: 120,
-          sortable: true
+          maxWidth: 320,
+          sortable: true,
+          render: (h, params) => {
+            return h(
+              "a",
+              {
+                on: {
+                  click: () => {
+                    this.editModal(params.index, 'put', '编辑命令')
+                  }
+                }
+              },
+              params.row.command_name
+            );
+          }
         },
         {
           title: '命令',
           key: 'command',
-          minWidth: 100
+          align: 'left',
+          minWidth: 300,
         },
         {
           title: '参数',
           key: 'args',
-          minWidth: 100,
-          sortable: true
+          align: 'left',
+          sortable: true,
+          minWidth: 220,
+          
         },
         {
           title: '指定主机',
           key: 'force_host',
-          width: 150
+          width: 140,
+          align: 'center',
         },
-        {
-          title: '创建者',
-          key: 'creator',
-          width: 120
-        },
-        {
-          title: '更新时间',
-          key: 'update_time',
-          width: 150
-        },
+        // {
+        //   title: '创建者',
+        //   key: 'creator',
+        //   width: 120
+        // },
+        // {
+        //   title: '更新时间',
+        //   key: 'update_time',
+        //   width: 150
+        // },
         {
           title: '操作',
           key: 'handle',
-          width: 150,
+          width: 75,
           align: 'center',
           render: (h, params) => {
-            return h('div', [
-              h(
-                'Button',
-                {
-                  props: {
-                    type: 'primary',
-                    size: 'small'
-                  },
-                  style: {
-                    marginRight: '5px'
-                  },
-                  on: {
-                    click: () => {
-                      this.editModal(params.index, 'put', '编辑命令')
-                    }
+            return h(
+              "a",
+              {
+                on: {
+                  click: () => {
+                    this.delData(params)
                   }
-                },
-                '编辑'
-              ),
-              h(
-                'Button',
-                {
-                  props: {
-                    type: 'error',
-                    size: 'small'
-                  },
-                  on: {
-                    click: () => {
-                      this.delData(params)
-                    }
-                  }
-                },
-                '删除'
-              )
-            ])
+                }
+              },
+              '删除'
+            );
           }
+          // render: (h, params) => {
+          //   return h('div', [
+          //     h(
+          //       'Button',
+          //       {
+          //         props: {
+          //           type: 'primary',
+          //           size: 'small'
+          //         },
+          //         style: {
+          //           marginRight: '5px'
+          //         },
+          //         on: {
+          //           click: () => {
+          //             this.editModal(params.index, 'put', '编辑命令')
+          //           }
+          //         }
+          //       },
+          //       '编辑'
+          //     ),
+          //     h(
+          //       'Button',
+          //       {
+          //         props: {
+          //           type: 'error',
+          //           size: 'small'
+          //         },
+          //         on: {
+          //           click: () => {
+          //             this.delData(params)
+          //           }
+          //         }
+          //       },
+          //       '删除'
+          //     )
+          //   ])
+          // }
         }
       ],
       tableData: [],
