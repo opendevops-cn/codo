@@ -291,7 +291,7 @@
         },
         { title: '主机', key: 'server_len', align: 'center' },
         { title: '数据库', key: 'db_len', align: 'center' },
-        { title: '操作', key: 'handle', width: 120, align: 'center',
+        { title: '操作', key: 'handle', width: 140, align: 'center',
           render: (h, params) => {
             return h('div', [
               h( 'Button',
