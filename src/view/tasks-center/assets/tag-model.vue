@@ -343,10 +343,10 @@
           }
         },
         { title: 'IP', key: 'ip',  minWidth: 200, },
-        { title: 'IDC', key: 'idc', align: 'center', minWidth: 120},
+        // { title: 'IDC', key: 'idc', align: 'center', minWidth: 120},
         { title: '区域', key: 'region', align: 'center', minWidth: 120},
-        { title: '状态', key: 'state', width: 120, align: 'center', sortable: true},
-        { title: '操作', key: 'handle', width: 150, align: 'center',
+        { title: '状态', key: 'state', minWidth: 100, align: 'center'},
+        { title: '操作', key: 'handle', width: 150,
           render: (h, params) => {
             return h('div', [
               h(
