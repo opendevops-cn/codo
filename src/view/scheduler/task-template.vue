@@ -4,9 +4,8 @@
     <i-col :md="24" :lg="6">
       <Card style="height:100%">
         <div class="search-con">
-          <Input @on-change="handleClear" clearable placeholder="输入模板名称" class="search-input" v-model="searchValue"/>
-          <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
-          <Button type="primary"  @click="editModal('post', '新建模板')" class="search-btn" >创建</Button>
+          <Input @on-change="handleClear" clearable placeholder="输入模板名称搜索" class="search-input" v-model="searchValue"/>
+          <Button class="search-btn" @click="editModal('post', '新建模板')">新建</Button>
         </div>
           <Table size="small" height="710" :columns="columns" :data="tableData"></Table>
       </Card>
@@ -32,7 +31,7 @@
           <Button type="warning" class="search-btn" @click="handlerSubmit" ghost>提交选择</Button>
           <Button type="warning" class="search-btn" @click="handlerSubmitEdit" ghost >保存编辑</Button>
         </div>
-        <tables ref="tables" editable  search-place="top" v-model="tableData2" :columns="columns2" @on-delete="handleDelete"/>
+        <tables ref="tables" editable size="small"  search-place="top" v-model="tableData2" :columns="columns2"  @on-delete="handleDelete"/>
         </Card>
       </i-col>
     </Row>
@@ -75,13 +74,12 @@ export default {
           title: 'ID',
           key: 'temp_id',
           width: 70,
-          align: 'center',
           sortable: true
         },
         {
           title: '模板名称',
           key: 'temp_name',
-          align: 'center',
+          tooltip: true,
           minWidth: 140,
           render: (h, params) => {
             return h('div', [
@@ -102,19 +100,15 @@ export default {
         {
           title: '操作',
           key: 'handle',
-          width: 140,
+          width: 90,
           align: 'center',
           render: (h, params) => {
             return h('div', [
               h(
-                'Button',
+                'a',
                 {
-                  props: {
-                    type: 'success',
-                    size: 'small'
-                  },
                   style: {
-                    marginRight: '1px'
+                    marginRight: '5px'
                   },
                   on: {
                     click: () => {
@@ -126,12 +120,8 @@ export default {
                 '授权'
               ),
               h(
-                'Button',
+                'a',
                 {
-                  props: {
-                    type: 'error',
-                    size: 'small'
-                  },
                   on: {
                     click: () => {
                       this.deleteTemplate(params)
@@ -200,7 +190,7 @@ export default {
           title: '触发器',
           key: 'trigger',
           align: 'center',
-          width: 100,
+          minWidth: 100,
           render: (h, params) => {
             return h(
               'Select',
@@ -210,7 +200,7 @@ export default {
                   size: 'small',
                   transfer: true
                 },
-                style: 'width:60px',
+                style: 'width:70px',
                 on: {
                   'on-change': event => {
                     this.editIng = `修改了模板${this.selectTemp}触发器`
@@ -279,7 +269,7 @@ export default {
                 },
                 [
                   h(
-                    'Button',
+                    'a',
                     {
                       props: {
                         type: 'error',
@@ -325,7 +315,6 @@ export default {
     getTempList (key, value) {
       getTemplist(key, value).then(res => {
         if (res.data.code === 0) {
-          this.$Message.success(`${res.data.msg}`)
           this.tableData = res.data.data
         } else {
           this.$Message.error(`${res.data.msg}`)
@@ -343,7 +332,7 @@ export default {
     },
     // 获取用户列表
     getUserList () {
-      getuserlist(1, 10000).then(res => {
+      getuserlist(1, 1000).then(res => {
         if (res.data.code === 0) {
           this.allUser = res.data.data
         } else {
@@ -414,7 +403,7 @@ export default {
     handlerOnChange (val) {
       let newCommandList = []
       val.forEach(item => {
-        item['group'] = 88
+        item['group'] = 1
         item['level'] = 88
         item['exec_user'] = 'root'
         item['trigger'] = 'hand'
@@ -508,6 +497,11 @@ export default {
       this.getTempList(this.searchKey, this.searchValue)
     }
   },
+  watch: {
+    searchValue(val) {
+      this.handleSearch()
+    }
+  },
   mounted () {
     this.getTempList()
     this.getCommandList()
@@ -538,7 +532,7 @@ export default {
     }
     &-input {
       display: inline-block;
-      width: 160px;
+      width: 220px;
       margin-left: 1px;
     }
     &-input-long {
@@ -547,7 +541,7 @@ export default {
       margin-left: 1px;
     }
     &-btn {
-      margin-left: 2px;
+      margin-left: 3px;
     }
   }
 }

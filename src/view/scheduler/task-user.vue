@@ -7,11 +7,19 @@
     <p>用户为ssh的时候使用的用户，端口为ssh端口，密钥为ssh的私钥，
       你需要把当对应公钥放入远端需要执行的主机，一般我们把CMDB里面的系统级管理用户导入，当作执行用户来使用</p>
   </Alert>
-      <div class="search-con search-con-top">
-      <Button type="primary"  @click="editModal('', 'post', '新建用户')" class="search-btn" >新建</Button>
-    </div>
+
+  <div class="search-con search-con-top">
+      <Input class="search-input" v-model="searchValue" clearable :maxlength='50' placeholder="假装有个搜索框"/>
+
+      <ButtonGroup class="search-btn">
+        <Button @click="editModal('', 'post', '新建参数')" >新建参数</Button>
+      </ButtonGroup>
+
+  </div>
+
   <Table size="small" height="620" ref="selection" :columns="columns" :data="tableData"></Table>
-  <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
+
+  <Modal v-model="modalData.modalVisible"  :title="modalData.modalTitle" :loading=true :footer-hide=true>
     <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
   </Modal>
 </Card>
@@ -19,7 +27,7 @@
 
 <script>
 import FormGroup from '_c/form-group'
-import { getExecUserlist, operationExecUserlist } from '@/api/task'
+import { getExecUserlist, operationExecUserlist } from '@/api/scheduler/scheduler-task.js'
 export default {
   components: {
     FormGroup
@@ -30,26 +38,22 @@ export default {
         {
           title: '执行用户',
           key: 'alias_user',
-          align: 'center',
           minWidth: 130,
         },
         {
           title: '系统用户',
           key: 'exec_user',
-          align: 'center',
           minWidth: 120,
         },
         {
           title: 'SSH端口',
           key: 'ssh_port',
-          align: 'center',
           minWidth: 100,
         },
         {
           title: '备注',
           key: 'remarks',
-          minWidth: 100,
-          align: 'center'
+          minWidth: 100
         },
         {
           title: '更新时间',
@@ -57,19 +61,14 @@ export default {
           width: 150
         },
         {
-          title: '操作',
+          title: '#',
           key: 'handle',
           width: 150,
-          align: 'center',
           render: (h, params) => {
             return h('div', [
               h(
-                'Button',
+                'a',
                 {
-                  props: {
-                    type: 'primary',
-                    size: 'small'
-                  },
                   style: {
                     marginRight: '5px'
                   },
@@ -82,12 +81,8 @@ export default {
                 '编辑'
               ),
               h(
-                'Button',
+                'a',
                 {
-                  props: {
-                    type: 'error',
-                    size: 'small'
-                  },
                   on: {
                     click: () => {
                       this.delExecUser(params)
@@ -101,17 +96,22 @@ export default {
         }
       ],
       tableData: [],
-      modalMap: {
+      modalData: {
         modalVisible: false,
         modalTitle: '新建'
       },
       formList: [],
-      editModalData: ''
+      editModalData: '',
+      //
+      pageTotal: 0, // 数据总数
+      // pageNum: 1, // 当前页码
+      // pageSize: 15, // 每页条数
+      searchValue: '',
     }
   },
   methods: {
     getExecUserList () {
-      getExecUserlist().then(res => {
+      getExecUserlist(this.searchValue).then(res => {
         if (res.data.code === 0) {
           this.tableData = res.data.data
         } else {
@@ -120,8 +120,8 @@ export default {
       })
     },
     editModal (index, meth, mtitle) {
-      this.modalMap.modalVisible = true
-      this.modalMap.modalTitle = mtitle
+      this.modalData.modalVisible = true
+      this.modalData.modalTitle = mtitle
       this.editModalData = meth
       this.formList = [
         {
@@ -131,11 +131,11 @@ export default {
         {
           name: 'alias_user',
           type: 'i-input',
-          maxlength: 80,
+          maxlength: 30,
           value: meth === 'put' ? this.tableData[index].alias_user : '',
           label: '执行用户',
 
-          placeholder: '请输入执行用户名称，编辑模板的时候会选择，必须使用英文字母',
+          placeholder: '执行用户名称，编辑模板的时候会选择，必须使用英文字母',
           rule: [{ required: true, message: '执行用户名称不能为空', trigger: 'blur' }]
         },
         {
@@ -153,10 +153,7 @@ export default {
           value: meth === 'put' ? this.tableData[index].ssh_port : '22',
           label: 'SSH端口',
           maxlength: 5,
-          placeholder: '请输入端口号，一般为22',
-          rule: [
-            { required: true, message: 'SSH端口不能为空', trigger: 'blur' }
-          ]
+          placeholder: '请输入端口号，一般为22'
         },
         {
           name: 'remarks',
@@ -186,7 +183,7 @@ export default {
           if (res.data.code === 0) {
             this.$Message.success(`${res.data.msg}`)
             this.getExecUserList()
-            this.modalMap.modalVisible = false
+            this.modalData.modalVisible = false
           } else {
             this.$Message.error(`${res.data.msg}`)
           }
@@ -216,21 +213,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.search-con {
-  padding: 10px 0;
-  .search {
-    &-col {
-      display: inline-block;
-      width: 200px;
-    }
-    &-input {
-      display: inline-block;
-      width: 200px;
-      margin-left: 2px;
-    }
-    &-btn {
-      margin-left: 2px;
+  .search-con {
+    padding: 5px 0;
+    .search {
+      &-col {
+        display: inline-block;
+        width: 200px;
+      }
+      &-input {
+        display: inline-block;
+        width: 350px;
+        margin-left: 2px;
+      }
+      &-btn {
+        margin-right: 1px;
+        float:right;
+      }
     }
   }
-}
 </style>
+

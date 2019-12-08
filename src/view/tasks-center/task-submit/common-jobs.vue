@@ -139,8 +139,7 @@ export default {
         {
           title: '作业名称',
           key: 'task_name',
-          align: 'left',
-          width: 400,
+          minWidth: 250,
           sortable: true,
           render: (h, params) => {
             return h(
@@ -159,39 +158,34 @@ export default {
         {
           title: '执行主机',
           key: 'hosts_name',
-          align: 'left'
+          minWidth: 150,
         },
         {
           title: '模板ID',
           key: 'temp_id',
-          align: 'center',
-          width: 100
+          minWidth: 90,
         },
         {
           title: '创建者',
           key: 'creator',
           align: 'center',
-          width: 150
+          minWidth: 120
         },
-        {
-          title: '创建时间',
-          key: 'create_time',
-          align: 'center',
-          width: 180,
-          sortable: true
-        },
+        // {
+        //   title: '创建时间',
+        //   key: 'create_time',
+        //   width: 160
+        // },
         {
           title: '更新时间',
           key: 'update_time',
-          align: 'center',
-          width: 180,
+          width: 160,
           sortable: true
         },
         {
-          title: '',
+          title: '#',
           key: 'handle',
-          width: 360,
-          align: 'center',
+          minWidth: 350,
           render: (h, params) => {
             return h('ButtonGroup', [
               h(
@@ -549,7 +543,6 @@ export default {
       getAuthTaglist().then(res => {
         if (res.data.code === 0) {
           this.allTagList = res.data.data
-          console.log(this.allTagList)
         } else {
           this.$Message.error(`${res.data.msg}`)
         }
@@ -565,7 +558,6 @@ export default {
       getDetailslist(temp_id).then(res => {
         if (res.data.code === 0) {
           this.temp_step_list = res.data.data.temp_list
-          console.log('temp_step_list', this.temp_step_list)
         } else {
           this.$Message.error(`${res.data.msg}`)
         }
@@ -614,20 +606,16 @@ export default {
     handlePageSize (value) {
       this.pageSize = value
       this.pageNum = 1
-      console.log(value)
       this.getCommonJobs()
     }
   },
   mounted () {
     this.getCommonJobs()
     this.getAllTagList()
-    // this.getTempList();
-    // this.getDetailsList(200)
   },
   watch: {
     searchVal (val) {
-      this.searchKey = val
-      this.getCommonJobs(this.searchKey)
+      this.getCommonJobs()
     }
   }
 }
