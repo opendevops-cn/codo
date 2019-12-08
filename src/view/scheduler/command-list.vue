@@ -1,24 +1,33 @@
 <template>
   <Card style="height:100%">
-      <div class="search-con search-con-top">
-        <Select v-model="searchKey" class="search-col">
-          <Option v-for="item in columns" v-if="item.key !== 'handle' && item.key !== 'status' && item.key !== ''" :value="item.key" :key="`search-col-${item.key}`">{{ item.title }}</Option>
-        </Select>
-        <Input @on-change="handleClear" clearable placeholder="输入关键字搜索" class="search-input" v-model="searchValue"/>
-        <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
-        <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新建命令')" class="search-btn" >新建命令</Button></slot>
+    <div class="search-con search-con-top">
+      <Input class="search-input" v-model="searchValue" clearable :maxlength='50' placeholder="输入关键字搜索"/>
+
+      <ButtonGroup class="search-btn">
+        <Button @click="handlerExportData()"><Icon type="ios-download-outline"></Icon>导出数据</Button>
+        <Button @click="editModal('', 'post', '新建参数')" >新建参数</Button>
+      </ButtonGroup>
+    </div>
+
+    <Table size="small" ref="selection"  :columns="columns" :data="tableData"/>
+   
+   <div style="margin: 10px;overflow: hidden">
+      <div style="float: left;">
+        <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" show-total show-sizer :page-size-opts="[10,15,20,50,500,1000]"
+            @on-change="changePage" @on-page-size-change="handlePageSize" />
       </div>
-    <Table size="small" height="718" ref="selection" border :columns="columns" :data="tableData"></Table>
-    <!-- <Table size="small" height="718" ref="selection"  :columns="columns" :data="tableData"></Table> -->
-    <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true  width="660">
+    </div>
+
+    <Modal v-model="modalData.modalVisible"  :title="modalData.modalTitle" :loading=true :footer-hide=true width="660">
       <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
     </Modal>
+
   </Card>
 </template>
 
 <script>
 import FormGroup from '_c/form-group'
-import { getCommandlist, operationCommand } from '@/api/task'
+import { getCommandlist, operationCommand } from '@/api/scheduler/scheduler-task'
 export default {
   components: {
     FormGroup
@@ -67,20 +76,10 @@ export default {
           width: 140,
           align: 'center',
         },
-        // {
-        //   title: '创建者',
-        //   key: 'creator',
-        //   width: 120
-        // },
-        // {
-        //   title: '更新时间',
-        //   key: 'update_time',
-        //   width: 150
-        // },
         {
-          title: '操作',
+          title: '#',
           key: 'handle',
-          width: 75,
+          width: 80,
           align: 'center',
           render: (h, params) => {
             return h(
@@ -95,62 +94,26 @@ export default {
               '删除'
             );
           }
-          // render: (h, params) => {
-          //   return h('div', [
-          //     h(
-          //       'Button',
-          //       {
-          //         props: {
-          //           type: 'primary',
-          //           size: 'small'
-          //         },
-          //         style: {
-          //           marginRight: '5px'
-          //         },
-          //         on: {
-          //           click: () => {
-          //             this.editModal(params.index, 'put', '编辑命令')
-          //           }
-          //         }
-          //       },
-          //       '编辑'
-          //     ),
-          //     h(
-          //       'Button',
-          //       {
-          //         props: {
-          //           type: 'error',
-          //           size: 'small'
-          //         },
-          //         on: {
-          //           click: () => {
-          //             this.delData(params)
-          //           }
-          //         }
-          //       },
-          //       '删除'
-          //     )
-          //   ])
-          // }
         }
       ],
       tableData: [],
-      modalMap: {
+      modalData: {
         modalVisible: false,
         modalTitle: '新建'
       },
       formList: [],
       editModalData: '',
       //
-      searchKey: '',
-      searchValue: ''
+      pageTotal: 0, // 数据总数
+      pageNum: 1, // 当前页码
+      pageSize: 15, // 每页条数
+      searchValue: '',
     }
   },
   methods: {
-    getCommandList (key, value) {
-      getCommandlist(key, value).then(res => {
+    handlerGetCommandList () {
+      getCommandlist(this.searchValue).then(res => {
         if (res.data.code === 0) {
-          this.$Message.success(`${res.data.msg}`)
           this.pageTotal = res.data.count
           this.tableData = res.data.data
         } else {
@@ -159,8 +122,8 @@ export default {
       })
     },
     editModal (index, meth, mtitle) {
-      this.modalMap.modalVisible = true
-      this.modalMap.modalTitle = mtitle
+      this.modalData.modalVisible = true
+      this.modalData.modalTitle = mtitle
       this.editModalData = meth
       this.formList = [
         {
@@ -209,9 +172,9 @@ export default {
       setTimeout(() => {
         operationCommand(value.data, this.editModalData).then(res => {
           if (res.data.code === 0) {
+            this.handlerGetCommandList()
             this.$Message.success(`${res.data.msg}`)
-            this.getCommandList(this.searchKey, this.searchValue)
-            this.modalMap.modalVisible = false
+            this.modalData.modalVisible = false
           } else {
             this.$Message.error(`${res.data.msg}`)
           }
@@ -233,44 +196,51 @@ export default {
         )
       }
     },
-    setDefaultSearchKey () {
-      this.searchKey = this.columns[0].key && this.columns[0].key !== 'handle' ? this.columns[0].key : (this.columns.length > 1 ? this.columns[1].key : '')
-    },
-    handleClear (e) {
-      if (e.target.value === '') this.tableData = this.value
-    },
-    handleSearch () {
-      this.getCommandList(this.searchKey, this.searchValue)
+     // 切换页码
+    changePage(value){
+      this.pageNum = value
+      this.handlerGetServerList()
+    },    
+    handlePageSize(value){
+       this.pageSize = value
+       this.handlerGetServerList()
+    }, 
+     //导出数据
+    handlerExportData(){
+      let nowTime = Date.parse(new Date())
+      this.$refs.selection.exportCsv({
+          filename: `命令信息-${nowTime}`,
+       });
     }
   },
-  watch: {
+  watch:{
     searchValue (val) {
-      this.getCommandList(this.searchKey, val)
-    }
-  },
+      this.handlerGetCommandList()
+    },
+   },
   mounted () {
-    this.getCommandList()
-    this.setDefaultSearchKey()
+    this.handlerGetCommandList()
   }
 }
 </script>
 
 <style lang="less" scoped>
-.search-con {
-  padding: 10px 0;
-  .search {
-    &-col {
-      display: inline-block;
-      width: 200px;
-    }
-    &-input {
-      display: inline-block;
-      width: 200px;
-      margin-left: 2px;
-    }
-    &-btn {
-      margin-left: 2px;
+  .search-con {
+    padding: 5px 0;
+    .search {
+      &-col {
+        display: inline-block;
+        width: 200px;
+      }
+      &-input {
+        display: inline-block;
+        width: 350px;
+        margin-left: 2px;
+      }
+      &-btn {
+        margin-right: 0px;
+        float:right;
+      }
     }
   }
-}
 </style>

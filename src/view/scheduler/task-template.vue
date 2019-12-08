@@ -5,8 +5,7 @@
       <Card style="height:100%">
         <div class="search-con">
           <Input @on-change="handleClear" clearable placeholder="输入模板名称搜索" class="search-input" v-model="searchValue"/>
-          <!-- <Button type="info" class="search-btn" @click="handleSearch" >搜索</Button> -->
-          <Button type="info" class="search-btn" @click="editModal('post', '新建模板')">新建</Button>
+          <Button class="search-btn" @click="editModal('post', '新建模板')">新建</Button>
         </div>
           <Table size="small" height="710" :columns="columns" :data="tableData"></Table>
       </Card>
@@ -108,10 +107,6 @@ export default {
               h(
                 'a',
                 {
-                  // props: {
-                  //   type: 'success',
-                  //   size: 'small'
-                  // },
                   style: {
                     marginRight: '5px'
                   },
@@ -127,10 +122,6 @@ export default {
               h(
                 'a',
                 {
-                  // props: {
-                  //   type: 'error',
-                  //   size: 'small'
-                  // },
                   on: {
                     click: () => {
                       this.deleteTemplate(params)
@@ -278,7 +269,7 @@ export default {
                 },
                 [
                   h(
-                    'Button',
+                    'a',
                     {
                       props: {
                         type: 'error',
@@ -324,7 +315,6 @@ export default {
     getTempList (key, value) {
       getTemplist(key, value).then(res => {
         if (res.data.code === 0) {
-          this.$Message.success(`${res.data.msg}`)
           this.tableData = res.data.data
         } else {
           this.$Message.error(`${res.data.msg}`)
@@ -342,7 +332,7 @@ export default {
     },
     // 获取用户列表
     getUserList () {
-      getuserlist(1, 10000).then(res => {
+      getuserlist(1, 1000).then(res => {
         if (res.data.code === 0) {
           this.allUser = res.data.data
         } else {
@@ -413,7 +403,7 @@ export default {
     handlerOnChange (val) {
       let newCommandList = []
       val.forEach(item => {
-        item['group'] = 88
+        item['group'] = 1
         item['level'] = 88
         item['exec_user'] = 'root'
         item['trigger'] = 'hand'
@@ -542,7 +532,7 @@ export default {
     }
     &-input {
       display: inline-block;
-      width: 250px;
+      width: 220px;
       margin-left: 1px;
     }
     &-input-long {

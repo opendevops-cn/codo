@@ -8,7 +8,25 @@
     </i-col>
     <i-col :md="24" :lg="18">
       <Card shadow style="height:100%">
-        <div class="search-con">
+        <div class="search-con search-con-top">
+          <Input class="search-input" clearable v-model="searchVal" :maxlength='50' placeholder="输入关键字搜索"/>
+
+          <ButtonGroup class="search-btn">
+            <Button  @click="handlerSetConf()">GIT配置</Button>
+            <Button  @click="handlerAddGitRepo('post', '添加仓库')" class="search-btn" >单个添加</Button>
+            <Button  :loading="updateLoading" @click="handlerRefresh()" class="search-btn">刷新地址</Button>
+            <template v-if="tableSelectIdList.length > 0">
+              <Button  @click="handlerDelete">批量删除</Button>
+            </template>
+            <template v-else>
+              <Button  @click="handlerDelete" disabled>批量删除</Button>
+            </template>
+            <Button  @click="handlerHookslog()">钩子日志</Button>
+            <Button  to="//docs.opendevops.cn/zh/latest/code_repository.html" target="_blank">跳转文档</Button>
+          </ButtonGroup>
+      </div>
+
+        <!-- <div class="search-con">
           <Input class="search-input" clearable v-model="searchVal" style="padding:6px;" placeholder="输入关键字搜索"/>
           <Button type="primary"  @click="handlerSetConf()" class="search-btn" >GIT配置</Button>
           <Button type="primary"  @click="handlerAddGitRepo('post', '添加仓库')" class="search-btn" >单个添加</Button>
@@ -16,22 +34,22 @@
           <Button type="error" class="search-btn"  @click="handlerDelete">批量删除</Button>
           <Button class="search-btn"  @click="handlerHookslog()">钩子日志</Button>
           <Button class="search-btn"  to="//docs.opendevops.cn/zh/latest/code_repository.html" target="_blank">跳转文档</Button>
-        </div>
+        </div> -->
           <Form  v-if="setRepo" ref="formRepo" :model="formRepo" :rules="ruleInline" inline>
             <FormItem prop="git_url">
-              <Input type="text" v-model="formRepo.git_url" placeholder="git_url"  style="width: 250px" :maxlength='250'  clearable>
+              <Input type="text" v-model="formRepo.git_url" placeholder="GitLab 地址"  style="width: 250px" :maxlength='250'  clearable>
               </Input>
             </FormItem>
             <FormItem prop="private_token">
-              <Input type="text" v-model="formRepo.private_token" placeholder="private_token"  style="width: 200px" :maxlength='120'  clearable>
+              <Input type="text" v-model="formRepo.private_token" placeholder="private_token"  style="width: 220px" :maxlength='120'  clearable>
               </Input>
             </FormItem>
             <FormItem prop="api_version">
-              <Input type="text" v-model="formRepo.api_version" placeholder="API版本"  style="width: 80px" :readonly=true :maxlength='10'>
+              <Input type="text" v-model="formRepo.api_version" placeholder="API版本"  style="width: 30px" :readonly=true :maxlength='10'>
               </Input>
             </FormItem>
             <FormItem prop="deploy_key">
-              <Input type="text" v-model="formRepo.deploy_key" placeholder="deploy key"  style="width: 300px" :maxlength='800'  clearable>
+              <Input type="text" v-model="formRepo.deploy_key" placeholder="deploy key"  style="width: 200px" :maxlength='800'  clearable>
               </Input>
             </FormItem>
             <FormItem>
@@ -283,7 +301,7 @@
           },
           { title: '', key: '', align: 'center',
             render: (h, params) => {
-              return h('div', [
+              return h('ButtonGroup', [
                 h(
                   'Button',
                   {
@@ -322,13 +340,12 @@
         columns: [
           {
             title: '域名地址',
-            key: 'git_url',
-            align: 'center',
+            key: 'git_url'
           },
-          { title: '操作', key: 'handle', width: 120, align: 'center',
+          { title: '操作', key: 'handle', minWidth: 120,
             render: (h, params) => {
               return h('div', [
-                h( 'Button',
+                h( 'a',
                   {
                     props: {
                       type: 'success',
@@ -345,12 +362,8 @@
                   },'编辑'
                 ),
                 h(
-                  'Button',
+                  'a',
                   {
-                    props: {
-                      type: 'error',
-                      size: 'small'
-                    },
                     on: {
                       click: () => {
                         this.handlerDeleteGit(params.row.git_url)
@@ -364,14 +377,14 @@
           }
         ],
         repoColumns: [
-        { type: 'selection', key: 'id', width: 100, align: 'center'},
+        { type: 'selection', key: 'id', width: 80},
         {
           title: '域名地址',
           key: 'git_url',
-          width: 250,
+          minWidth: 250,
           align: 'center',
         },
-        { title: '组名称', key: 'group_name', align: 'center',
+        { title: '组名称', key: 'group_name', minWidth: 150,
           render: (h, params) => {
             return h('div', [
               h('a',{
@@ -387,18 +400,18 @@
             ])
           } 
         },
-        { title: '项目名称', key: 'project_name', align: 'center' },
-        { title: '操作', key: 'handle', width: 120, align: 'center',
+        { title: '项目名称', key: 'project_name', minWidth: 150,},
+        { title: '#', key: 'handle', width: 130,
           render: (h, params) => {
             return h('div', [
-              h( 'Button',
+              h( 'a',
                 {
                   props: {
                     type: 'success',
                     size: 'small'
                   },
                   style: {
-                    marginRight: '2px'
+                    marginRight: '5px'
                   },
                   on: {
                     click: () => {
@@ -408,7 +421,7 @@
                 },'编辑'
               ),
               h(
-                'Button',
+                'a',
                 {
                   props: {
                     type: 'error',
@@ -704,7 +717,7 @@
 </script>
 <style lang="less" scoped>
   .search-con {
-    padding: 10px 0;
+    padding: 6px 0;
     .search {
       &-col {
         display: inline-block;

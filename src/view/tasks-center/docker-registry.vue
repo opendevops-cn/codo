@@ -19,25 +19,10 @@
         class="search-input"
         v-model="searchValue"
       />
-      <Button
-        @click="handleSearch"
-        class="search-btn"
-        type="primary"
-      >搜索</Button>
-      <slot name="new_btn"><Button
-          type="primary"
-          @click="editModal('', 'post', '新建项目')"
-          class="search-btn"
-        >新建项目</Button></slot>
+      <Button  @click="handleSearch" class="search-btn">搜索</Button>
+      <slot name="new_btn"><Button @click="editModal('', 'post', '新建项目')" class="search-btn" >新建项目</Button></slot>
     </div>
-    <Table
-      size="small"
-      height="718"
-      ref="selection"
-      border
-      :columns="columns"
-      :data="tableData"
-    ></Table>
+    <Table size="small" height="718" ref="selection" :columns="columns" :data="tableData"/>
     <Modal
       v-model="modalMap.modalVisible"
       :title="modalMap.modalTitle"
@@ -66,29 +51,29 @@ export default {
           title: '项目名称',
           key: 'project_name',
           align: 'center',
-          width: 180,
+          minWidth: 120,
           sortable: true
         },
         {
           title: '仓库地址',
           key: 'registry_url',
-          align: 'center'
+          minWidth: 120,
         },
         {
           title: '用户',
           key: 'user_name',
-          width: 150,
+          minWidth: 120,
           align: 'center'
         },
         {
-          title: '操作',
+          title: '#',
           key: 'handle',
-          width: 200,
+          width: 150,
           align: 'center',
           render: (h, params) => {
             return h('div', [
               h(
-                'Button',
+                'a',
                 {
                   props: {
                     type: 'primary',
@@ -107,7 +92,7 @@ export default {
                 '编辑'
               ),
               h(
-                'Button',
+                'a',
                 {
                   props: {
                     type: 'error',

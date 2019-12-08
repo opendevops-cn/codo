@@ -95,12 +95,8 @@
             <FormItem>
               <Button type="primary" :loading="btn_loading" @click="handleSubmit('formValidate')">提交</Button>
               <Button @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
-              <Button
-                type="success"
-                :loading="btn_loading"
-                style="margin-left: 8px"
-                @click="handleSaveCommonJobs('formValidate')"
-              >保存到常用作业</Button>
+              <Button type="success" :loading="btn_loading" style="margin-left: 8px" @click="handleSaveCommonJobs('formValidate')">保存到常用作业</Button>
+              <Button type="success" :loading="btn_loading" style="margin-left: 8px" @click="handleSaveCronJobs('formValidate')">保存到定时作业</Button>
             </FormItem>
           </Form>
         </Col>
@@ -274,7 +270,9 @@ export default {
         }
       })
     },
-
+    handleSaveCronJobs() {
+      this.$Message.info('下个版本的内容')
+    },
     handleReset (value) {
       this.$refs[value].resetFields()
     }

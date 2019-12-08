@@ -1,23 +1,31 @@
 <template>
-<Card style="height:100%">
-    <div class="search-con search-con-top">
-      <Select v-model="searchKey" class="search-col">
-        <Option v-for="item in columns" v-if="item.key !== 'handle' && item.key !== ''" :value="item.key" :key="`search-col-${item.key}`">{{ item.title }}</Option>
-      </Select>
-      <Input @on-change="handleClear" clearable placeholder="输入关键字搜索" class="search-input" v-model="searchValue"/>
-      <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
-      <Button type="primary"  @click="editModal('', 'post', '新建参数')" class="search-btn" >新建参数</Button>
+  <Card style="height:100%">
+      <div class="search-con search-con-top">
+        <Input class="search-input" v-model="searchValue" clearable :maxlength='50' placeholder="输入关键字搜索"/>
+
+        <ButtonGroup class="search-btn">
+          <Button @click="handlerExportData()"><Icon type="ios-download-outline"></Icon>导出数据</Button>
+          <Button @click="editModal('', 'post', '新建参数')" >新建参数</Button>
+        </ButtonGroup>
+      </div>
+    <Table size="small" ref="selection" :columns="columns" :data="tableData"/>
+
+    <div style="margin: 10px;overflow: hidden">
+        <div style="float: left;">
+            <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" show-total show-sizer :page-size-opts="[10,15,20,50,500,1000]"
+          @on-change="changePage" @on-page-size-change="handlePageSize" />
+        </div>
     </div>
-  <Table size="small" height="720" ref="selection" :columns="columns" :data="tableData"></Table>
-  <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
-    <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
-  </Modal>
-</Card>
+
+    <Modal v-model="modalData.modalVisible"  :title="modalData.modalTitle" :loading=true :footer-hide=true>
+      <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
+    </Modal>
+  </Card>
 </template>
 
 <script>
 import FormGroup from '_c/form-group'
-import { getArgslist, operationArgs } from '@/api/task'
+import { getArgslist, operationArgs } from '@/api/scheduler/scheduler-task.js'
 export default {
   components: {
     FormGroup
@@ -28,47 +36,38 @@ export default {
         {
           title: 'ID',
           key: 'args_id',
-          align: 'center',
-          sortable: true,
           width: 80
         },
         {
           title: '参数名称',
           key: 'args_name',
-          align: 'center',
           minWidth: 120,
         },
         {
           title: '参数值',
           key: 'args_self',
-          align: 'center',
           minWidth: 120,
         },
         {
           title: '创建者',
           key: 'creator',
-           minWidth: 100,
+          minWidth: 100,
         },
         {
           title: '更新时间',
           key: 'update_time',
           sortable: true,
-           minWidth: 160,
+          minWidth: 160,
         },
         {
-          title: '操作',
+          title: '#',
           key: 'handle',
           width: 150,
-          align: 'center',
           render: (h, params) => {
             return h('div', [
               h(
-                'Button',
+                'a',
                 {
-                  props: {
-                    type: 'primary',
-                    size: 'small'
-                  },
                   style: {
                     marginRight: '5px'
                   },
@@ -81,12 +80,8 @@ export default {
                 '编辑'
               ),
               h(
-                'Button',
+                'a',
                 {
-                  props: {
-                    type: 'error',
-                    size: 'small'
-                  },
                   on: {
                     click: () => {
                       this.delData(params)
@@ -100,20 +95,22 @@ export default {
         }
       ],
       tableData: [],
-      modalMap: {
+      modalData: {
         modalVisible: false,
         modalTitle: '新建'
       },
       formList: [],
       editModalData: '',
       //
-      searchKey: '',
-      searchValue: ''
+      pageTotal: 0, // 数据总数
+      pageNum: 1, // 当前页码
+      pageSize: 15, // 每页条数
+      searchValue: '',
     }
   },
   methods: {
-    getArgsList (key, value) {
-      getArgslist(key, value).then(res => {
+    getArgsList() {
+      getArgslist(this.searchValue).then(res => {
         if (res.data.code === 0) {
           this.pageTotal = res.data.count
           this.tableData = res.data.data
@@ -123,8 +120,8 @@ export default {
       })
     },
     editModal (index, meth, mtitle) {
-      this.modalMap.modalVisible = true
-      this.modalMap.modalTitle = mtitle
+      this.modalData.modalVisible = true
+      this.modalData.modalTitle = mtitle
       this.editModalData = meth
       this.formList = [
         {
@@ -156,8 +153,8 @@ export default {
         operationArgs(value.data, this.editModalData).then(res => {
           if (res.data.code === 0) {
             this.$Message.success(`${res.data.msg}`)
-            this.getArgsList(this.searchKey, this.searchValue)
-            this.modalMap.modalVisible = false
+            this.getArgsList()
+            this.modalData.modalVisible = false
           } else {
             this.$Message.error(`${res.data.msg}`)
           }
@@ -179,44 +176,51 @@ export default {
         )
       }
     },
-    setDefaultSearchKey () {
-      this.searchKey = this.columns[0].key && this.columns[0].key !== 'handle' ? this.columns[0].key : (this.columns.length > 1 ? this.columns[1].key : '')
-    },
-    handleClear (e) {
-      if (e.target.value === '') this.tableData = this.value
-    },
-    handleSearch () {
-      this.getArgsList(this.searchKey, this.searchValue)
+     // 切换页码
+    changePage(value){
+      this.pageNum = value
+      this.handlerGetServerList()
+    },    
+    handlePageSize(value){
+       this.pageSize = value
+       this.handlerGetServerList()
+    }, 
+     //导出数据
+    handlerExportData(){
+      let nowTime = Date.parse(new Date())
+      this.$refs.selection.exportCsv({
+          filename: `参数信息-${nowTime}`,
+       });
     }
   },
-  watch: {
+  watch:{
     searchValue (val) {
-      this.getArgsList(this.searchKey, val)
-    }
-  },
+      this.getArgsList()
+    },
+   },
   mounted () {
     this.getArgsList()
-    this.setDefaultSearchKey()
   }
 }
 </script>
 
 <style lang="less" scoped>
-.search-con {
-  padding: 10px 0;
-  .search {
-    &-col {
-      display: inline-block;
-      width: 200px;
-    }
-    &-input {
-      display: inline-block;
-      width: 200px;
-      margin-left: 2px;
-    }
-    &-btn {
-      margin-left: 2px;
+  .search-con {
+    padding: 5px 0;
+    .search {
+      &-col {
+        display: inline-block;
+        width: 200px;
+      }
+      &-input {
+        display: inline-block;
+        width: 350px;
+        margin-left: 2px;
+      }
+      &-btn {
+        margin-right: 0px;
+        float:right;
+      }
     }
   }
-}
 </style>

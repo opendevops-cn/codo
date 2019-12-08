@@ -8,13 +8,21 @@
     </i-col>
     <i-col :md="24" :lg="19" style="margin-bottom: 15px;">
       <Card shadow>
-        <div class="search-con">
-          <Input class="search-input" v-model="searchVal" style="padding:6px;" placeholder="输入关键字搜索"/>
-          <Button v-if="selectTwo === 'server'" type="primary"  @click="handlerServer(null, 'post', '添加主机')" class="search-btn" >添加主机</Button>
-          <Button  v-else-if="selectTwo === 'DB'" type="primary"  @click="handlerDB(null, 'post', '添加数据库')" class="search-btn" >添加数据库</Button>
-          <Button v-else  type="primary"  @click="handlerTag(null, 'post', '新建标签')" class="search-btn" >新建标签</Button>
-          <Button type="error" class="search-btn"  @click="handlerDelete">批量删除</Button>
-        </div>
+        <div class="search-con search-con-top">
+        <Input class="search-input" v-model="searchVal" clearable :maxlength='50' placeholder="输入关键字搜索"/>
+
+        <ButtonGroup class="search-btn">
+          <Button v-if="selectTwo === 'server'"  @click="handlerServer(null, 'post', '添加主机')">添加主机</Button>
+          <Button v-else-if="selectTwo === 'DB'" @click="handlerDB(null, 'post', '添加数据库')" >添加数据库</Button>
+          <Button v-else @click="handlerTag(null, 'post', '新建标签')" >新建标签</Button>
+          <template v-if="tableSelectIdList.length > 0">
+              <Button  @click="handlerDelete">批量删除</Button>
+            </template>
+            <template v-else>
+              <Button  @click="handlerDelete" disabled>批量删除</Button>
+            </template>
+        </ButtonGroup>
+      </div>
          <Table v-if="selectTwo === 'DB'" size="small"  ref="selection" :columns="columns" :data="tableDataDB"  @on-selection-change="handleSelectChange"></Table>
          <Table v-else-if="selectTwo === 'server'" size="small"  ref="selection"  :columns="columns1"
          :data="tableDataServer" @on-selection-change="handleSelectChange"></Table>
@@ -284,7 +292,7 @@
         },
         { title: '主机', key: 'server_len', minWidth:100, align: 'center' },
         { title: '数据库', key: 'db_len',  minWidth:100, align: 'center' },
-        { title: '操作', key: 'handle', width: 150, align: 'center',
+        { title: '#', key: 'handle', width: 150,
           render: (h, params) => {
             return h('div', [
               h( 'Button',
@@ -346,7 +354,7 @@
         // { title: 'IDC', key: 'idc', align: 'center', minWidth: 120},
         { title: '区域', key: 'region', align: 'center', minWidth: 120},
         { title: '状态', key: 'state', minWidth: 100, align: 'center'},
-        { title: '操作', key: 'handle', width: 150,
+        { title: '#', key: 'handle', width: 150,
           render: (h, params) => {
             return h('div', [
               h(
@@ -417,8 +425,8 @@
         { title: '环境',  key: 'db_env',  minWidth:80, align: 'center', sortable: true },
         { title: '类型',  key: 'db_type',  minWidth:80, align: 'center', sortable: true},
         { title: '代理', key: 'proxy_host', minWidth:80, align: 'center', sortable: true},
-        { title: '状态', key: 'state', width: 120, align: 'center', sortable: true},
-        { title: '操作', key: 'handle', width: 150, align: 'center',
+        { title: '状态', key: 'state', minWidth: 110, align: 'center', sortable: true},
+        { title: '#', key: 'handle', width: 150,
           render: (h, params) => {
             return h('div', [
               h(
@@ -927,7 +935,7 @@
 </script>
 <style lang="less" scoped>
   .search-con {
-    padding: 10px 0;
+    padding: 6px 0;
     .search {
       &-col {
         display: inline-block;

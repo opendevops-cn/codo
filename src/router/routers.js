@@ -51,6 +51,26 @@ export const routerMap = [{
         },
         component: Main,
         children: [{
+                path: 'commonJobs',
+                name: 'commonJobs',
+                meta: {
+                    icon: 'ios-heart',
+                    title: '常用作业'
+                },
+                component: () =>
+                    import ('@/view/tasks-center/task-submit/common-jobs.vue')
+            },
+            {
+                path: 'customTasks',
+                name: 'customTasks',
+                meta: {
+                    icon: 'md-beer',
+                    title: '新建作业'
+                },
+                component: () =>
+                    import ('@/view/tasks-center/task-submit/create_task.vue')
+            },
+            {
                 path: 'publishApp',
                 name: 'publishApp',
                 meta: {
@@ -110,26 +130,7 @@ export const routerMap = [{
                 component: () =>
                     import ('@/view/tasks-center/task-submit/task-post.vue')
             },
-            {
-                path: 'customTasks',
-                name: 'customTasks',
-                meta: {
-                    icon: 'md-beer',
-                    title: '新建作业'
-                },
-                component: () =>
-                    import ('@/view/tasks-center/task-submit/create_task.vue')
-            },
-            {
-                path: 'commonJobs',
-                name: 'commonJobs',
-                meta: {
-                    icon: 'ios-heart',
-                    title: '常用作业'
-                },
-                component: () =>
-                    import ('@/view/tasks-center/task-submit/common-jobs.vue')
-            }
+
             // {
             //     path: 'myCollect',
             //     name: 'myCollect',
@@ -403,7 +404,7 @@ export const routerMap = [{
                 name: 'businesModel',
                 meta: {
                     icon: 'ios-link',
-                    title: '业务模型'
+                    title: '业务关联'
                 },
                 component: parentView,
                 children: [{
@@ -416,16 +417,16 @@ export const routerMap = [{
                         component: () =>
                             import ('@/view/tasks-center/assets/tag-model.vue')
                     },
-                    {
-                        path: 'modelTree',
-                        name: 'modelTree',
-                        meta: {
-                            icon: 'ios-stats',
-                            title: '树形关联'
-                        },
-                        component: () =>
-                            import ('@/view/tasks-center/assets/tree-model.vue')
-                    },
+                    // {
+                    //     path: 'modelTree',
+                    //     name: 'modelTree',
+                    //     meta: {
+                    //         icon: 'ios-stats',
+                    //         title: '树形关联'
+                    //     },
+                    //     component: () =>
+                    //         import ('@/view/tasks-center/assets/tree-model.vue')
+                    // },
                     {
                         path: 'proxyInfo',
                         name: 'proxyInfo',

@@ -73,7 +73,7 @@ export default {
     postTasks: '自定义任务-JSON',
     commonJobs: '常用作业',
     nodeAdd: '节点添加-K8S',
-    businesModel: '业务模型',
+    businesModel: '业务关联',
     tagTree: '标签关联',
     modelTree: '树形关联',
     proxyInfo: '代理配置',
