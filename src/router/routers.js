@@ -664,15 +664,27 @@ export const routerMap = [{
             title: '运维工具'
         },
         component: Main,
-        children: [{
-                path: 'paid_reminder',
-                name: 'paid_reminder',
-                meta: {
+        children: [
+            // {
+            //     path: 'paid_reminder',
+            //     name: 'paid_reminder',
+            //     meta: {
+            //         icon: 'ios-stopwatch',
+            //         title: '提醒管理'
+            //     },
+            //     component: () =>
+            //         import ('@/view/devops-tools/paid-reminder.vue')
+            // },
+            {                
+                path: 'remind_manager',
+                name: 'remind_manager',
+                  meta: {
                     icon: 'ios-stopwatch',
                     title: '提醒管理'
                 },
-                component: () =>
-                    import ('@/view/devops-tools/paid-reminder.vue')
+                             
+                component: ()  =>  
+                    import ('@/view/devops-tools/remind-manager.vue')            
             },
             {
                 path: 'project_manager',
@@ -755,8 +767,7 @@ export const routerMap = [{
                     import ('@/view/devops-tools/prometheus-alert.vue')
             }
         ]
-    },
-    {
+    }, {
         path: '/usermanage',
         name: 'usermanage',
         meta: {
@@ -805,8 +816,7 @@ export const routerMap = [{
                     import ('@/view/user-manage/role.vue')
             }
         ]
-    },
-    {
+    }, {
         path: '/systemmanage',
         name: 'systemmanage',
         meta: {
