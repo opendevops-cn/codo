@@ -1,26 +1,23 @@
 <template>
 <div style="height:100%">
   <Card>
-    <div class="split">
-        <Split v-model="offset">
-          <div slot="left" class="split-pane">
-              <tables ref="tables" editable searchable search-place="top" v-model="tableData" :columns="columns" @on-search-table="handleSearchTable">
+    <Row>
+       <Col :xs="24" :sm="12" :md="12" :lg="12" :xxl="15">
+         <tables ref="tables" editable searchable search-place="top" v-model="tableData" :columns="columns" @on-search-table="handleSearchTable">
               <div slot="new_btn" class="search-con search-col">
               <Button type="info" class="search-btn"  @click="showModal">新建</Button>
               </div>
-              </tables>
-            <br/>
-           <div style="margin: 0px;overflow: hidden">
-             <div style="float: left;">
-               <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[10,14,25,35,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize"></Page>
-             </div>
+          </tables>
 
+          <div style="margin: 10px; overflow: hidden">
+              <div style="float: left;">
+               <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[10,15,25,35,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize"></Page>
+             </div>
            </div>
-            </div>
-            <div slot="right" class="split-pane">
-              <Row>
-                <Col span="24" offset="1">
-                  <Transfer
+
+       </Col>
+       <Col :xs="23" :md="11" :lg="11" :xxl="8" offset="1" class="split-pane">
+         <Transfer
                     :list-style="listStyle"
                     :titles="tranferTitles"
                     :data="source"
@@ -29,11 +26,8 @@
                     :filter-method="filterMethod"
                     @on-change="handleChange">
                   </Transfer>
-                  </Col>
-                </Row>
-            </div>
-        </Split>
-    </div>
+       </Col>
+    </Row>
   </Card>
   <Modal  v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
     <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
@@ -79,7 +73,7 @@ export default {
       targetKeys: [],
       listStyle: {
         // width: "250px",
-        height: '663px'
+        height: '660px'
       },
       tranferTitles: ['所有列表', '已有列表'],
       role_id: '',
@@ -94,7 +88,7 @@ export default {
       tableData: [],
       pageTotal: 0, // 数据总数
       pageNum: 1, // 当前页码
-      pageSize: 14, // 每页条数
+      pageSize: 15, // 每页条数
       formList: [
         {
           name: 'role_name',
@@ -108,12 +102,11 @@ export default {
       ],
       columns: [
         // { title: "角色ID", key: "role_id", width: 80, sortable: true },
-        { title: '角色', key: 'role_name', width: 120, sortable: true },
+        { title: '角色', key: 'role_name',  minWidth: 120,  sortable: true },
         {
           title: '状态',
           key: 'status',
-          width: 80,
-          align: 'center',
+          minWidth: 100,
           render: (h, params, vm) => {
             return h('div', [
               h('i-switch', {
@@ -133,17 +126,16 @@ export default {
           }
         },
         {
-          title: '操作',
-          align: 'center',
+          title: '#',
           key: 'handle',
+          minWidth: 250,
           button: [
             (h, params, vm) => {
-              return h('div', [
+              return h('ButtonGroup', [
                 h(
                   'Button',
                   {
                     props: {
-                      type: 'primary',
                       size: 'small'
                     },
                     style: {
@@ -161,7 +153,6 @@ export default {
                   'Button',
                   {
                     props: {
-                      type: 'primary',
                       size: 'small'
                     },
                     style: {
@@ -179,7 +170,6 @@ export default {
                   'Button',
                   {
                     props: {
-                      type: 'primary',
                       size: 'small'
                     },
                     style: {
@@ -197,7 +187,6 @@ export default {
                   'Button',
                   {
                     props: {
-                      type: 'primary',
                       size: 'small'
                     },
                     style: {
