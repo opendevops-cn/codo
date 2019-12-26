@@ -6,7 +6,15 @@
     <Col v-if="task_type !== 'readonly1' && task_type !== 'normal1'" >
         <Card dis-hover>
           <p slot="title"><Icon type="ios-film-outline"></Icon>订单详情</p>
-          <Button slot="extra"  size="small" @click.native="handlerStop()">撤销订单</Button>
+          <!-- <Button slot="extra"  size="small" @click.native="handlerStop()">撤销订单</Button> -->
+          <div slot="extra">
+              <template v-if="list_id && task_type === 'normal' && checkData.schedule === 'new'" >
+                    <Button v-if="checkData.schedule === 'new' && checkData.approval_button"  size ="small" style="marginRight: 5px"
+                      @click.native="handlerApproval()">审批执行</Button>
+              </template>
+              <Button size="small" @click.native="handlerStop()">撤销订单</Button>
+          </div>
+          
             <Row>
               <Col span="12">
                 <div class="detail-col">
@@ -34,7 +42,7 @@
                 </div>
               </Col>
               <div v-if="list_id && task_type === 'normal'">
-                <div v-if="checkData.schedule === 'new'" >
+                <!-- <div v-if="checkData.schedule === 'new'" >
                   <Col span="24">
                     <div class="detail-col">
                       <b>审批执行：</b>
@@ -42,7 +50,7 @@
                         @click.native="handlerApproval()">审批</Button>
                     </div>
                   </Col>
-                </div>
+                </div> -->
                 <Col span="24">
                   <div class="detail-col">
                     <b>审批干预：</b>
