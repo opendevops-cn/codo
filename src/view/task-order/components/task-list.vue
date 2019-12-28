@@ -1,63 +1,73 @@
 <template>
 <div>
-  <Card>
+  <Card dis-hover>
   <Row :gutter="15" class="task-con">
     
-    <Col v-if="task_type !== 'readonly1' && task_type !== 'normal1'" style="padding: 10px; background: #f8f8f9">
-        <Card title="任务详情">
+    <Col v-if="task_type !== 'readonly1' && task_type !== 'normal1'" >
+        <Card dis-hover>
+          <p slot="title"><Icon type="ios-film-outline"></Icon>订单详情</p>
+          <!-- <Button slot="extra"  size="small" @click.native="handlerStop()">撤销订单</Button> -->
+          <div slot="extra">
+              <template v-if="list_id && task_type === 'normal' && checkData.schedule === 'new'" >
+                    <Button v-if="checkData.schedule === 'new' && checkData.approval_button"  size ="small" style="marginRight: 5px"
+                      @click.native="handlerApproval()">审批执行</Button>
+              </template>
+              <Button size="small" @click.native="handlerStop()">撤销订单</Button>
+          </div>
+          
             <Row>
               <Col span="12">
                 <div class="detail-col">
-                  提交时间：<p color="warning"  class="detail-col-1" size ="small">{{checkData.create_time}}</p>
+                  <b>提交时间：</b><p color="warning"  class="detail-col-1" size ="small">{{checkData.create_time}}</p>
                 </div>
               </Col>
               <Col span="12">
                  <div class="detail-col">
-                  执行时间：<p type="warning" class="detail-col-1" size ="small">{{checkData.start_time}}</p>
+                   <b>执行时间：</b><p type="warning" class="detail-col-1" size ="small">{{checkData.start_time}}</p>
                 </div>
               </Col>
               <Col span="12">
                 <div class="detail-col">
-                  发起人：<p type="warning" class="detail-col-1" size ="small">{{checkData.creator}}</p>
+                  <b>发起人：</b><p type="warning" class="detail-col-1" size ="small">{{checkData.creator}}</p>
                 </div>
               </Col>
               <Col span="12">
                 <div class="detail-col">
-                  审批人：<p type="warning" class="detail-col-1" size ="small">{{checkData.executor}}</p>
+                  <b>审批人：</b><p type="warning" class="detail-col-1" size ="small">{{checkData.executor}}</p>
                 </div>
               </Col>
               <Col span="24">
                 <div class="detail-col">
-                  参与人员：<p type="warning" class="detail-col-1" size ="small">{{checkData.associated_user}}</p>
+                  <b>流程管理员：</b><p type="warning" class="detail-col-1" size ="small">{{checkData.associated_user}}</p>
                 </div>
               </Col>
               <div v-if="list_id && task_type === 'normal'">
-                <div v-if="checkData.schedule === 'new'" >
+                <!-- <div v-if="checkData.schedule === 'new'" >
                   <Col span="24">
                     <div class="detail-col">
-                      审批执行：
+                      <b>审批执行：</b>
                       <Button v-if="checkData.schedule === 'new' && checkData.approval_button" type="success" size ="small" class="detail-col-1"
                         @click.native="handlerApproval()">审批</Button>
                     </div>
                   </Col>
-                </div>
+                </div> -->
                 <Col span="24">
                   <div class="detail-col">
-                    审批干预：
-                    <span  slot="extra" v-if="checkData.hand_list" v-for="item, index in checkData.hand_list">
-                      <Button type="info" style="marginRight: 10px" size ="small" @click.native="handlerHand(item)">{{item}}</Button>
+                    <b>全局干预：</b>
+                    <span class="detail-col-1" v-if="checkData.hand_list" v-for="item, index in checkData.hand_list">
+                      <Button type="info" style="marginLeft: 10px" size ="small" @click.native="handlerHand(item)">{{item}}</Button>
                     </span>
-                    <Button type="error" class="detail-col-1" size="small" @click.native="handlerStop()">终止全部</Button>
+                    <!-- <Button type="error" class="detail-col-1" size="small" @click.native="handlerStop()">撤销订单</Button> -->
                   </div>
                 </Col>
               </div>
               <Col v-if="list_id" span="24" style="padding: 10px">
                 <div v-if="task_type === 'normal'">
-                  <Table v-if="dataArgs.length > 0" height="121" :columns="columnsArgs" :data="dataArgs" :border="false" :show-header=false  size='small'></Table>
-                  <Alert v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
+                  <Table v-if="dataArgs.length > 0" max-height="123" :columns="columnsArgs" :data="dataArgs"  :show-header=false  size='small'></Table>
+                  <Alert  v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
                 </div>
-                <div  v-if="task_type === 'readonly2'">
-                  <Table v-if="dataArgs.length > 0" :columns="columnsArgs" :data="dataArgs" :border="false" :show-header=false  size='small'></Table>
+                <div v-if="task_type === 'readonly2'">
+                  <Table v-if="dataArgs.length > 0" max-height="400" :columns="columnsArgs" :data="dataArgs" :show-header=false  size='small'></Table>
                   <Alert v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
                 </div>
               </Col>
@@ -65,10 +75,10 @@
         </Card>
       </Col>
 
-      <Col style="padding: 10px; background: #f8f8f9">
+      <Col style="padding: 10px;">
        <Tabs v-model="runGroup" @on-click="handleTabs">
           <TabPane v-for="(item, index) in tabs" :key="`${_uid}_${index}`" :label="item.label" :icon="item.icon" :name="item.name">
-            <span style="marginRight: 2px;marginLeft: 2px;" v-for="h in checkData.this_host_list">
+            <span style="marginRight: 2px; marginLeft: 2px; cursor: pointer;" v-for="h in checkData.this_host_list">
             <tag fade v-if="checkData.hosts_status[h] === '0'" color="default" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
             <tag fade v-if="checkData.hosts_status[h] === '1'" color="cyan" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
             <tag fade v-if="checkData.hosts_status[h] === '2'" color="green" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
@@ -78,7 +88,7 @@
             <tag fade v-if="checkData.hosts_status[h] === '6'" color="magenta" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
             <tag fade v-if="checkData.hosts_status[h] === '7'" color="geekblue" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
             </span>
-            <Table style="margin-top: 10px; "border size="small":columns="columns1" :data="tableData1"></Table>
+            <Table style="margin-top: 10px;" border size="small":columns="columns1" :data="tableData1"></Table>
           </TabPane>
         </Tabs>
       </Col>
@@ -169,11 +179,11 @@ export default {
         {
           title: '任务命令',
           key: 'task_cmd',
-          align: 'center'
+          minWidth: 180,
         },
         {
           title: '状态',
-          key: 'handle',
+          key: 'task_status',
           width: 100,
           align: 'center',
           render: (h, params) => {
@@ -216,9 +226,9 @@ export default {
           }
         },
         {
-          title: '操作',
+          title: '#',
           key: 'handle',
-          width: 180,
+          width: 188,
           align: 'center',
           render: (h, params) => {
             return h('div', [
@@ -269,7 +279,7 @@ export default {
                   },
                   '执行'
                 ),
-              params.row.task_status !== '5' && (this.task_type === 'normal'||this.task_type === 'normal1') &&
+              params.row.task_status !== '5' && (this.task_type === 'normal'||this.task_type === 'normal1') && 
                 h(
                   'Button',
                   {
@@ -325,11 +335,16 @@ export default {
           {
               title: '参数',
               key: 'args_key',
-              width: 245,
+              minWidth: 280,
+              render: (h, params) => {
+                  return h('b', {}, `${params.row.args_key}：`
+                  )
+              }
           },
           {
               title: '值',
-              key: 'args_value'
+              key: 'args_value',
+              minWidth: 250
           },
       ],
       dataArgs: [],
@@ -415,7 +430,7 @@ export default {
     },
     // 审批干预
     handlerHand (value) {
-      if (confirm(`通过执行《${value}》任务吗??`)) {
+      if (confirm(`通过执行 ${value} ，此干预为全局的`)) {
         operationChecklist(
           { list_id: this.list_id, hand_task: value },
           'put'
@@ -431,7 +446,7 @@ export default {
     },
     // 终止整个任务
     handlerStop () {
-      if (confirm('这样会结束掉整个任务，你确定要这样操作吗？')) {
+      if (confirm('这样会终止掉整个订单流程，你确定要这样操作吗？')) {
         operationOrderlist({ list_id: this.list_id }, 'put').then(res => {
           if (res.data.code === 0) {
             this.$emit('flushOrderList')
@@ -565,7 +580,7 @@ export default {
   .detail {
     &-col {
       margin-top: 10px; 
-      margin-left: 16px; 
+      margin-left: 28px; 
       margin-right: 16px;
       &-1 {
         margin-right: 2px;

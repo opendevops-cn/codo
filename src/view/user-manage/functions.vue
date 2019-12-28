@@ -89,17 +89,15 @@ export default {
           key: 'ctime'
         },
         {
-          title: '操作',
+          title: '#',
           key: 'handle',
           width: 150,
-          align: 'center',
           render: (h, params) => {
             return h('div', [
               h(
                 'Button',
                 {
                   props: {
-                    type: 'primary',
                     size: 'small'
                   },
                   style: {

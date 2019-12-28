@@ -1,63 +1,54 @@
 <template>
   <div style="height:100%">
-    <!-- <Card style="height:100%"> -->
-      <div class="split">
-        <Split v-model="offset">
-          <div
-            slot="left"
-            class="split-pane"
-          >
-            <tables
-              ref="tables"
-              :height="730"
-              editable
-              searchable
-              search-place="top"
-              v-model="tableData"
-              :columns="columns"
-              @on-search-table="handleSearchTable"
-            >
-              <div
-                slot="new_btn"
-                class="search-con search-col"
+      <Row :gutter="16">
+        <Col span="12">
+          <Card>
+          <tables ref="tables"
+                :height="700"
+                editable
+                searchable
+                search-place="top"
+                v-model="tableData"
+                :columns="columns"
+                @on-search-table="handleSearchTable"
               >
-                <Button
-                  type="info"
-                  class="search-btn"
-                  @click="showModal('', 'menu', 'post', '添加菜单')"
-                >添加菜单</Button>
-              </div>
-            </tables>
-          </div>
-          <div
-            slot="right"
-            class="split-pane"
-          >
-            <tables
-              ref="tables"
-              :height="730"
-              editable
-              searchable
-              search-place="top"
-              v-model="tableData1"
-              :columns="columns1"
-              @on-search-table="handleSearchTable1"
-            >
-              <div
-                slot="new_btn"
-                class="search-con search-col"
+                <div slot="new_btn" class="search-con search-col">
+                  <Button
+                    type="info"
+                    class="search-btn"
+                    @click="showModal('', 'menu', 'post', '添加菜单')"
+                  >添加菜单</Button>
+                </div>
+              </tables>
+          </Card>
+        </Col>
+
+        <Col span="12">
+        <Card>
+        <tables
+                ref="tables"
+                :height="700"
+                editable
+                searchable
+                search-place="top"
+                v-model="tableData1"
+                :columns="columns1"
+                @on-search-table="handleSearchTable1"
               >
-                <Button
-                  type="info"
-                  class="search-btn"
-                  @click="showModal('', 'component', 'post', '添加组件')"
-                >添加组件</Button>
-              </div>
-            </tables>
-          </div>
-        </Split>
-      </div>
-    <!-- </Card> -->
+                <div
+                  slot="new_btn"
+                  class="search-con search-col"
+                >
+                  <Button
+                    type="info"
+                    class="search-btn"
+                    @click="showModal('', 'component', 'post', '添加组件')"
+                  >添加组件</Button>
+                </div>
+              </tables>
+          </Card>
+        </Col>
+      </Row>
     <Modal
       v-model="modalMap.modalVisible"
       :title="modalMap.modalTitle"
@@ -103,7 +94,7 @@ export default {
       newDataType: "",
       editModalData: "",
       columns: [
-        { title: "菜单名称", key: "menu_name", width: 200, sortable: true },
+        { title: "菜单名称", key: "menu_name", minWidth: 200, sortable: true },
         {
           title: "状态",
           key: "status",
@@ -179,7 +170,7 @@ export default {
         {
           title: "组件名称",
           key: "component_name",
-          width: 200,
+          minWidth: 200,
           sortable: true
         },
         {
