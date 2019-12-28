@@ -22,7 +22,7 @@
               <tag color="success" closable :key="item" :name="item" @on-close="handleClose">{{item}}</tag>
             </span>
           </FormItem>
-           <FormItem label="选择模板" prop="temp_id" >
+           <FormItem label="选择模板" prop="temp_id">
             <Select v-model="formValidate.temp_id" filterable @on-change="handlerSelectTemp(formValidate.temp_id)" placeholder="请选择关联的模板" >
               <Option v-for="item in tempList" :value="item.temp_id" :key="item.temp_id" >{{ item.temp_name }}</Option>
             </Select>

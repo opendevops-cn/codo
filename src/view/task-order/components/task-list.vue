@@ -38,7 +38,7 @@
               </Col>
               <Col span="24">
                 <div class="detail-col">
-                  <b>参与人员：</b><p type="warning" class="detail-col-1" size ="small">{{checkData.associated_user}}</p>
+                  <b>流程管理员：</b><p type="warning" class="detail-col-1" size ="small">{{checkData.associated_user}}</p>
                 </div>
               </Col>
               <div v-if="list_id && task_type === 'normal'">
@@ -53,9 +53,9 @@
                 </div> -->
                 <Col span="24">
                   <div class="detail-col">
-                    <b>审批干预：</b>
-                    <span  slot="extra" v-if="checkData.hand_list" v-for="item, index in checkData.hand_list">
-                      <Button type="info" style="marginRight: 10px" size ="small" @click.native="handlerHand(item)">{{item}}</Button>
+                    <b>全局干预：</b>
+                    <span class="detail-col-1" v-if="checkData.hand_list" v-for="item, index in checkData.hand_list">
+                      <Button type="info" style="marginLeft: 10px" size ="small" @click.native="handlerHand(item)">{{item}}</Button>
                     </span>
                     <!-- <Button type="error" class="detail-col-1" size="small" @click.native="handlerStop()">撤销订单</Button> -->
                   </div>
@@ -63,11 +63,11 @@
               </div>
               <Col v-if="list_id" span="24" style="padding: 10px">
                 <div v-if="task_type === 'normal'">
-                  <Table v-if="dataArgs.length > 0" max-height="123" :columns="columnsArgs" :data="dataArgs" :border="false" :show-header=false  size='small'></Table>
-                  <Alert v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
+                  <Table v-if="dataArgs.length > 0" max-height="123" :columns="columnsArgs" :data="dataArgs"  :show-header=false  size='small'></Table>
+                  <Alert  v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
                 </div>
                 <div v-if="task_type === 'readonly2'">
-                  <Table v-if="dataArgs.length > 0" max-height="400" :columns="columnsArgs" :data="dataArgs" :border="false" :show-header=false  size='small'></Table>
+                  <Table v-if="dataArgs.length > 0" max-height="400" :columns="columnsArgs" :data="dataArgs" :show-header=false  size='small'></Table>
                   <Alert v-else > 没有参数，或者参数格式化的时候发生了异常</Alert>
                 </div>
               </Col>
@@ -78,7 +78,7 @@
       <Col style="padding: 10px;">
        <Tabs v-model="runGroup" @on-click="handleTabs">
           <TabPane v-for="(item, index) in tabs" :key="`${_uid}_${index}`" :label="item.label" :icon="item.icon" :name="item.name">
-            <span style="marginRight: 2px;marginLeft: 2px;" v-for="h in checkData.this_host_list">
+            <span style="marginRight: 2px; marginLeft: 2px; cursor: pointer;" v-for="h in checkData.this_host_list">
             <tag fade v-if="checkData.hosts_status[h] === '0'" color="default" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
             <tag fade v-if="checkData.hosts_status[h] === '1'" color="cyan" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
             <tag fade v-if="checkData.hosts_status[h] === '2'" color="green" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
@@ -88,7 +88,7 @@
             <tag fade v-if="checkData.hosts_status[h] === '6'" color="magenta" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
             <tag fade v-if="checkData.hosts_status[h] === '7'" color="geekblue" @click.native="handleGetInfo(runGroup,h)">{{h}}</tag>
             </span>
-            <Table style="margin-top: 10px; "border size="small":columns="columns1" :data="tableData1"></Table>
+            <Table style="margin-top: 10px;" border size="small":columns="columns1" :data="tableData1"></Table>
           </TabPane>
         </Tabs>
       </Col>
@@ -430,7 +430,7 @@ export default {
     },
     // 审批干预
     handlerHand (value) {
-      if (confirm(`通过执行《${value}》任务吗??`)) {
+      if (confirm(`通过执行 ${value} ，此干预为全局的`)) {
         operationChecklist(
           { list_id: this.list_id, hand_task: value },
           'put'

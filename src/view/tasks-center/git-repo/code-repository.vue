@@ -57,7 +57,7 @@
             </FormItem>
           </Form>
           <Table v-if="setRepo" size="small" :columns="columns" :data="confData"></Table>
-          <Table v-else size="small"  :columns="repoColumns" :data="tableData" @on-selection-change="handleSelectChange" height='705'></Table>
+          <Table v-else size="small"  :columns="repoColumns" :data="tableData" @on-selection-change="handleSelectChange" max-height='705'></Table>
       </Card>
     </i-col>
   </Row>
@@ -447,7 +447,7 @@
             if (res.data.code === 0) {
               this.tagTreeData = res.data.data
             } else {
-              this.$Message.error(`${res.data.msg}`)
+              // this.$Message.error(`${res.data.msg}`)
             }
           })
         },

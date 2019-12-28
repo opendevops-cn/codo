@@ -195,7 +195,6 @@ export default {
                     'Button',
                     {
                       props: {
-                        type: 'primary',
                         size: 'small'
                       }
                     },

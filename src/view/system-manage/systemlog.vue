@@ -1,5 +1,5 @@
 <template>
- <Card style="height:100%;">
+ <Card>
     <div class="search-con search-con-top">
       <Select v-model="searchKey" class="search-col">
         <Option v-for="item in columns" v-if="item.key !== 'handle'" :value="item.key" :key="`search-col-${item.key}`">{{ item.title }}</Option>
@@ -8,7 +8,7 @@
       <DatePicker :value="dateValue" type="daterange" placement="bottom-end" @on-change="changeDate" placeholder="Select date" style=" margin-left: 2px; width: 200px"></DatePicker>
       <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
     </div>
-  <Table size="small" ref="selection"  :columns="columns" :data="tableData"></Table>
+  <Table size="small" :columns="columns" :data="tableData"></Table>
   <div style="margin: 10px;overflow: hidden">
     <div style="float: left;">
       <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[10,15,25,35,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize"></Page>

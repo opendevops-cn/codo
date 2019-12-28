@@ -270,6 +270,13 @@ export default {
       tableData: [],
       //
       viewStepcolumns: [
+         {
+          title: '执行组',
+          key: 'group',
+          align: 'center',
+          width: 100,
+          sortable: true
+        },
         {
           title: '优先级',
           key: 'level',
@@ -280,27 +287,23 @@ export default {
         {
           title: '脚本名称',
           key: 'command_name',
-          align: 'left',
-          width: 250,
+          minWidth: 250,
           sortable: true
         },
         {
           title: '脚本命令',
           key: 'command',
-          align: 'left',
           sortable: true
         },
         {
-          title: '状态',
+          title: '触发器',
           key: 'trigger',
-          width: 85,
+          width: 90,
           align: 'center',
           render: (h, params) => {
             let status = params.row.trigger
             if (status === 'order') {
-              return h('div', [
-                h('Tag', { props: { color: 'default' } }, '默认')
-              ])
+              return h('div', [ h('Tag', { props: { color: 'default' } }, '默认')])
             } else if (status === 'hand') {
               return h('div', [h('Tag', { props: { color: 'cyan' } }, '手动')])
             } else if (status === 'timed') {
