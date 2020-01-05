@@ -196,9 +196,8 @@ export default {
               maxlength: 2, //限制不能超过两位
               placeholder: '${TOKEN_EXP_TIME} 系统默认登录超时时间，默认一天',
               rule: [
-                { required: true, type: 'string', message: '格式应为int类型，不能小于1小时，不能大于5天 ', trigger: 'blur' },
-                { type: 'string',  min: 1,   message: '不能小于1小时，不然体验太差了',   trigger: 'blur' },
-                { type: 'string',  max: 120, message: '不能大于5天，不然的话太不安全了', trigger: 'blur' }
+                { type: 'string', message: '格式应为int类型', trigger: 'blur' },
+                { type: 'string',  min: 1,   message: '不能小于1小时，不然体验太差了',   trigger: 'blur' }
               ]
             },
             {
