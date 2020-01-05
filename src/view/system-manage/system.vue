@@ -14,16 +14,19 @@
           <Col span="12">
           <form-group :list="formList" @on-submit-success="handleSubmit"  :label-width="130">
             <slot slot="left-btn">
-              <Button v-if="theTabName === 'EMAIL'" type="success" style="margin-left: 8px"@click="handlerCheckTest(theTabName)">测试邮件</Button>
-              <Button v-if="theTabName === 'SMS'" type="success" style="margin-left: 8px" @click="handlerCheckTest(theTabName)">测试短信</Button>
-              <Button v-if="theTabName === 'LDAP'" type="success" style="margin-left: 8px" @click="handlerCheckTest(theTabName)">测试LDAP</Button>
+              <Button v-if="theTabName === 'EMAIL'" type="success" style="margin-left: 8px" :loading="btn_loading" @click="handlerCheckTest(theTabName)">测试邮件</Button>
+              <Button v-if="theTabName === 'SMS'"   type="success" style="margin-left: 8px" :loading="btn_loading" @click="handlerCheckTest(theTabName)">测试短信</Button>
+              <Button v-if="theTabName === 'LDAP'"  type="success" style="margin-left: 8px" :loading="btn_loading" @click="handlerCheckTest(theTabName)">测试LDAP</Button>
             </slot>
             </form-group>
           </Col>
           <Col span="10"  offset='1'>
             <Alert  v-if="theTabName === 'WEBSITE'">
+              <h4>建议正式环境使用SSL证书</h4><br>
               <h5>API地址：暂为记录API地址方便后续调用</h5><br>
-              <h5>默认邮箱：系统内默认发送邮件的地址</h5>
+              <h5>默认邮箱：系统内默认发送邮件的地址</h5><br>
+              <h5>登录超时时间：默认为一天，可以设置，单位为小时，前端暂定不能超过24小时，后续可能会更改</h5><br>
+              <h5>二次认证：默认开启二次认证，且正式环境非常不建议关闭全局的二次认证</h5>
             </Alert>
             <Alert  v-if="theTabName === 'EMAIL'">
               <a href="http://docs.opendevops.cn/zh/latest/faq.html#id1" target="_blank">参考文档</a>
@@ -86,6 +89,7 @@ export default {
   },
   data () {
     return {
+      btn_loading: false,
       theTabName: '',
       tabs: [
         { label: '系统设置', icon: 'logo-tux', name: 'WEBSITE' },
@@ -105,6 +109,10 @@ export default {
       CONFIG_DATA: {
         WEBSITE_API_GW_URL: '', // API 地址
         WEBSITE_DEFAULT_MAIL: '', //站内默认邮件接收人
+        //
+        TOKEN_EXP_TIME: 24,  //令牌超时时间
+        MFA_GLOBAL: false,  // 全局二次认证
+
         EMAILLOGIN_DOMAIN: '', // 邮箱登录
         EMAILLOGIN_SERVER: '', // 邮箱服务地址
         //
@@ -179,6 +187,24 @@ export default {
               label: '默认邮箱',
               maxlength: 50,
               placeholder: '${WEBSITE_DEFAULT_MAIL} 系统内默认邮件地址'
+            },
+            {
+              name: 'TOKEN_EXP_TIME',
+              type: 'i-input',
+              value: this.CONFIG_DATA.TOKEN_EXP_TIME,
+              label: '登录超时时间',
+              maxlength: 2, //限制不能超过两位
+              placeholder: '${TOKEN_EXP_TIME} 系统默认登录超时时间，默认一天',
+              rule: [
+                { type: 'string', message: '格式应为int类型', trigger: 'blur' },
+                { type: 'string',  min: 1,   message: '不能小于1小时，不然体验太差了',   trigger: 'blur' }
+              ]
+            },
+            {
+              name: 'MFA_GLOBAL',
+              type: 'i-switch',
+              value: this.CONFIG_DATA.MFA_GLOBAL === '1',
+              label: '禁用二次认证'
             }
           ]
           break
@@ -530,6 +556,7 @@ export default {
       }
     },
     handleSubmit (value) {
+      this.btn_loading = true;
       setTimeout(() => {
         operationSysconfig(value.data).then(res => {
           if (res.data.code === 0) {
@@ -540,9 +567,11 @@ export default {
             this.$Message.error(`${res.data.msg}`)
           }
         })
+        this.btn_loading = false;
       }, 1000)
     },
     handlerCheckTest (value) {
+      this.btn_loading = true;
       setTimeout(() => {
         CheckSysconfig({ check_key: value }).then(res => {
           if (res.data.code === 0) {
@@ -551,15 +580,22 @@ export default {
             this.$Message.error(`${res.data.msg}`)
           }
         })
-      }, 500)
+        this.btn_loading = false;
+      }, 3000)
     }
   },
   mounted () {
     this.getSttings('all')
     setTimeout(() => {
       this.handleTabs('WEBSITE')
-    }, 200)
-  }
+    }, 500)
+  },
+  created () {
+    this.getSttings('all')
+    setTimeout(() => {
+      this.handleTabs('WEBSITE')
+    }, 500)
+  },
 }
 </script>
 

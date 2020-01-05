@@ -12,7 +12,7 @@
       <Input class="search-input" v-model="searchValue" clearable :maxlength='50' placeholder="假装有个搜索框"/>
 
       <ButtonGroup class="search-btn">
-        <Button @click="editModal('', 'post', '新建参数')" >新建参数</Button>
+        <Button @click="editModal('', 'post', '新建用户')" >新建用户</Button>
       </ButtonGroup>
 
   </div>
