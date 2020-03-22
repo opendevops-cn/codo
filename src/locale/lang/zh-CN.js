@@ -122,6 +122,7 @@ export default {
     zabbix_manager: 'ZABBIX',
     prometheus_alert: 'Prometheus',
     domain: '域名管理',
-    domain_name_manage: '域名解析',
+    domain_name_manage: 'BIND解析',
+    cloud_domain_name: '云解析',
     domain_name_monitor: '域名监控'
 }
