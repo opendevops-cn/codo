@@ -23,7 +23,7 @@
           <Col span="10"  offset='1'>
             <Alert  v-if="theTabName === 'WEBSITE'">
               <h4>建议正式环境使用SSL证书</h4><br>
-              <h5>API地址：暂为记录API地址方便后续调用</h5><br>
+              <h5>API地址：默认为：gw.opendevops.cn/api/ 根据实际情况自己调整</h5><br>
               <h5>默认邮箱：系统内默认发送邮件的地址</h5><br>
               <h5>登录超时时间：默认为一天，可以设置，单位为小时，前端暂定不能超过24小时，后续可能会更改</h5><br>
               <h5>二次认证：默认开启二次认证，且正式环境非常不建议关闭全局的二次认证</h5>
@@ -107,7 +107,7 @@ export default {
       ],
       formList: [],
       CONFIG_DATA: {
-        WEBSITE_API_GW_URL: '', // API 地址
+        WEBSITE_API_GW_URL: 'gw.opendevops.cn/api/', // 默认API 地址
         WEBSITE_DEFAULT_MAIL: '', //站内默认邮件接收人
         //
         TOKEN_EXP_TIME: 24,  //令牌超时时间
@@ -160,6 +160,7 @@ export default {
       })
     },
     handleTabs (name) {
+      this.btn_loading =false
       this.theTabName = name
       switch (name) {
         case 'WEBSITE':
@@ -441,7 +442,7 @@ export default {
               type: 'i-input',
               maxlength: 60,
               disabled: true,
-              value: ' {"username": "cn", "email": "mail"}或者{"username": "cn", "email": "email"}',
+              value: this.CONFIG_DATA.LDAP_ATTRIBUTES,
               placeholder: '${LDAP_ATTRIBUTES} 不能为空',
               label: 'LDAP属性映射',
               rule: [ { required: true, message: 'LDAP 属性映射不能为空，并且一定要映射出邮箱地址', trigger: 'blur'}]

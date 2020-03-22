@@ -54,7 +54,8 @@
         <Row  style="width: 900px">
           <i-col span='24'>
             <h4>默认配置</h4>
-            <Input v-model="defautConf"  type="textarea" :autosize="{minRows: 40,maxRows: 150}" />
+            <!-- <editor v-model="defautConf" @init="editorInit" :mode_type="mode_type" :read="editor.read"  :editorHeight=650 :key="`${_uid}`" ></editor> -->
+            <Input v-model="defautConf"  type="textarea" :autosize="{minRows: 30, maxRows: 40}" />
           </i-col>
         </Row>
       </i-col>
@@ -224,11 +225,20 @@
 </template>
 
 <script>
+import editor from '@/components/public/editor'
 import  DomainParser  from './checkDomain.js'
 import { getDomainname, operationDomainname, getDomainzone, operationDomainzone, getLoglist, getDomainconf} from '@/api/dns'
 export default {
+  components: {editor},
   data() {
    return {
+    mode_type: 'ini', 
+    editor:{
+      title: '默认',
+      read: true,
+      color: "primary"
+    },
+    //
     //日志
     logInfo: [],
     logModal: false,
@@ -268,7 +278,7 @@ export default {
       {
         type: 'selection',
         key: '',
-        width: 50,
+        width: 70,
         align: 'center'
       },
       {
@@ -337,9 +347,9 @@ export default {
         sortable: true,
       },
       {
-        title: '操作',
+        title: '#',
         align: 'center',
-        width: 120,
+        width: 130,
         key: '',
 　　    render: (h, params) => {
             let status = params.row.state
@@ -747,6 +757,12 @@ export default {
           this.$Message.error(`${res.data.msg}`)
         }
       })
+    },
+    //
+    editorInit: function () {
+      require(`brace/mode/${this.mode_type}`)    //language
+      require('brace/theme/terminal')
+      require('brace/theme/xcode')
     },
     closeModal () {
       // this.over()
