@@ -156,8 +156,8 @@ export default {
       },
       btnLoading: false,
       modalMethod:'',
-      cloudDict: {'DNSPod':'dnspod'},
-      // cloudDict: {'阿里云':'aliyun', '腾讯云':'qcloud', 'DNSPod':'dnspod', 'GoDaddy':'godaddy'},
+      // cloudDict: {'DNSPod':'dnspod'},
+      cloudDict: {'阿里云':'aliyun', '腾讯云':'qcloud', 'DNSPod':'dnspod', 'GoDaddy':'godaddy'},
     }
   },
   methods: {

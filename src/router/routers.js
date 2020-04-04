@@ -644,26 +644,26 @@ export const routerMap = [{
                 component: () =>
                     import ('@/view/domain-name/domain-name-manage.vue')
             },
-            {
-                path: 'cloud_domain_name',
-                name: 'cloud_domain_name',
-                meta: {
-                    icon: 'ios-cloudy',
-                    title: '云解析'
-                },
-                component: () =>
-                    import ('@/view/domain-name/cloud-domain-manage.vue')
-            },
-            {
-                path: 'cloud_domain_account',
-                name: 'cloud_domain_account',
-                meta: {
-                    icon: 'ios-cloudy',
-                    title: '云账号-域名'
-                },
-                component: () =>
-                    import ('@/view/domain-name/cloud-account-mg.vue')
-            },
+            // {
+            //     path: 'cloud_domain_name',
+            //     name: 'cloud_domain_name',
+            //     meta: {
+            //         icon: 'ios-cloudy',
+            //         title: '云解析'
+            //     },
+            //     component: () =>
+            //         import ('@/view/domain-name/cloud-domain-manage.vue')
+            // },
+            // {
+            //     path: 'cloud_domain_account',
+            //     name: 'cloud_domain_account',
+            //     meta: {
+            //         icon: 'ios-cloudy',
+            //         title: '云账号-域名'
+            //     },
+            //     component: () =>
+            //         import ('@/view/domain-name/cloud-account-mg.vue')
+            // },
             {
                 path: 'domain_name_monitor',
                 name: 'domain_name_monitor',
