@@ -227,7 +227,7 @@
 <script>
 import editor from '@/components/public/editor'
 import  DomainParser  from './checkDomain.js'
-import { getDomainname, operationDomainname, getDomainzone, operationDomainzone, getLoglist, getDomainconf} from '@/api/dns'
+import { getDomainname, operationDomainname, getDomainzone, operationDomainzone, getLoglist, getDomainconf} from '@/api/domain/dns'
 export default {
   components: {editor},
   data() {

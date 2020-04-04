@@ -124,5 +124,6 @@ export default {
     domain: '域名管理',
     domain_name_manage: 'BIND解析',
     cloud_domain_name: '云解析',
+    cloud_domain_account: '云账号-域名',
     domain_name_monitor: '域名监控'
 }
