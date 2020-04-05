@@ -417,16 +417,16 @@ export const routerMap = [{
                         component: () =>
                             import ('@/view/tasks-center/assets/tag-model.vue')
                     },
-                    // {
-                    //     path: 'modelTree',
-                    //     name: 'modelTree',
-                    //     meta: {
-                    //         icon: 'ios-stats',
-                    //         title: '树形关联'
-                    //     },
-                    //     component: () =>
-                    //         import ('@/view/tasks-center/assets/tree-model.vue')
-                    // },
+                    {
+                        path: 'modelTree',
+                        name: 'modelTree',
+                        meta: {
+                            icon: 'ios-stats',
+                            title: '树形关联'
+                        },
+                        component: () =>
+                            import ('@/view/tasks-center/assets/tree-model.vue')
+                    },
                     {
                         path: 'proxyInfo',
                         name: 'proxyInfo',

@@ -7,31 +7,32 @@
           <Option v-for="item in columns" v-if="item.key !== 'handle' && item.key !== 'status' && item.key !== ''" :value="item.key" :key="`search-col-${item.key}`">{{ item.title }}</Option>
         </Select>
         <Input @on-change="handleClear" clearable placeholder="输入关键字搜索" class="search-input" v-model="searchValue"/>
-        <Button @click="handleSearch" class="search-btn" type="primary">搜索</Button>
-        <slot name="new_btn" ><Button type="primary"  @click="editModal('', 'post', '新建权限')" class="search-btn" >新建</Button></slot>
+        <Button @click="handleSearch" type="primary">搜索</Button>
+        <slot name="new_btn" ><Button  @click="handlerAdd" class="search-btn" >添加权限</Button></slot>
       </div>
 
       <Table size="small" ref="selection" :columns="columns" :data="tableData"></Table>
       
       <div style="margin: 10px;overflow: hidden">
         <div style="float: left;">
-          <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[10,15,25,35,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize"></Page>
+          <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[10,15,25,50,1000] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize"></Page>
         </div>
       </div>
-
-      <Modal v-model="modalMap.modalVisible"  :title="modalMap.modalTitle" :loading=true :footer-hide=true>
-        <form-group :list="formList"  @on-submit-success="handleSubmit"></form-group>
-      </Modal>
+      
+      <template>
+         <func-edit :modalEditData="modalEditData" :funcData="funcData" @modal-close="handlerModalClose"></func-edit>
+      </template>
+   
     </Card>
   </div>
 </template>
 
 <script>
-import FormGroup from '_c/form-group'
 import { getFuncslist, operationFunc } from '@/api/user'
+import funcEdit from './components/func-edit'
 export default {
   components: {
-    FormGroup
+    funcEdit
   },
   data () {
     return {
@@ -43,14 +44,84 @@ export default {
           align: 'center'
         },
         {
+          title: '所在应用',
+          key: 'app_code',
+          sortable: true
+        },
+        {
           title: '权限名称',
           key: 'func_name',
-          align: 'center',
           sortable: true
         },
         {
           title: '请求方法',
-          key: 'method_type'
+          key: 'method_type',
+            render: (h, params) => {
+            let method_type = params.row.method_type
+            if (method_type == 'ALL') {
+              return h("div", [
+                h(
+                  "p",
+                  {
+                    style: {
+                      color: "black"
+                    }
+                  },
+                  'GET, POST, PUT, PATCH, DELETE'
+                )
+              ]);
+             } else if (method_type == 'GET') {
+              return h("div", [
+                h(
+                  "p",
+                  {
+                    style: { color: "#61affe"}
+                  },
+                  params.row.method_type
+                )
+              ]);
+             } else if (method_type == 'POST') {
+              return h("div", [
+                h(
+                  "p",
+                  {
+                    style: { color: "#49cc90"}
+                  },
+                  params.row.method_type
+                )
+              ]);
+            } else if (method_type == 'PUT') {
+              return h("div", [
+                h(
+                  "p",
+                  {
+                    style: { color: "#fca130"}
+                  },
+                  params.row.method_type
+                )
+              ]);
+            } else if (method_type == 'PATCH') {
+              return h("div", [
+                h(
+                  "p",
+                  {
+                    style: { color: "#50e3c2"}
+                  },
+                  params.row.method_type
+                )
+              ]);
+            } else {
+              return h("div", [
+                h(
+                  "p",
+                  {
+                    style: { color: "#f93e3e"}
+                  },
+                  params.row.method_type
+                )
+              ]);
+            }
+          }
         },
         {
           title: '请求路径',
@@ -59,7 +130,7 @@ export default {
         {
           title: '状态',
           key: 'status',
-          width: 80,
+          width: 100,
           align: 'center',
           render: (h, params, vm) => {
             return h('div', [
@@ -82,12 +153,13 @@ export default {
         },
         {
           title: '更新时间',
-          key: 'utime'
+          key: 'utime',
+          width: 170,
         },
-        {
-          title: '添加时间',
-          key: 'ctime'
-        },
+        // {
+        //   title: '添加时间',
+        //   key: 'ctime'
+        // },
         {
           title: '#',
           key: 'handle',
@@ -105,7 +177,7 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.editModal(params.index, 'put', '编辑权限')
+                      this.handlerEdit(params.row)
                     }
                   }
                 },
@@ -140,16 +212,18 @@ export default {
       },
       formList: [],
       editModalData: '',
+      funcData: {},
+      modalEditData: {
+      },
       //
       searchKey: '',
       searchValue: ''
     }
   },
   methods: {
-    getFuncsList (page, limit, key, value) {
-      getFuncslist(page, limit, key, value).then(res => {
+    handlerGetFuncsList () {
+      getFuncslist( this.pageNum,  this.pageSize,  this.searchKey,  this.searchValue).then(res => {
         if (res.data.code === 0) {
-          this.$Message.success(`${res.data.msg}`)
           this.pageTotal = res.data.count
           this.tableData = res.data.data
         } else {
@@ -157,72 +231,44 @@ export default {
         }
       })
     },
-    editModal (index, meth, mtitle) {
-      this.modalMap.modalVisible = true
-      this.modalMap.modalTitle = mtitle
-      this.editModalData = meth
-      this.formList = [
-        {
-          name: 'func_id',
-          value: meth === 'put' ? this.tableData[index].func_id : ''
-        },
-        {
-          name: 'func_name',
-          type: 'i-input',
-          value: meth === 'put' ? this.tableData[index].func_name : '',
-          label: '权限名称',
-          rule: [
-            { required: true, message: '权限名称不能为空', trigger: 'blur' }
-          ]
-        },
-        {
-          name: 'method_type',
-          type: 'i-select',
-          value: meth === 'put' ? this.tableData[index].method_type : '',
-          label: '请求方法',
-          children: {
-            type: 'i-option',
-            list: [
-              { value: 'GET', title: 'GET' },
-              { value: 'POST', title: 'POST' },
-              { value: 'PUT', title: 'PUT' },
-              { value: 'PATCH', title: 'PATCH' },
-              { value: 'DELETE', title: 'DELETE' },
-              { value: 'ALL', title: 'ALL' }
-            ]
-          },
-          rule: [
-            { required: true, message: '请求方法不能为空', trigger: 'blur' }
-          ]
-        },
-        {
-          name: 'uri',
-          type: 'i-input',
-          maxlength: 100,
-          value: meth === 'put' ? this.tableData[index].uri : '',
-          label: '请求路径',
-          rule: [{ required: true, message: 'URI不能为空', trigger: 'blur' }]
-        }
-      ]
+    handlerAdd() {
+      this.funcData = {
+          func_name: '',
+          method_type: '',
+          app_code: '',
+          uri: '',
+          parameters:'暂无',
+      },
+      this.modalEditData = {
+        show: true,
+        title: '添加API信息，用来展示后端权限',
+        action: 'post'
+      }
     },
-    handleSubmit (value) {
-      setTimeout(() => {
-        operationFunc(value.data, this.editModalData).then(res => {
-          if (res.data.code === 0) {
-            this.$Message.success(`${res.data.msg}`)
-            this.getFuncsList(
-              this.pageNum,
-              this.pageSize,
-              this.searchKey,
-              this.searchValue
-            )
-            this.modalMap.modalVisible = false
-          } else {
-            this.$Message.error(`${res.data.msg}`)
-          }
-        })
-      }, 1000)
+    handlerEdit(paramsRow) {
+      this.funcData = paramsRow
+      this.modalEditData = {
+        show: true,
+        title: '编辑API详细信息',
+        action: 'put'
+      }
     },
+    handlerModalClose() {
+      this.handlerGetFuncsList()
+    },
+    // handleSubmit (value) {
+    //   setTimeout(() => {
+    //     operationFunc(value.data, this.editModalData).then(res => {
+    //       if (res.data.code === 0) {
+    //         this.$Message.success(`${res.data.msg}`)
+    //         this.handlerGetFuncsList()
+    //         this.modalMap.modalVisible = false
+    //       } else {
+    //         this.$Message.error(`${res.data.msg}`)
+    //       }
+    //     })
+    //   }, 1000)
+    // },
     // 删除
     delData (params) {
       if (confirm(`确定要删除权限 ${params.row.func_name}`)) {
@@ -243,12 +289,7 @@ export default {
     },
     // 调用开关
     onSwitch (params) {
-      operationFunc(
-        {
-          func_id: params.row.func_id
-        },
-        'patch'
-      ).then(res => {
+      operationFunc( {func_id: params.row.func_id}, 'patch').then(res => {
         if (res.data.code === 0) {
           this.$Message.success(`${res.data.msg}`)
         } else {
@@ -258,33 +299,24 @@ export default {
     },
     changePage (value) {
       this.pageNum = value
-      this.getFuncsList(
-        this.pageNum,
-        this.pageSize,
-        this.searchKey,
-        this.searchValue
-      )
+      this.handlerGetFuncsList()
     },
     // 每页条数
     handlePageSize (value) {
       this.pageSize = value
-      this.getFuncsList(1, this.pageSize, this.searchKey, this.searchValue)
+      this.pageNum = 1
+      this.handlerGetFuncsList()
     },
     handleClear (e) {
       if (e.target.value === '') this.tableData = this.value
     },
     handleSearch () {
       this.pageNum = 1
-      this.getFuncsList(
-        this.pageNum,
-        this.pageSize,
-        this.searchKey,
-        this.searchValue
-      )
+      this.handlerGetFuncsList()
     }
   },
   mounted () {
-    this.getFuncsList(this.pageNum, this.pageSize)
+    this.handlerGetFuncsList()
   }
 }
 </script>
