@@ -904,7 +904,7 @@ export const routes = [{
         name: 'doc',
         meta: {
             title: '官方文档',
-            href: 'http://docs.opendevops.cn/zh/latest/',
+            href: 'https://docs.opendevops.cn',
             icon: 'ios-book'
         }
     },

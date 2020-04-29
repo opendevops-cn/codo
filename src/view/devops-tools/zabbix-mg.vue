@@ -22,7 +22,7 @@
           <Button type="success"  @click="handerTestZabbixHook('', 'post', '测试钩子')" class="search-btn" >测试钩子</Button>
           <!-- <Button type="error" class="search-btn"  @click="handlerDelete">批量删除</Button> -->
           <Button class="search-btn"  @click="handlerHookslog()">钩子日志</Button>
-          <Button class="search-btn"  to="//docs.opendevops.cn/zh/latest/zabbix_manager.html" target="_blank">跳转文档</Button>
+          <Button class="search-btn"  to="//docs.opendevops.cn/zh/guide/used/#%E7%9B%91%E6%8E%A7%E5%91%8A%E8%AD%A6" target="_blank">跳转文档</Button>
         </div>
           <Form  v-if="setZabbix" ref="formZabbixConf" :model="formZabbixConf" :rules="ruleInline" inline>
             <FormItem prop="zabbix_name">

@@ -29,7 +29,7 @@
               <h5>二次认证：默认开启二次认证，且正式环境非常不建议关闭全局的二次认证</h5>
             </Alert>
             <Alert  v-if="theTabName === 'EMAIL'">
-              <a href="http://docs.opendevops.cn/zh/latest/faq.html#id1" target="_blank">参考文档</a>
+              <a href="https://docs.opendevops.cn/zh/guide/more/faq/" target="_blank">参考文档</a>
             </Alert>
             <Alert  v-if="theTabName === 'SMS'">
               <h5>这块主要配置短信接口信息，短信接口只支持阿里云阿里大鱼，后续平台所涉及到发短信会调用此接口</h5><br>
