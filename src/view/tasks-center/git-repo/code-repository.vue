@@ -22,7 +22,7 @@
               <Button  @click="handlerDelete" disabled>批量删除</Button>
             </template>
             <Button  @click="handlerHookslog()">钩子日志</Button>
-            <Button  to="//docs.opendevops.cn/zh/latest/code_repository.html" target="_blank">跳转文档</Button>
+            <Button  to="//docs.opendevops.cn/zh/guide/used/#%E4%BB%A3%E7%A0%81%E4%BB%93%E5%BA%93" target="_blank">跳转文档</Button>
           </ButtonGroup>
       </div>
 
@@ -33,7 +33,7 @@
           <Button type="warning" :loading="updateLoading" @click="handlerRefresh()" class="search-btn">刷新地址</Button>
           <Button type="error" class="search-btn"  @click="handlerDelete">批量删除</Button>
           <Button class="search-btn"  @click="handlerHookslog()">钩子日志</Button>
-          <Button class="search-btn"  to="//docs.opendevops.cn/zh/latest/code_repository.html" target="_blank">跳转文档</Button>
+          <Button class="search-btn"  to="/docs.opendevops.cn/zh/guide/used/#%E4%BB%A3%E7%A0%81%E4%BB%93%E5%BA%93" target="_blank">跳转文档</Button>
         </div> -->
           <Form  v-if="setRepo" ref="formRepo" :model="formRepo" :rules="ruleInline" inline>
             <FormItem prop="git_url">
