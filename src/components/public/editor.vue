@@ -3,9 +3,9 @@
 </template>
 
 <script>
-  require(['emmet/emmet'], function (data) {
-    window.emmet = data.emmet
-  })
+  // require(['emmet/emmet'], function (data) {
+  //   window.emmet = data.emmet
+  // })
   const ace = require('brace')
   export default {
     name: 'editor',

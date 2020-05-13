@@ -11,7 +11,7 @@
 
           <div style="margin: 10px; overflow: hidden">
               <div style="float: left;">
-               <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[10,15,25,35,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize"></Page>
+               <Page :total="pageTotal" :current="pageNum" :page-size="pageSize" :page-size-opts=[10,15,50,100] show-sizer show-total @on-change="changePage" @on-page-size-change="handlePageSize"></Page>
              </div>
            </div>
 
@@ -230,7 +230,6 @@ export default {
     getRoleList (page, limit, key, value) {
       getrolelist(page, limit, key, value).then(res => {
         if (res.data.code === 0) {
-          this.$Message.success(`${res.data.msg}`)
           this.pageTotal = res.data.count
           this.tableData = res.data.data
         } else {
