@@ -172,7 +172,7 @@
         allProxyList: [],
         tableSelectIdList: [],
         //
-        searchKey: "",
+        searchKey: "tag_name",
         searchValue: "",
         formValidate2: {
           id: null,
@@ -686,7 +686,7 @@
           if (e.target.value === "") this.tableData = this.value;
         },
         handleSearch() {
-          this.getTagList(this.pageNum,this.pageSize,this.searchKey, this.searchValue);
+          this.getTagList(this.searchKey, this.searchValue);
         },
         // table 选中的ID
         handleSelectChange (val) {
