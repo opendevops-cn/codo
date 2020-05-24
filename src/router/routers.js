@@ -417,36 +417,36 @@ export const routerMap = [{
                         component: () =>
                             import ('@/view/tasks-center/assets/tag-model.vue')
                     },
-                    {
-                        path: 'modelTree',
-                        name: 'modelTree',
-                        meta: {
-                            icon: 'ios-stats',
-                            title: '树形关联'
-                        },
-                        component: () =>
-                            import ('@/view/tasks-center/assets/tree-model.vue')
-                    },
-                    {
-                        path: 'autoRule',
-                        name: 'autoRule',
-                        meta: {
-                            icon: 'ios-stats',
-                            title: '自动关联'
-                        },
-                        component: () =>
-                            import ('@/view/tasks-center/assets/auto-rule.vue')
-                    },
-                    {
-                        path: 'resourceMg',
-                        name: 'resourceMg',
-                        meta: {
-                            icon: 'logo-steam',
-                            title: '资源关联改版'
-                        },
-                        component: () =>
-                            import ('@/view/tasks-center/assets/resource-mg.vue')
-                    },
+                    // {
+                    //     path: 'modelTree',
+                    //     name: 'modelTree',
+                    //     meta: {
+                    //         icon: 'ios-stats',
+                    //         title: '树形关联'
+                    //     },
+                    //     component: () =>
+                    //         import ('@/view/tasks-center/assets/tree-model.vue')
+                    // },
+                    // {
+                    //     path: 'autoRule',
+                    //     name: 'autoRule',
+                    //     meta: {
+                    //         icon: 'ios-stats',
+                    //         title: '自动关联'
+                    //     },
+                    //     component: () =>
+                    //         import ('@/view/tasks-center/assets/auto-rule.vue')
+                    // },
+                    // {
+                    //     path: 'resourceMg',
+                    //     name: 'resourceMg',
+                    //     meta: {
+                    //         icon: 'logo-steam',
+                    //         title: '资源关联改版'
+                    //     },
+                    //     component: () =>
+                    //         import ('@/view/tasks-center/assets/resource-mg.vue')
+                    // },
                     {
                         path: 'proxyInfo',
                         name: 'proxyInfo',
