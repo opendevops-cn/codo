@@ -621,10 +621,7 @@ export default {
               this.modalbiz.show = false
               this.btnLoading = false
             } else {
-              this.$Message.error({
-                content: JSON.stringify(res.data.msg),
-                duration: 5
-              })
+              this.$Message.error(res.data.msg)
             }
           }).catch(error => {
             this.btnLoading = false
@@ -656,10 +653,7 @@ export default {
               this.modalRemark = this.$options.data().modalRemark
               this.btnLoading = false
             } else {
-              this.$Message.error({
-                content: res.data.msg,
-                duration: 5
-              })
+              this.$Message.error(res.data.msg)
             }
           }).catch(error => {
             this.btnLoading = false
@@ -684,10 +678,7 @@ export default {
             this.$Message.success(res.data.msg)
             this.handlerGetDomainRecords()
           } else {
-              this.$Message.error({
-                  content: JSON.stringify(res.data.msg),
-                  duration: 5
-              })
+            this.$Message.error(res.data.msg)
           }
           this.btnLoading = false
           })
@@ -743,10 +734,7 @@ export default {
             this.modalData = this.$options.data().modalData
             this.handlerGetDomainRecords()
           } else {
-            this.$Message.error({
-                content: JSON.stringify(res.data.messages),
-                duration: 5
-            })
+            this.$Message.error(res.data.msg)
           }
           this.btnLoading = false
         })

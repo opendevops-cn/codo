@@ -14,7 +14,7 @@
         <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
           <user :user-avator="userAvator" :nick-name="nickName"/>
           <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px;" :lang="local"/>
-          <error-store v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader" :has-read="hasReadErrorPage" :count="errorCount"></error-store>
+          <!-- <error-store v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader" :has-read="hasReadErrorPage" :count="errorCount"></error-store> -->
           <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
         </header-bar>
       </Header>
@@ -41,7 +41,7 @@ import TagsNav from './components/tags-nav'
 import User from './components/user'
 import Fullscreen from './components/fullscreen'
 import Language from './components/language'
-import ErrorStore from './components/error-store'
+// import ErrorStore from './components/error-store'
 import { mapMutations, mapActions, mapGetters } from 'vuex'
 import { getNewTagList, getNextRoute, routeEqual } from '@/libs/util'
 import minLogo from '@/assets/images/logo-min.jpg'
@@ -56,7 +56,7 @@ export default {
     Language,
     TagsNav,
     Fullscreen,
-    ErrorStore,
+    // ErrorStore,
     User,
     copyRight
   },
@@ -93,9 +93,9 @@ export default {
     local () {
       return this.$store.state.app.local
     },
-    hasReadErrorPage () {
-      return this.$store.state.app.hasReadErrorPage
-    }
+    // hasReadErrorPage () {
+    //   return this.$store.state.app.hasReadErrorPage
+    // }
   },
   methods: {
     ...mapMutations([
@@ -105,7 +105,8 @@ export default {
       'setLocal'
     ]),
     ...mapActions([
-      'handleLogin'
+      'handleLogin',
+       'handleGetResourceList'
     ]),
     turnToPage (route) {
       let { name, params, query } = {}
@@ -142,7 +143,14 @@ export default {
     },
     handleClick (item) {
       this.turnToPage(item)
-    }
+    },
+    handleGetResource() {
+      this.handleGetResourceList().then(res => {
+        if (res.code != 0) {
+           this.$Message.error(`${res.msg}`)
+        }
+      })
+    },
   },
   watch: {
     '$route' (newRoute) {
@@ -157,6 +165,7 @@ export default {
     }
   },
   mounted () {
+    this.handleGetResource()
     /**
      * @description 初始化设置面包屑导航和标签导航
      */

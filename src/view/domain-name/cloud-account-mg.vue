@@ -137,8 +137,8 @@ export default {
       ruleValidate: {
         alias_name: [ { required: true, message: "名称简介不能为空", trigger: "blur"}],
         cloud_name: [ { required: true, message: "选择云厂商", trigger: "blur"}],
-        access_id:  [ { required: true, message: "IAM角色 AccessID,需要有权限访问云主机", trigger: "blur"}],
-        access_key: [ { required: true, message: "IAM角色 AccessKey,需要有权限访问云主机", trigger: "blur"}]
+        access_id:  [ { required: true, message: "IAM角色 AccessID，需要有权限访问云解析", trigger: "blur"}],
+        access_key: [ { required: true, message: "IAM角色 AccessKey，需要有权限访问云解析", trigger: "blur"}]
       },
       formValidate: {
           id: '',
