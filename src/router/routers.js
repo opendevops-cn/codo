@@ -427,6 +427,26 @@ export const routerMap = [{
                     //     component: () =>
                     //         import ('@/view/tasks-center/assets/tree-model.vue')
                     // },
+                    // {
+                    //     path: 'autoRule',
+                    //     name: 'autoRule',
+                    //     meta: {
+                    //         icon: 'ios-stats',
+                    //         title: '自动关联'
+                    //     },
+                    //     component: () =>
+                    //         import ('@/view/tasks-center/assets/auto-rule.vue')
+                    // },
+                    // {
+                    //     path: 'resourceMg',
+                    //     name: 'resourceMg',
+                    //     meta: {
+                    //         icon: 'logo-steam',
+                    //         title: '资源关联改版'
+                    //     },
+                    //     component: () =>
+                    //         import ('@/view/tasks-center/assets/resource-mg.vue')
+                    // },
                     {
                         path: 'proxyInfo',
                         name: 'proxyInfo',
@@ -853,6 +873,17 @@ export const routerMap = [{
                 },
                 component: () =>
                     import ('@/view/system-manage/system.vue')
+            },
+            {
+                path: 'resourceManagement',
+                name: 'resourceManagement',
+                meta: {
+                    icon: 'ios-stats',
+
+                    title: '资源管理'
+                },
+                component: () =>
+                    import ('@/view/system-manage/resource-management.vue')
             },
             {
                 path: 'systemlog',

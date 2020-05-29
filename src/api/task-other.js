@@ -145,12 +145,54 @@ export const operationProjectlist = (data, method) => {
     })
 }
 
-export const getProjecttree = (project_code) => {
+export const getProjecttree = (project_name) => {
     return axios.request({
         url: '/task/other/v1/record/business/tree/',
         method: 'get',
         params: {
-            project_code
+            project_name
+        }
+    })
+}
+
+//自动关联
+export const getautoRule = () => {
+    return axios.request({
+        url: '/task/other/v1/record/rule/',
+        method: 'get'
+    })
+}
+
+export const optAutoRule = (data, method) => {
+    return axios.request({
+        url: '/task/other/v1/record/rule/',
+        method,
+        data
+    })
+}
+
+//
+export const getBizlist = () => {
+    return axios.request({
+        url: '/task/other/v1/record/business/list/',
+        method: 'get'
+    })
+}
+
+
+// 查询关联的资源
+export const getProjectResource = (page, limit, project_name, environment, service, search_t, search_v) => {
+    return axios.request({
+        url: '/task/other/v1/record/business/resource/',
+        method: 'get',
+        params: {
+            page,
+            limit,
+            project_name,
+            environment,
+            service,
+            search_t,
+            search_v
         }
     })
 }

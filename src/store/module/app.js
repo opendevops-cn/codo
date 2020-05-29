@@ -1,16 +1,17 @@
 import {
-  getBreadCrumbList,
-  setTagNavListInLocalstorage,
-  // getMenuByRouter,
-  getTagNavListFromLocalstorage,
-  getHomeRoute,
-  getNextRoute,
-  routeHasExist,
-  routeEqual,
-  getRouteTitleHandled,
-  localSave,
-  localRead
+    getBreadCrumbList,
+    setTagNavListInLocalstorage,
+    // getMenuByRouter,
+    getTagNavListFromLocalstorage,
+    getHomeRoute,
+    getNextRoute,
+    routeHasExist,
+    routeEqual,
+    getRouteTitleHandled,
+    localSave,
+    localRead
 } from '@/libs/util'
+import { getResourceList } from '@/api/mg/resource-mg'
 import beforeClose from '@/router/before-close'
 import { saveErrorLogger } from '@/api/data'
 import router from '@/router'
@@ -21,99 +22,135 @@ import config from '@/config'
 const { homeName } = config
 
 const closePage = (state, route) => {
-  const nextRoute = getNextRoute(state.tagNavList, route)
-  state.tagNavList = state.tagNavList.filter(item => {
-    return !routeEqual(item, route)
-  })
-  router.push(nextRoute)
+    const nextRoute = getNextRoute(state.tagNavList, route)
+    state.tagNavList = state.tagNavList.filter(item => {
+        return !routeEqual(item, route)
+    })
+    router.push(nextRoute)
 }
 
 export default {
-  state: {
-    breadCrumbList: [],
-    tagNavList: [],
-    homeRoute: getHomeRoute(routes, homeName),
-    local: localRead('local'),
-    errorList: [],
-    hasReadErrorPage: false
-  },
-  getters: {
-    // menuList: (state, getters, rootState) => getMenuByRouter(routers, rootState.user.access),
-    // errorCount: state => state.errorList.length
-  },
-  mutations: {
-    setBreadCrumb (state, route) {
-      state.breadCrumbList = getBreadCrumbList(route, state.homeRoute)
+    state: {
+        breadCrumbList: [],
+        tagNavList: [],
+        homeRoute: getHomeRoute(routes, homeName),
+        local: localRead('local'),
+        errorList: [],
+        hasReadErrorPage: false,
+        allResourceGroup: [], //所有的资源组/目录
+        resourceGroupDir: [], // 可扩展的，可以扩展为目录结构
+        resourceGroupTAG: [], //不能扩展的，当全局标签使用
+        userResourceGroup: [],
     },
-    setTagNavList (state, list) {
-      let tagList = []
-      if (list) {
-        tagList = [...list]
-      } else tagList = getTagNavListFromLocalstorage() || []
-      if (tagList[0] && tagList[0].name !== homeName) tagList.shift()
-      let homeTagIndex = tagList.findIndex(item => item.name === homeName)
-      if (homeTagIndex > 0) {
-        let homeTag = tagList.splice(homeTagIndex, 1)[0]
-        tagList.unshift(homeTag)
-      }
-      // 删除空标签
-      tagList.forEach((item, index) => {
-        if (!item.meta.icon) tagList.splice(index, 1)
-      })
-      // if (tagList[1] && !tagList[1].meta.icon) tagList.splice(1, 1)
-      state.tagNavList = tagList
-      setTagNavListInLocalstorage([...tagList])
+    getters: {
+        // menuList: (state, getters, rootState) => getMenuByRouter(routers, rootState.user.access),
+        // errorCount: state => state.errorList.length
+        getterAllResourceGroup: state => state.allResourceGroup,
+        getterResourceGroupDir: state => state.resourceGroupDir,
+        resourceGroupTAG: state => state.resourceGroupTAG,
+        // getterUserResource: state => state.userResourceGroup
     },
-    closeTag (state, route) {
-      let tag = state.tagNavList.filter(item => routeEqual(item, route))
-      route = tag[0] ? tag[0] : null
-      if (!route) return
-      if (route.meta && route.meta.beforeCloseName && route.meta.beforeCloseName in beforeClose) {
-        new Promise(beforeClose[route.meta.beforeCloseName]).then(close => {
-          if (close) {
-            closePage(state, route)
-          }
-        })
-      } else {
-        closePage(state, route)
-      }
-    },
-    addTag (state, { route, type = 'unshift' }) {
-      let router = getRouteTitleHandled(route)
-      if (!routeHasExist(state.tagNavList, router)) {
-        if (type === 'push') state.tagNavList.push(router)
-        else {
-          if (router.name === homeName) state.tagNavList.unshift(router)
-          else state.tagNavList.splice(1, 0, router)
+    mutations: {
+        setAllResourceGroup(state, dataList) {
+            state.allResourceGroup = dataList
+        },
+        setResourceDir(state, dataList) {
+            state.resourceGroupDir = dataList.filter(item => { return item.expand === 'yes' })
+        },
+        setResourceTAG(state, dataList) {
+            state.resourceGroupTAG = dataList.filter(item => { return item.expand === 'no' })
+        },
+        // setuserResource(state, dataList) {
+        //     state.userResourceGroup = dataList
+        // },
+        setBreadCrumb(state, route) {
+            state.breadCrumbList = getBreadCrumbList(route, state.homeRoute)
+        },
+        setTagNavList(state, list) {
+            let tagList = []
+            if (list) {
+                tagList = [...list]
+            } else tagList = getTagNavListFromLocalstorage() || []
+            if (tagList[0] && tagList[0].name !== homeName) tagList.shift()
+            let homeTagIndex = tagList.findIndex(item => item.name === homeName)
+            if (homeTagIndex > 0) {
+                let homeTag = tagList.splice(homeTagIndex, 1)[0]
+                tagList.unshift(homeTag)
+            }
+            // 删除空标签
+            tagList.forEach((item, index) => {
+                    if (!item.meta.icon) tagList.splice(index, 1)
+                })
+                // if (tagList[1] && !tagList[1].meta.icon) tagList.splice(1, 1)
+            state.tagNavList = tagList
+            setTagNavListInLocalstorage([...tagList])
+        },
+        closeTag(state, route) {
+            let tag = state.tagNavList.filter(item => routeEqual(item, route))
+            route = tag[0] ? tag[0] : null
+            if (!route) return
+            if (route.meta && route.meta.beforeCloseName && route.meta.beforeCloseName in beforeClose) {
+                new Promise(beforeClose[route.meta.beforeCloseName]).then(close => {
+                    if (close) {
+                        closePage(state, route)
+                    }
+                })
+            } else {
+                closePage(state, route)
+            }
+        },
+        addTag(state, { route, type = 'unshift' }) {
+            let router = getRouteTitleHandled(route)
+            if (!routeHasExist(state.tagNavList, router)) {
+                if (type === 'push') state.tagNavList.push(router)
+                else {
+                    if (router.name === homeName) state.tagNavList.unshift(router)
+                    else state.tagNavList.splice(1, 0, router)
+                }
+                setTagNavListInLocalstorage([...state.tagNavList])
+            }
+        },
+        setLocal(state, lang) {
+            localSave('local', lang)
+            state.local = lang
+        },
+        addError(state, error) {
+            state.errorList.push(error)
+        },
+        setHasReadErrorLoggerStatus(state, status = true) {
+            state.hasReadErrorPage = status
         }
-        setTagNavListInLocalstorage([...state.tagNavList])
-      }
     },
-    setLocal (state, lang) {
-      localSave('local', lang)
-      state.local = lang
-    },
-    addError (state, error) {
-      state.errorList.push(error)
-    },
-    setHasReadErrorLoggerStatus (state, status = true) {
-      state.hasReadErrorPage = status
+    actions: {
+        handleGetResourceList({ commit }, data) {
+            return new Promise((resolve, reject) => {
+                getResourceList().then(res => {
+                    const data = res.data
+                    if (data.code === 0) {
+                        commit('setAllResourceGroup', data.data)
+                        commit('setResourceDir', data.data)
+                        commit('setResourceTAG', data.data)
+                    }
+                    resolve(data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        //
+        addErrorLog({ commit, rootState }, info) {
+            if (!window.location.href.includes('error_logger_page')) commit('setHasReadErrorLoggerStatus', false)
+            const { user: { token, userId, userName } } = rootState
+            let data = {
+                ...info,
+                time: Date.parse(new Date()),
+                token,
+                userId,
+                userName
+            }
+            saveErrorLogger(info).then(() => {
+                commit('addError', data)
+            })
+        }
     }
-  },
-  actions: {
-    addErrorLog ({ commit, rootState }, info) {
-      if (!window.location.href.includes('error_logger_page')) commit('setHasReadErrorLoggerStatus', false)
-      const { user: { token, userId, userName } } = rootState
-      let data = {
-        ...info,
-        time: Date.parse(new Date()),
-        token,
-        userId,
-        userName
-      }
-      saveErrorLogger(info).then(() => {
-        commit('addError', data)
-      })
-    }
-  }
 }

@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Message, Notice } from 'view-design'
 import Vue from 'vue'
 import Cookies from 'js-cookie'
+import { setToken } from '@/libs/util'
 // import { router } from '@/router'
 
 class HttpRequest {
@@ -46,6 +47,7 @@ class HttpRequest {
         }, error => {
             this.destroy(url)
             if (error.response.status === '401' || error.response.status === 401) {
+                setToken('')
                 location.reload()
             } else if (error.response.status === 402) {
                 console.log(error.response)

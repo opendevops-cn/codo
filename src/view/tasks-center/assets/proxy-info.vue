@@ -1,6 +1,7 @@
 <template>
   <div style="height:100%; background: #f8f8f9">
     <Card>
+      <Alert show-icon>小提示：如果使用代理，则任务会通过代理主机来访问目标主机，例如：在ssh模式下任务系统会ssh到代理主机下执行任务，在salt模式下会查询代理下的salt master信息</Alert>
       <div class="search-con search-con-top">
         <Button type="primary" @click="editModal('post', '添加代理')" class="search-btn">添加代理</Button>
       </div>
