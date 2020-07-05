@@ -1,6 +1,7 @@
 <template>
   <div>
     <Card>
+       <Alert type="success" show-icon>支持云厂商为：阿里云、腾讯云、DNSPod、GoDaddy，一个厂商可以使用多个账号。后台会定时同步厂商数据到CODO</Alert>
         <div class="search-con search-con-top">
           <ButtonGroup class="search-btn">
             <Button  @click="editModal('post', '新增配置', '')" class="search-btn" >新增配置</Button>

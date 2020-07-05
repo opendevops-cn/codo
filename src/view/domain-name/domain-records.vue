@@ -39,7 +39,7 @@
        </div>
     </div>
 
-    <Modal width="680px;" v-model="modalData.show" :title="modalData.title" :footer-hide=true>
+    <Modal width="680px;" v-model="modalData.show" :title="modalData.title" :footer-hide=true  @on-cancel="handleClose">
       <Form ref="formInline" :model="formInline" :rules="formRule" :label-width="100" :label-colon=true>
           <FormItem  label="记录类型" prop="domain_type">
             <Row>
@@ -158,7 +158,7 @@
       <Button type="success" style="margin-top: 10px;" :loading="btnLoading"  @click="handlerChangeBiz" long>确定更换</Button>
     </Modal> -->
 
-    <Modal  width="650px;" v-model="modalRemark.show"  :title="modalRemark.title" :footer-hide=true>
+    <Modal  width="650px;" v-model="modalRemark.show"  :title="modalRemark.title" :footer-hide=true  @on-cancel="handleClose">
        <Input type="text" v-model="modalRemark.remark" :maxlength='50' placeholder="请输入需要记录的备注信息" ></Input>
        <Button type="success" style="margin-top: 10px;" :loading="btnLoading" @click="handlerChangeRemark" long>确定修改</Button>
     </Modal>
@@ -773,6 +773,10 @@ export default {
         }
       })
     },
+    handleClose(){
+      console.info('---')
+      this.handlerGetDomainRecords()
+    },
     handlerReset() {
       this.btnLoading = false
       this.formInline = this.$options.data().formInline
@@ -806,7 +810,7 @@ export default {
     },
     handlePageSize1 (value) {
       this.logPageNum = 1
-      thislogPpageSize = value
+      this.logPpageSize = value
       this.handlerGetDomainLog()
     }
   },

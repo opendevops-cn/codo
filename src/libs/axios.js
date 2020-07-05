@@ -66,6 +66,11 @@ class HttpRequest {
                     title: '服务内部错误，请联系管理员',
                     desc: `${error.response.data}`
                 })
+            } else if (error.response.status === 404) {
+                Notice.error({
+                    title: '404错误-请检查后端是否缺少应用没有部署',
+                    desc: `${error.response.data}`
+                })
             } else {
                 Notice.error({
                     title: '发生错误',

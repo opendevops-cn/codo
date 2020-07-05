@@ -3,7 +3,7 @@
   <Card>
     <div v-if="!selectedDomain">
       <Alert type="success">
-          <h3>【提醒通知】：</h3>
+          <h3>【提醒通知】：GoDaddy接口有BUG，只能用来查看和添加</h3>
       </Alert>
 
       <div class="search-con search-con-top">
