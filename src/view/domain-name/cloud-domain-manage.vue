@@ -3,7 +3,7 @@
   <Card>
     <div v-if="!selectedDomain">
       <Alert type="success">
-          <h3>【提醒通知】：</h3>
+          <h3>【提醒通知】：首先把云厂商的账号录入才能使用，GoDaddy接口有BUG，只能用来查看和添加</h3>
       </Alert>
 
       <div class="search-con search-con-top">
@@ -265,7 +265,7 @@ export default {
       this.$Modal.confirm({
         title: '提醒',
         content: '<p>手动触发获取厂商相关信息更新到域名管理系统，</p>\
-                  <p>点击确认进行拉取，请耐心稍等一下，不要重复点击，详细信息可查看同步日志</p>',
+                  <p>点击确认进行拉取，请耐心稍等一下，不要重复点击</p>',
         onOk: () => {
           this.$Spin.show();
             setTimeout(() => {
