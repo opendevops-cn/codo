@@ -1,7 +1,7 @@
 <template>
   <Card>
 
-    <Alert show-icon>阿里云资源管理（Resource Management）服务包含一系列支持企业IT治理的资源管理产品集合，主要包括资源组、资源目录和资源共享。通过资源管理服务，您可以按照业务需要搭建合适的资源组织关系，使用目录、资源夹、账号以及资源组，分层次地组织和管理您的云资源。</Alert>
+    <Alert show-icon>提示：此次为全局资源组</Alert>
       <div class="search-con">
         <ButtonGroup class="search-btn">
             <Button  @click="handlerAddProject" >新建项目</Button>
