@@ -1,0 +1,305 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "[CODO](https://opendevops.cn/)\u662f\u4e00\u6b3e\u4e3a\u7528\u6237\u63d0\u4f9b\u4f01\u4e1a\u591a\u6df7\u5408\u4e91\u3001\u4e00\u7ad9\u5f0f[DEVOPS](https://opendevops.cn/)\u3001\u81ea\u52a8\u5316\u8fd0\u7ef4\u3001\u5b8c\u5168\u5f00\u6e90\u7684\u4e91\u7ba1\u7406\u5e73\u53f0\u3001\u81ea\u52a8\u5316\u8fd0\u7ef4\u5e73\u53f0",
+    "version": "1.0.0",
+    "title": "Swagger Petstore",
+    "termsOfService": "https://opendevops.cn/",
+    "contact": {
+      "email": "admin@admin.admin"
+    },
+    "license": {
+      "name": "GNU General Public License v3.0",
+      "url": "https://github.com/opendevops-cn/opendevops/blob/master/LICENSE"
+    }
+  },
+  "basePath": "",
+  "tags": [
+    {
+      "name": "accounts",
+      "description": "\u7528\u6237\u7ba1\u7406",
+      "externalDocs": {
+        "description": "\u67e5\u770b\u66f4\u591a",
+        "url": "https://opendevops.cn/"
+      }
+    }
+  ],
+  "paths": {
+    "/api/mg/v2/accounts/user/": {
+      "get": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "\u67e5\u8be2\u7528\u6237\uff0c\u4e0d\u586b\u5199\u5173\u952e\u5b57\u4e3a\u641c\u7d22\u6240\u6709",
+        "description": "",
+        "operationId": "getUserByName",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "default": "1",
+            "in": "query",
+            "description": "\u7b2c\u51e0\u9875",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "limit",
+            "default": "15",
+            "in": "query",
+            "description": "\u663e\u793a\u6570\u91cf",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "key",
+            "in": "query",
+            "description": "\u7528\u6237\u540d: username,\u6635\u79f0: nickname,\u90e8\u95e8: department,\u624b\u673a: tel,\u90ae\u7bb1: email,\u767b\u5f55IP: last_ip",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "value",
+            "in": "query",
+            "description": "\u641c\u7d22\u5173\u952e\u5b57",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "\u6dfb\u52a0\u65b0\u7528\u6237",
+        "description": "\u6dfb\u52a0\u65b0\u7528\u6237",
+        "operationId": "createUser",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Accounts-Create"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "\u6839\u636euser_id\u4fee\u6539\u7528\u6237\u4fe1\u606f",
+        "description": "",
+        "operationId": "updateUserByName",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "\u6839\u636euser_id\u4fee\u6539\u7528\u6237\u4fe1\u606f",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Accounts-Update"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid username supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "\u542f\u7528&\u5173\u95ed\u7528\u6237",
+        "description": "\u7528&\u5173\u95ed\u7528\u6237",
+        "operationId": "UserStatus",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "\u6839\u636e\u7528\u6237id\u4fee\u542f\u7528\u6216\u7981\u7528",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Accounts-Status"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "accounts"
+        ],
+        "summary": "\u5220\u9664\u7528\u6237",
+        "description": "\u5220\u9664\u7528\u6237",
+        "operationId": "UserDelete",
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "\u6839\u636e\u7528\u6237id\u5220\u9664\u7528\u6237",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Accounts-Delete"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "500": {
+            "description": "Error: Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "petstore_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "http://petstore.swagger.io/oauth/dialog",
+      "flow": "implicit",
+      "scopes": {
+        "write:pets": "modify pets in your account",
+        "read:pets": "read your pets"
+      }
+    },
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "Accounts-Create": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "nickname": {
+          "type": "string"
+        },
+        "department": {
+          "type": "string"
+        },
+        "wechat": {
+          "type": "string"
+        },
+        "tel": {
+          "type": "integer"
+        },
+        "no": {
+          "type": "integer"
+        },
+        "email": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Accounts-Create"
+      }
+    },
+    "Accounts-Update": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "integer",
+          "default": "999"
+        },
+        "key": {
+          "type": "string",
+          "description": "\u90e8\u95e8: department,\u624b\u673a: tel,\u90ae\u7bb1: email"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "xml": {
+        "name": "Accounts-Status"
+      }
+    },
+    "Accounts-Status": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "integer",
+          "default": "999"
+        },
+        "status": {
+          "type": "string",
+          "default": "status"
+        }
+      },
+      "xml": {
+        "name": "Accounts-Status"
+      }
+    },
+    "Accounts-Delete": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "integer",
+          "default": "999"
+        }
+      },
+      "xml": {
+        "name": "Accounts-Delete"
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "\u67e5\u770b\u66f4\u591a\u5173\u4e8eCODO\u7684\u6d88\u606f",
+    "url": "https://opendevops.cn/"
+  }
+}
