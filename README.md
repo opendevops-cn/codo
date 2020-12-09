@@ -83,6 +83,7 @@ docker-compose up -d
 
 - 测试一下 `ls /var/www/codo/index.html` 看下前端文件是不是存在
 - 测试一下 `ls /my/nginx/conf.d/codo-init.conf` 看下nginx配置文件是不是存在
+- swagger-ui 复制到/var/www/codo/目录即可，详情请参考安装文档。 命令如下：cd /opt/codo/codo && \cp -r swagger-ui/ /var/www/codo/ 
 
 ## License
 
