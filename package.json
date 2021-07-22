@@ -42,7 +42,7 @@
         "vuex": "^3.0.1",
         "vuex-persistedstate": "^2.5.4",
         "wangeditor": "^3.1.1",
-        "xlsx": "^0.13.3",
+        "xlsx": "^0.17.0",
         "xterm": "^3.9.1"
     },
     "devDependencies": {
